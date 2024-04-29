@@ -11,7 +11,7 @@
     		select concert_request_seq.nextval from dual
     	</select>
     	
-    	<select id="list" resultType="ConcertRequest">
+    	<select id="list" resultType="ConcertRequestDto">
 			select * from concertRequest order by concert_request_no asc
 		</select>
 		
