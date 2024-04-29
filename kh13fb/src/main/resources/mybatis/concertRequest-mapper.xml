@@ -1,0 +1,46 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<!DOCTYPE mapper
+    PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+    "https://mybatis.org/dtd/mybatis-3-mapper.dtd">
+    
+    <mapper namespace="concertRequest">
+    	
+    	
+    	<select id="sequence" resultType="int">
+    		select concert_request_seq.nextval from dual
+    	</select>
+    	
+    	<select id="list" resultType="ConcertRequestDto">
+			select * from concertRequest order by concert_request_no asc
+		</select>
+		
+		
+		<!-- 정보값추가-->
+		<insert id="register">
+			insert into concert_request(
+				concert_request_no, concert_request_company_name, concert_request_company_number, 
+				concert_request_representative, concert_request_manager, concert_request_address, 
+				concert_request_office_number, concert_request_phone_number, concert_request_email, 
+				concert_request_fax, concert_request_concert_name, concert_request_concert_genre, 
+				concert_request_age, concert_request_runtime_first,  concert_request_intermission, 
+				concert_request_runtime_second, concert_request_head_day, concert_request_footer_day, 
+				concert_request_readyh_day, concert_request_readyf_day, concert_request_starth_day, 
+				concert_request_startf_day, concert_request_withdrawh_day, concert_request_withdrawf_day, 
+				concert_request_seatvip, concert_request_seatr, concert_request_seats, concert_request_seata
+			)
+				values(#{concertRequestNo}, #{concertRequestCompanyName}, 
+							#{concertRequestCompanyNumber}, #{concertRequestRepresentative}, 
+							#{concertRequestManager}, #{concertRequestAddress}, #{concertRequestOfficeNumber}, 
+							#{concertRequestPhoneNumber}, #{concertRequestEmail}, #{concertRequestFax}, 
+							#{concertRequestConcertName}, #{concertRequestConcertGenre}, #{concertRequestAge}, 
+							#{concertRequestRuntimeFirst}, #{concertRequestIntermission}, #{concertRequestRuntimeSecond}, 
+							#{concertRequestHeadDay}, #{concertRequestFooterDay}, #{concertRequestReadyhDay}, 
+							#{concertRequestReadyfDay}, #{concertRequestStarthDay}, #{concertRequestStartfDay}, 
+							#{concertRequestWithdrawhDay}, #{concertRequestWithdrawfDay}, #{concertRequestSeatvip}, 
+							#{concertRequestSeatr}, #{concertRequestSeats}, #{concertRequestSeata}
+		</insert>
+    
+    
+    
+    </mapper>

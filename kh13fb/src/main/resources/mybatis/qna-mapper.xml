@@ -6,9 +6,23 @@
     
 <mapper namespace="qna">
 
+	<select id="sequence" resultType="int">
+		select qna_seq.nextval from dual
+	</select>
+
 	<select id="list" resultType="QnaDto">
 		select * from qna order by qna_no asc
 	</select>
+	
+	<select id="find" resultType="QnaDto">
+		select * from qna where qna_no = #{qnaNo}
+	</select>
+
+	<insert id="save">
+		insert into qna(qna_no, qna_title, qna_content)
+		values
+		(#{qnaNo}, #{qnaTitle}, #{qnaContent})
+	</insert>
 
 </mapper>
     
