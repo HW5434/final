@@ -38,5 +38,6 @@ public class ConcertRequestDto {
 	private int concert_request_seatr; 
 	private int concert_request_seats; 
 	private int concert_request_seata;
+	private String concert_request_state;
 
 }
