@@ -1,0 +1,65 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<!DOCTYPE mapper
+    PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+    "https://mybatis.org/dtd/mybatis-3-mapper.dtd">
+    
+    <mapper namespace="concertSchedule">
+    
+    <!-- 등록 -->
+    <select id ="sequence" resultType="int">
+    	select schedule_seq.nextval from dual
+    </select>
+    
+    <insert id="save">
+    	insert into concert_schedule(
+    	concert_schedule_no,
+		concert_schedule_start,
+		concert_schedule_end,
+		concert_request_no)
+		
+		values(#{concertScheduleNo},#{concertScheduleStart}, #{concertScheduleEnd},#{concertRequestNo})
+    </insert>
+    
+    
+    <!-- 목록 -->
+    <select id="list" resultType="ConcertScheduleDto">
+    	select * from concert_schedule order by concert_schedule_no asc
+    </select>
+    
+    <!-- 상세 -->
+    <select id="find" resultType="ConcertScheduleDto">
+    	select * from concert_schedule where concert_schedule_no =#{concertScheduleNo}
+    </select>
+    
+   <!-- 수정 -->
+  <update id="editAll">
+    update concert_schedule
+    set
+        concert_schedule_start=#{concertScheduleStart},
+        concert_schedule_end=#{concertScheduleEnd}
+    where
+        concert_schedule_no=#{concertScheduleNo}
+</update>
+   
+   
+   
+   <update id="editUnit">
+    update concert_schedule
+    <set>
+        <if test="concertScheduleStart != null">concert_schedule_start=#{concertScheduleStart},</if>
+        <if test="concertScheduleEnd != null">concert_schedule_end=#{concertScheduleEnd}</if>
+    </set>
+    where concert_schedule_no=#{concertScheduleNo}
+</update>
+    
+    <!-- 삭제 -->
+<delete id="delete">
+    delete concert_schedule where concert_schedule_no = #{concertScheduleNo}
+</delete>
+    
+    
+    
+    
+    
+    </mapper>
