@@ -10,7 +10,7 @@
     		select concert_request_seq.nextval from dual
     	</select>
     	
-    	<select id="find" resultType="Attach">
+    	<select id="find" resultType="AttachDto">
     		select * from attach where attach_no = #{attachNo}
     	</select>
     	
@@ -25,8 +25,13 @@
     	
     	 <update id="update" parameterType="AttachDTO">
    			 UPDATE attach
-    SET attachName = #{attachName}, attachType = #{attachType}, attachSize = #{attachSize}
-    WHERE attachNo = #{attachNo}
-  </update>
-        
+   			 SET attachName = #{attachName}, attachType = #{attachType}, attachSize = #{attachSize}
+    		WHERE attachNo = #{attachNo}
+  		</update>
+  		
+  		 <insert id="insertMemberAttach" parameterType="map">
+    	    INSERT INTO member_attach(member_id, attach_no)
+     	   VALUES (#{memberId}, #{attachNo})
+    	</insert>
+       
     </mapper>

@@ -26,6 +26,9 @@ public class SeatDao {
 	public int sequence() {
 		return sqlSession.selectOne("seat.sequence");
 	}
+	public void insert(SeatDto seatDto) {
+		sqlSession.insert("seat.save",seatDto);
+	}
 	
 	//좌석 수정
 	public boolean editAll(SeatDto seatDto) {
@@ -37,9 +40,6 @@ public class SeatDao {
 	}
 	
 	
-	public void insert(SeatDto seatDto) {
-		sqlSession.insert("seat.save",seatDto);
-	}
 	//좌석 삭제
 	public boolean delete(int seatNo) {
 		return sqlSession.delete("seat.delete", seatNo) > 0;

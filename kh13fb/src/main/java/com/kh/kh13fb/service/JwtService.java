@@ -7,8 +7,17 @@ import java.util.Date;
 import javax.crypto.SecretKey;
 
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.stereotype.Service;
 
+import com.kh.kh13fb.configuration.JwtProperties;
+import com.kh.kh13fb.dto.MemberDto;
+import com.kh.kh13fb.vo.MemberLoginVO;
 
+import io.jsonwebtoken.Claims;
+import io.jsonwebtoken.Jwts;
+import io.jsonwebtoken.security.Keys;
+
+@Service
 public class JwtService {
 
 	@Autowired
@@ -36,7 +45,7 @@ public class JwtService {
 					.expiration(expire)//만료시각
 					.signWith(key)//서명
 					.claim("loginId", memberDto.getMemberId())//사용자에게 보낼 내용(key=value)
-					.claim("loginLevel", memberDto.getMemberLevel())//사용자에게 보낼 내용(key=value)
+//					.claim("loginGrade", memberDto.getMemberGrade())//사용자에게 보낼 내용(key=value)
 				.compact();
 
 		return token;
@@ -60,13 +69,13 @@ public class JwtService {
 					.expiration(expire)//만료시각
 					.signWith(key)//서명
 					.claim("loginId", memberDto.getMemberId())//사용자에게 보낼 내용(key=value)
-					.claim("loginLevel", memberDto.getMemberLevel())//사용자에게 보낼 내용(key=value)
+					.claim("loginGrade", memberDto.getMemberGrade())//사용자에게 보낼 내용(key=value)
 				.compact();
 
 		return token;
 	}
 	
-	public HomeLoginVO parse(String token) {
+	public MemberLoginVO parse(String token) {
 			//1. 해덧을 위한 key 생성
 			String keyStr = jwtProperties.getKeyStr();
 			SecretKey key = Keys.hmacShaKeyFor(keyStr.getBytes(StandardCharsets.UTF_8));
@@ -80,8 +89,8 @@ public class JwtService {
 			
 			//3. 해석된 결과를 객체로 반환
 			return MemberLoginVO.builder()
-					.homeId((String)claims.get("loginId"))
-					.homeLevel((String)claims.get("loginLevel"))
+					.memberId((String)claims.get("loginId"))
+					.memberGrade((String)claims.get("loginGrade"))
 				.build();
 		}
 	}

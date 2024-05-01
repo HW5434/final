@@ -7,7 +7,7 @@
 <mapper namespace="seat">
 	<!-- 좌석 목록 -->
 	<select id="list" resultType="SeatDto">
-		select * from seat order by seat_col asc
+		select * from seat order by seat_col asc, seat_row asc
 	</select>
 	
 	<!-- 좌석 상세 -->
