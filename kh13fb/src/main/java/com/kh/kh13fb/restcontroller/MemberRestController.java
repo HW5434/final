@@ -16,6 +16,7 @@ import org.springframework.web.bind.annotation.RestController;
 
 import com.kh.kh13fb.dao.MemberDao;
 import com.kh.kh13fb.dto.MemberDto;
+import com.kh.kh13fb.service.EmailService;
 
 
 @CrossOrigin
@@ -25,6 +26,9 @@ public class MemberRestController {
 
 	@Autowired
 	private MemberDao memberDao;
+	
+	@Autowired
+	private EmailService emailService;
 	
 	//등록
 	@PostMapping("/")
@@ -83,5 +87,11 @@ public class MemberRestController {
 	@GetMapping("/doubleCheckEmail/{memberEmail}")
 	public boolean selectDoubleCheckEmail(@PathVariable String memberEmail) {
 		return memberDao.selectDoubleCheckEmail(memberEmail);
+	}
+	
+	//이메일 전송 테스트
+	@GetMapping("/sendEmail/{memberEmail}")
+	public String sendEmail(@PathVariable String memberEmail) {
+		return emailService.sendCert(memberEmail);
 	}
 }
