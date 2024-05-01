@@ -22,5 +22,11 @@
     	<select id="list" resultType="AttachDto">
     		select * from attach order by attach_no asc
     	</select>    	
+    	
+    	 <update id="update" parameterType="AttachDTO">
+   			 UPDATE attach
+    SET attachName = #{attachName}, attachType = #{attachType}, attachSize = #{attachSize}
+    WHERE attachNo = #{attachNo}
+  </update>
         
     </mapper>
