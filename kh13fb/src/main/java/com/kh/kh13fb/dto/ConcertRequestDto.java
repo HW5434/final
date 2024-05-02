@@ -9,7 +9,7 @@ import lombok.NoArgsConstructor;
 
 @Data @Builder @NoArgsConstructor @AllArgsConstructor
 public class ConcertRequestDto {
-	
+
     private int concertRequestNo;
     private String concertRequestCompanyName;
     private int concertRequestCompanyNumber;
@@ -37,7 +37,7 @@ public class ConcertRequestDto {
     private int concertRequestSeatvip;
     private int concertRequestSeatr;
     private int concertRequestSeats;
-    private int concertRequestSeata;
+    private int concertRequestSeata; 
     private String concertRequestState;
 
 }
