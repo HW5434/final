@@ -94,4 +94,6 @@ public class MemberRestController {
 	public String sendEmail(@PathVariable String memberEmail) {
 		return emailService.sendCert(memberEmail);
 	}
+	
+	///브랜치 테스트
 }
