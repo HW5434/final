@@ -22,4 +22,14 @@ public class ConcertRequestDao {
 			sqlSession.insert("concertRequest.save", concertRequestDto);
 			
 		}
+		
+		public ConcertRequestDto selectOne(int concertRequestNo) {
+            return sqlSession.selectOne("concertRequest.find", concertRequestNo);
+        }
+//		지혜
+		public boolean editUnit(ConcertRequestDto concertRequestDto) {
+			return sqlSession.update("concertRequest.editUnit", concertRequestDto)>0;
+		}
+		
+		
 }
