@@ -8,7 +8,7 @@ import lombok.NoArgsConstructor;
 @Data @AllArgsConstructor @NoArgsConstructor @Builder
 public class MemberLoginVO {
 
-	private String memberId;
+	private int memberNo;
 	private String memberGrade;
 	private String accessToken;
 	private String refreshToken;

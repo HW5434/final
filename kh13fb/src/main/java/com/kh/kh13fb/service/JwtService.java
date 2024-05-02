@@ -43,7 +43,7 @@ public class JwtService {
 					.issuedAt(now)//발행시각
 					.expiration(expire)//만료시각
 					.signWith(key)//서명
-					.claim("loginId", memberDto.getMemberId())//사용자에게 보낼 내용(key=value)
+					.claim("loginNo", memberDto.getMemberNo())//사용자에게 보낼 내용(key=value)
 //					.claim("loginGrade", memberDto.getMemberGrade())//사용자에게 보낼 내용(key=value)
 				.compact();
 
@@ -67,7 +67,7 @@ public class JwtService {
 					.issuedAt(now)//발행시각
 					.expiration(expire)//만료시각
 					.signWith(key)//서명
-					.claim("loginId", memberDto.getMemberId())//사용자에게 보낼 내용(key=value)
+					.claim("loginNo", memberDto.getMemberNo())//사용자에게 보낼 내용(key=value)
 					.claim("loginGrade", memberDto.getMemberGrade())//사용자에게 보낼 내용(key=value)
 				.compact();
 
@@ -88,7 +88,7 @@ public class JwtService {
 			
 			//3. 해석된 결과를 객체로 반환
 			return MemberLoginVO.builder()
-					.memberId((String)claims.get("loginId"))
+					.memberNo((int)claims.get("loginNo"))
 					.memberGrade((String)claims.get("loginGrade"))
 				.build();
 		}

@@ -20,7 +20,7 @@ public class ConcertRequestDao {
 		}
 
 		public void insert(ConcertRequestDto concertRequestDto) {
-			sqlSession.insert("concertRequest.save", concertRequestDto);
+			sqlSession.insert("concertRequest.register", concertRequestDto);
 			
 		}
 

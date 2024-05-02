@@ -9,8 +9,7 @@ import lombok.NoArgsConstructor;
 
 @Data @Builder @NoArgsConstructor @AllArgsConstructor
 public class ConcertRequestDto {
-<<<<<<< HEAD
-	
+
 
 	private int concertRequestNo;
 	private String concertRequestCompanyName;

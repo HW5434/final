@@ -31,6 +31,7 @@
 							#{concertRequestReadyfDay}, #{concertRequestStarthDay}, #{concertRequestStartfDay}, 
 							#{concertRequestWithdrawhDay}, #{concertRequestWithdrawfDay}, #{concertRequestSeatvip}, 
 							#{concertRequestSeatr}, #{concertRequestSeats}, #{concertRequestSeata}, #{concertRequestState}
+							)
 		</insert>
 		
 		<select id="find" resultType="concertRequestDto">
@@ -58,9 +59,7 @@
 			select * from concert_request order by concert_request_no asc
 		</select>
 
-	    <select id="find" resultType="concertRequestDto">
-			select * from seat where concert_request_no = #{concertRequestNo}
-		</select>
+	
     
     	<delete id="delete">
     		delete concert_request where concert_request_no = #{concertRequestNo}
