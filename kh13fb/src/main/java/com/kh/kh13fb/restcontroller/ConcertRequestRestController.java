@@ -16,7 +16,7 @@ import com.kh.kh13fb.dto.ConcertRequestDto;
 @CrossOrigin
 @RestController
 @RequestMapping("/concertRequest")
-public class ConcertRequestController {
+public class ConcertRequestRestController {
 		
 	@Autowired
 	private ConcertRequestDao concertRequestDao;

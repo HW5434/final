@@ -14,15 +14,15 @@ public class EmailService {
 	@Autowired
 	private JavaMailSender sender;
 	
-	//가입 환영 이메일 발송
-	public void sendWelcomeMail(String email) {
-		SimpleMailMessage message = new SimpleMailMessage();
-		message.setTo(email);
-		message.setSubject("[KH정보교육원] 가입을 환영합니다 하이룽");
-		message.setText("앞으로 많은 활동 부탁드립니다!");
-		
-		sender.send(message);
-	}
+//	//가입 환영 이메일 발송
+//	public void sendWelcomeMail(String email) {
+//		SimpleMailMessage message = new SimpleMailMessage();
+//		message.setTo(email);
+//		message.setSubject("[KH정보교육원] 가입을 환영합니다 하이룽");
+//		message.setText("앞으로 많은 활동 부탁드립니다!");
+//		
+//		sender.send(message);
+//	}
 	
 	//이메일 인증번호 발송
 	public String sendCert(String eamil) {
