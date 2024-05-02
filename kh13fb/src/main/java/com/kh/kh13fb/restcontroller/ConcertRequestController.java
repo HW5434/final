@@ -24,7 +24,7 @@ import com.kh.kh13fb.vo.ConcertListVO;
 @CrossOrigin
 @RestController
 @RequestMapping("/concertRequest")
-public class ConcertRequestRestController {
+public class ConcertRequestController {
 		
 	@Autowired
 	private ConcertRequestDao concertRequestDao;
