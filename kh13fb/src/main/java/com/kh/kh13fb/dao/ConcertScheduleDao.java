@@ -35,5 +35,8 @@ public class ConcertScheduleDao {
 	public boolean delete(int concertScheduleNo) {
 		return sqlSession.delete("concertSchedule.delete",concertScheduleNo)>0;
 	}
+	public List<ConcertScheduleDto> findByConcertRequestNo(int concertRequestNo) {
+		return sqlSession.selectList("concertSchedule.findByConcertRequestNo",concertRequestNo);
+	}
 	
 }
