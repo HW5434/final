@@ -9,6 +9,14 @@
 	<select id="list" resultType="ActorDto">
 		select * from actor order by actor_no asc
 	</select>
+	<!-- 배우 목록 -->
+	<select id="listByConcertRequestNo" resultType="ActorDto">
+		select a.actor_no, a.actor_name, c.concert_request_no
+			from actor a
+			join concert_request c on a.concert_request_no = c.concert_request_no
+		where c.concert_request_no = #{concertRequestNo}
+	</select>
+	
 	
 	<!-- 배우 상세 -정보 별로 없는데 상세 필요할까싶음-->
 	<select id="find" resultType="ActorDto">
@@ -28,7 +36,7 @@
 		values(
 			#{actorNo},
 			#{actorName}, 
-			#{ConcertRequestNo}
+			#{concertRequestNo}
 		)
 	</insert>
 	
