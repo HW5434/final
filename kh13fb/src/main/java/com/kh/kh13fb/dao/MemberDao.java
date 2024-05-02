@@ -47,4 +47,17 @@ public class MemberDao {
 	public boolean delete(int memberNo) {
 		return sqlSession.delete("member.delete", memberNo) > 0;
 	}
+	
+	//아이디 중복체크
+	public boolean selectDoubleCheckId(String memberId) {
+		return sqlSession.selectOne("member.selectDoubleCheckId", memberId) == null;
+	}
+	
+	//이메일 중복체크
+	public boolean selectDoubleCheckEmail(String memberEmail) {
+		String test = sqlSession.selectOne("member.selectDoubleCheckEmail", memberEmail);
+		System.out.println("데이터체크");
+		System.out.println(memberEmail);
+		return sqlSession.selectOne("member.selectDoubleCheckEmail", memberEmail) == null;
+	}
 }

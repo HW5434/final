@@ -16,13 +16,13 @@
 	</select>
 	
 	<!-- 등록 -->
-	<select id="sequence" resultType="int">
-		select member_seq.nextval from dual
-	</select>
-	<insert id="insert">
-		insert into member(member_no, member_id, member_pw, member_contact, member_email, member_birth, member_post, member_address1, member_address2)
-		values(member_seq.nextval, #{memberId}, #{memberPw}, #{memberContact}, #{memberEmail}, #{memberBirth}, #{memberPost}, #{memberAddress1}, #{memberAddress2})
-	</insert>
+   <select id="sequence" resultType="int">
+      select member_seq.nextval from dual
+   </select>
+   <insert id="insert">
+      insert into member(member_no, member_name, member_id, member_pw, member_contact, member_email, member_birth, member_post, member_address1, member_address2)
+      values(member_seq.nextval, #{memberName}, #{memberId}, #{memberPw}, #{memberContact}, #{memberEmail}, #{memberBirth}, #{memberPost}, #{memberAddress1}, #{memberAddress2})
+   </insert>
 	
 	<!-- 삭제 -->
 	<delete id="delete">
@@ -33,6 +33,7 @@
 	<update id="edit">
 		update member
 		<set>
+			<if test="memberName != null">member_name = #{memberName},</if>
 			<if test="memberPw != null">member_pw = #{memberPw},</if>
 			<if test="memberContact != null">member_contact = #{memberContact},</if>
 			<if test="memberEmail != null">member_email = #{memberEmail},</if>
@@ -48,6 +49,7 @@
 	<update id="editMemberByAdmin">
 		update member
 		<set>
+			<if test="memberName != null">member_name = #{memberName},</if>
 			<if test="memberContact != null">member_contact = #{memberContact},</if>
 			<if test="memberGrade != null">member_grade = #{memberGrade},</if>
 			<if test="memberEmail != null">member_email = #{memberEmail},</if>
@@ -59,5 +61,15 @@
 		</set>
 		where member_no = #{memberNo}
 	</update>
+	
+	<!-- 아이디 중복체크 -->
+	<select id="selectDoubleCheckId" resultType="string">
+		select member_id from member where member_id = #{memberId}
+	</select>
+	
+	<!-- 이메일 중복체크 -->
+	<select id="selectDoubleCheckEmail" resultType="string">
+		select member_email from member where member_email = #{memberEmail}
+	</select>
 		
 </mapper>
