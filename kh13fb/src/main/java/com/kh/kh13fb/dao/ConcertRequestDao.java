@@ -6,6 +6,7 @@ import org.apache.ibatis.session.SqlSession;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Repository;
 
+import com.kh.kh13fb.dto.ActorDto;
 import com.kh.kh13fb.dto.ConcertRequestDto;
 
 @Repository
@@ -34,6 +35,8 @@ public class ConcertRequestDao {
 		public boolean edit(ConcertRequestDto concertRequestDto) {
 			return sqlSession.update("concertRequest.edit", concertRequestDto)>0;
 		}
-		
-		
+				
+		public List<ActorDto> selectActorsByConcertRequestNo(int concertRequestNo) {
+			return sqlSession.selectList("actor.listByConcertRequestNo",concertRequestNo);
+		}
 }
