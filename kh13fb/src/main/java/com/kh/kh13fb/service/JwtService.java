@@ -23,8 +23,7 @@ public class JwtService {
 	@Autowired
 	private JwtProperties jwtProperties;//keyStr, expireHour, issuer
 	
-	@Autowired
-	private MemberDto memberDto;
+
 	
 	public String createAccessToken(MemberDto memberDto) {
 		//1. 서명을 위한 키(SecretKey) 생성

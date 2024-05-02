@@ -13,7 +13,9 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
 import com.kh.kh13fb.dao.ConcertRequestDao;
+import com.kh.kh13fb.dto.ActorDto;
 import com.kh.kh13fb.dto.ConcertRequestDto;
+import com.kh.kh13fb.vo.ConcertListVO;
 
 @CrossOrigin
 @RestController
@@ -34,13 +36,28 @@ public class ConcertRequestRestController {
 		concertRequestDao.insert(concertRequestDto);
 		return;
 	}
-	
 	@GetMapping("/{concertRequestNo}")
-	public ResponseEntity<ConcertRequestDto> find(@PathVariable int concertRequestNo){
-		ConcertRequestDto concertRequestDto = concertRequestDao.selectOne(concertRequestNo);
-		if(concertRequestDto == null)return ResponseEntity.notFound().build();
-		return ResponseEntity.ok().body(concertRequestDto);
+    public ResponseEntity<ConcertRequestDto> find(@PathVariable int concertRequestNo){
+        ConcertRequestDto concertRequestDto = concertRequestDao.selectOne(concertRequestNo);
+        if(concertRequestDto == null)return ResponseEntity.notFound().build();
+        return ResponseEntity.ok().body(concertRequestDto); 
+    }
+	
+	@GetMapping("/{concertRequestNo}/actors")
+	public ResponseEntity<ConcertListVO> findWithActors(@PathVariable int concertRequestNo) {
+	    ConcertRequestDto concertRequestDto = concertRequestDao.selectOne(concertRequestNo);
+	    if (concertRequestDto == null) return ResponseEntity.notFound().build();
+
+	    List<ActorDto> actorList = concertRequestDao.selectActorsByConcertRequestNo(concertRequestNo);
+
+	    ConcertListVO concertListVO = ConcertListVO.builder()
+	                                                .concertRequestDto(concertRequestDto)
+	                                                .listActorDto(actorList)
+	                                                .build();
+	    
+	    return ResponseEntity.ok().body(concertListVO);
 	}
+
 	
 	
 	

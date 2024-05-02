@@ -14,8 +14,7 @@ public class AttachDao {
 		@Autowired
 		private SqlSession sqlSession;
 		
-		@Autowired
-		private AttachDto attachDto;
+		
 
 		public int getSequence() {
 			return sqlSession.selectOne("attach.sequence");
