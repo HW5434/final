@@ -72,9 +72,4 @@ public class ConcertRequestRestController {
 	    return ResponseEntity.ok().build();
     }
 
-	
-	
-	
-	
-
 }
