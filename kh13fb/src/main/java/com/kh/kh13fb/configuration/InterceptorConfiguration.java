@@ -24,15 +24,16 @@ public class InterceptorConfiguration implements WebMvcConfigurer{
 	@Override
 	public void addInterceptors(InterceptorRegistry registry) {
 		
-		registry.addInterceptor(memberInterceptor)
-					.addPathPatterns(
-							"/member/**" //"/concertRequest/**"
-							
-							)
-					.excludePathPatterns(
-							"/member/join*", "/member/login"
-							
-							);
+//		registry.addInterceptor(memberInterceptor)
+//					.addPathPatterns(
+//							"/member/**" //"/concertRequest/**"
+//							
+//							)
+//					.excludePathPatterns(
+//							"/member/signUp*"	, "/member/login*", "/member/doubleCheckId*","/member/sendEmail*",
+//							"/member/doubleCheckEmail*"
+//							
+//							);
 	/*	
 		// 관리자 인터셉터 등록
 		
@@ -51,11 +52,10 @@ public class InterceptorConfiguration implements WebMvcConfigurer{
 								);
 		*/
 		//비로그인시 접근 제한
-		registry.addInterceptor(NonMemberInterceptor)
-					.addPathPatterns(//가능
-							"/member/find*", 
-							"/member/join*"
-					);
+//		registry.addInterceptor(NonMemberInterceptor)
+//					.addPathPatterns(//가능
+//							"/member/find*"							
+//					);
 	
 	}	
 
