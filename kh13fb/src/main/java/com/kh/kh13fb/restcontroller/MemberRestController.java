@@ -16,6 +16,7 @@ import org.springframework.web.bind.annotation.RestController;
 
 import com.kh.kh13fb.dao.MemberDao;
 import com.kh.kh13fb.dto.MemberDto;
+import com.kh.kh13fb.service.EmailService;
 
 
 @CrossOrigin
@@ -26,11 +27,12 @@ public class MemberRestController {
 	@Autowired
 	private MemberDao memberDao;
 	
+	@Autowired
+	private EmailService emailService;
+	
 	//등록
 	@PostMapping("/")
 	public ResponseEntity<MemberDto> insert(@RequestBody MemberDto memberDto) {
-		
-		
 		int sequence = memberDao.sequence();
 		memberDto.setMemberNo(sequence);
 		memberDao.insert(memberDto);
@@ -43,6 +45,7 @@ public class MemberRestController {
 		List<MemberDto> list = memberDao.selectList();
 		return ResponseEntity.ok().body(list);
 	}
+	
 	//상세
 	@GetMapping("/{memberNo}")
 	public ResponseEntity<MemberDto> find(@PathVariable int memberNo) {
@@ -50,7 +53,7 @@ public class MemberRestController {
 		if(memberDto == null) return ResponseEntity.notFound().build();
 		return ResponseEntity.ok().body(memberDto);
 	}
-	
+
 	//수정
 	@PatchMapping("/")
 	public ResponseEntity<MemberDto> edit(@RequestBody MemberDto memberDto) {
@@ -72,5 +75,23 @@ public class MemberRestController {
 		boolean result = memberDao.delete(memberNo);
 		if(result == false) return ResponseEntity.notFound().build();
 		return ResponseEntity.ok().build();
+	}
+	
+	//아이디 중복체크
+	@GetMapping("/doubleCheckId/{memberId}")
+	public boolean selectDoubleCheckId(@PathVariable String memberId) {
+		return memberDao.selectDoubleCheckId(memberId);
+	}
+	
+	//이메일 중복체크
+	@GetMapping("/doubleCheckEmail/{memberEmail}")
+	public boolean selectDoubleCheckEmail(@PathVariable String memberEmail) {
+		return memberDao.selectDoubleCheckEmail(memberEmail);
+	}
+	
+	//이메일 전송 테스트
+	@GetMapping("/sendEmail/{memberEmail}")
+	public String sendEmail(@PathVariable String memberEmail) {
+		return emailService.sendCert(memberEmail);
 	}
 }
