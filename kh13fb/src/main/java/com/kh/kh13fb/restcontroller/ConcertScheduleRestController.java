@@ -85,6 +85,11 @@ public class ConcertScheduleRestController {
 		return ResponseEntity.ok().build();
 	}
 	
+	// 공연 정보에 따른 일정 검색
+	@GetMapping("/{concertRequestNo}/byConcertNo")
+	public List<ConcertScheduleDto> findScheduleByConcertRequestNo(@PathVariable int concertRequestNo) {
+	    return concertScheduleDao.findByConcertRequestNo(concertRequestNo);
+	}
 	
 	
 	
