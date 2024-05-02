@@ -24,6 +24,11 @@ public class ConcertRequestDao {
 			
 		}
 
+//		지혜
+		public boolean editUnit(ConcertRequestDto concertRequestDto) {
+			return sqlSession.update("concertRequest.editUnit", concertRequestDto)>0;
+		}
+		
 		public ConcertRequestDto selectOne(int concertRequestNo) {
 			return sqlSession.selectOne("concertRequest.find", concertRequestNo);
 		}
@@ -39,4 +44,5 @@ public class ConcertRequestDao {
 		public List<ActorDto> selectActorsByConcertRequestNo(int concertRequestNo) {
 			return sqlSession.selectList("actor.listByConcertRequestNo",concertRequestNo);
 		}
+
 }

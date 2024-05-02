@@ -4,7 +4,9 @@ import java.util.List;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.CrossOrigin;
+import org.springframework.web.bind.annotation.DeleteMapping;
 import org.springframework.web.bind.annotation.GetMapping;
+import org.springframework.web.bind.annotation.PatchMapping;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestBody;
@@ -26,17 +28,20 @@ public class QnaRestController {
 	@Autowired
 	private QnaDao qnaDao;
 	
+	//목록
 	@GetMapping("/")
 	public List<QnaDto> list() {
 		return qnaDao.selectList();
 	}
 	
-	@GetMapping("{qnaNo}")
+	//탐색
+	@GetMapping("/{qnaNo}")
 	public QnaDto find(@PathVariable int qnaNo) {
 		QnaDto qnaDto = qnaDao.selectOne(qnaNo);
 		return qnaDto;
 	}
 	
+	//등록
 	@PostMapping("/")
 	public QnaDto insert(@RequestBody QnaDto qnaDto) {
 		int sequence = qnaDao.sequence();
@@ -44,4 +49,18 @@ public class QnaRestController {
 		qnaDao.insert(qnaDto);
 		return qnaDao.selectOne(sequence);
 	}
+	
+	//일부수정
+	@PatchMapping("/")
+	public boolean edit(@RequestBody QnaDto qnaDtp) {
+		boolean result = qnaDao.edit(qnaDtp);
+		return result;
+	}
+	
+	//삭제
+	@DeleteMapping("/{qnaNo}")
+	public boolean delete(@PathVariable int qnaNo) {
+		return qnaDao.delete(qnaNo);
+	}
+	
 }
