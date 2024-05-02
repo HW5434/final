@@ -24,5 +24,17 @@
 		(#{qnaNo}, #{qnaTitle}, #{qnaContent})
 	</insert>
 
+	<!-- 수정 -->
+	
+	<update id="edit">
+		update qna
+		<set>
+			<if test="qnaTitle != null">qna_title = #{qnaTitle},</if>
+			<if test="qnaContent != null">qna_content = #{qnaContent},</if>
+		</set>
+		where qna_no = #{qnaNo}
+	</update>
+
+
 </mapper>
     
