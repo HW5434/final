@@ -6,7 +6,6 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.CrossOrigin;
 import org.springframework.web.bind.annotation.GetMapping;
-
 import org.springframework.web.bind.annotation.PatchMapping;
 
 import org.springframework.web.bind.annotation.PathVariable;
@@ -58,6 +57,7 @@ public class ConcertRequestRestController {
 	    }
 	    // 성공한 경우 200 OK 상태 코드를 반환합니다.
 	    return ResponseEntity.ok().build();
+
     }
 	
 	@GetMapping("/{concertRequestNo}/actors")
@@ -74,10 +74,5 @@ public class ConcertRequestRestController {
 	    
 	    return ResponseEntity.ok().body(concertListVO);
 	}
-
-	
-	
-	
-	
 
 }

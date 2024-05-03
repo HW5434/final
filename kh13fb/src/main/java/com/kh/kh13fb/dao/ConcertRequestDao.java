@@ -20,7 +20,7 @@ public class ConcertRequestDao {
 		}
 
 		public void insert(ConcertRequestDto concertRequestDto) {
-			sqlSession.insert("concertRequest.save", concertRequestDto);
+			sqlSession.insert("concertRequest.register", concertRequestDto);
 			
 		}
 
@@ -29,12 +29,18 @@ public class ConcertRequestDao {
 			return sqlSession.update("concertRequest.editUnit", concertRequestDto)>0;
 		}
 		
-		
-
 		public ConcertRequestDto selectOne(int concertRequestNo) {
-            return sqlSession.selectOne("concertRequest.find", concertRequestNo);
-        }
-
+			return sqlSession.selectOne("concertRequest.find", concertRequestNo);
+		}
+		
+		public boolean delete(int concertRequestNo) {
+			return sqlSession.delete("concertRequest.delete", concertRequestNo)>0;
+		}
+		
+		public boolean edit(ConcertRequestDto concertRequestDto) {
+			return sqlSession.update("concertRequest.edit", concertRequestDto)>0;
+		}
+				
 		public List<ActorDto> selectActorsByConcertRequestNo(int concertRequestNo) {
 			return sqlSession.selectList("actor.listByConcertRequestNo",concertRequestNo);
 		}

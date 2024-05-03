@@ -5,6 +5,7 @@
     "https://mybatis.org/dtd/mybatis-3-mapper.dtd">
     
     <mapper namespace="concertRequest">
+		
     	
     	
     	<select id="sequence" resultType="int">
@@ -39,24 +40,27 @@
 							#{concertRequestReadyfDay}, #{concertRequestStarthDay}, #{concertRequestStartfDay}, 
 							#{concertRequestWithdrawhDay}, #{concertRequestWithdrawfDay}, #{concertRequestSeatvip}, 
 							#{concertRequestSeatr}, #{concertRequestSeats}, #{concertRequestSeata}, #{concertRequestState}
+							)
 		</insert>
 		
 		<select id="find" resultType="concertRequestDto">
-        select * from concert_request where concert_request_no = #{concertRequestNo}
-    </select>
+     	   select * from concert_request where concert_request_no = #{concertRequestNo}
+  	  </select>
+    
+    
     <!-- 지혜 -->
     	<update id="editUnit">
-    update concert_request
-    <set> 
-        concert_request_state = #{concertRequestState},
-        concert_request_no = #{concertRequestNo}
-    </set>
-    where concert_request_no = #{concertRequestNo}
-</update>
-		
-		
-		
-		
+  			  update concert_request
+        	<set> 
+        		concert_request_state = #{concertRequestState},
+        		concert_request_no = #{concertRequestNo}
+    		</set>
+    			where concert_request_no = #{concertRequestNo}
+		</update>
+    
+    	<delete id="delete">
+    		delete concert_request where concert_request_no = #{concertRequestNo}
+    	</delete>
     
     
     
