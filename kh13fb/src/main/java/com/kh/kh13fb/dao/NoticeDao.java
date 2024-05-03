@@ -35,4 +35,7 @@ public class NoticeDao {
 	//수정
 	
 	//삭제
+	public boolean delete(int noticeNo) {
+		return sqlSession.delete("notice.delete", noticeNo) > 0;
+	}
 }

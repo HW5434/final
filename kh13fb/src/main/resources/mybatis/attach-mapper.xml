@@ -1,0 +1,37 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<!DOCTYPE mapper
+    PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+    "https://mybatis.org/dtd/mybatis-3-mapper.dtd">
+    
+    <mapper namespace="attach">
+    
+    	<select id="sequence" resultType="int">
+    		select concert_request_seq.nextval from dual
+    	</select>
+    	
+    	<select id="find" resultType="AttachDto">
+    		select * from attach where attach_no = #{attachNo}
+    	</select>
+    	
+    	<insert id="save">
+    		insert into attach(attach_no, attach_name, attach_type, attach_size)
+    			values( #{attachNo}, #{attachName},#{attachType}, #{attachSize})
+    	</insert>
+    	   	
+    	<select id="list" resultType="AttachDto">
+    		select * from attach order by attach_no asc
+    	</select>    	
+    	
+    	 <update id="update" parameterType="AttachDTO">
+   			 UPDATE attach
+   			 SET attachName = #{attachName}, attachType = #{attachType}, attachSize = #{attachSize}
+    		WHERE attachNo = #{attachNo}
+  		</update>
+  		
+  		 <insert id="insertMemberAttach" parameterType="map">
+    	    INSERT INTO member_attach(member_id, attach_no)
+     	   VALUES (#{memberId}, #{attachNo})
+    	</insert>
+       
+    </mapper>
