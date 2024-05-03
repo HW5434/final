@@ -41,7 +41,7 @@ public class QnaRestController {
 		return qnaDto;
 	}
 	
-	//등록
+	//등록 만약에
 	@PostMapping("/")
 	public QnaDto insert(@RequestBody QnaDto qnaDto) {
 		int sequence = qnaDao.sequence();
@@ -52,8 +52,8 @@ public class QnaRestController {
 	
 	//일부수정
 	@PatchMapping("/")
-	public boolean edit(@RequestBody QnaDto qnaDtp) {
-		boolean result = qnaDao.edit(qnaDtp);
+	public boolean edit(@RequestBody QnaDto qnaDto) {
+		boolean result = qnaDao.edit(qnaDto);
 		return result;
 	}
 	
