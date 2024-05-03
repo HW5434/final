@@ -73,12 +73,12 @@
 </delete>
     
     
-    <!-- 특정 공연 정보에 따른 일정 검색 -->
+<!-- 특정 공연 정보에 따른 일정 검색 -->
 		<select id="findByConcertRequestNo" resultType="ConcertScheduleDto">
     		select cs.* 
     			from concert_schedule cs
     			join concert_request cr on cs.concert_request_no = cr.concert_request_no
-    		where cr.concert_request_no = #{concertRequestNo}
+    		where cr.concert_request_no = #{concertRequestNo} order by cs.concert_schedule_start asc
 		</select>
     
     

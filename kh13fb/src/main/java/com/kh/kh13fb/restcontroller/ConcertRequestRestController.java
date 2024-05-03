@@ -7,14 +7,15 @@ import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.CrossOrigin;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PatchMapping;
-
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
+import com.kh.kh13fb.dao.CastActorDao;
 import com.kh.kh13fb.dao.ConcertRequestDao;
+import com.kh.kh13fb.dao.ConcertScheduleDao;
 import com.kh.kh13fb.dto.ActorDto;
 import com.kh.kh13fb.dto.ConcertRequestDto;
 import com.kh.kh13fb.vo.ConcertListVO;
@@ -27,7 +28,6 @@ public class ConcertRequestRestController {
 		
 	@Autowired
 	private ConcertRequestDao concertRequestDao;
-	
 	
 	@GetMapping("/")
 	public List<ConcertRequestDto> list(){
