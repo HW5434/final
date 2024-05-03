@@ -6,10 +6,13 @@ import org.apache.ibatis.session.SqlSession;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Repository;
 
+
 import com.kh.kh13fb.dto.ActorDto;
+
 
 @Repository
 public class ActorDao {//전체배우
+	
 	@Autowired
 	private SqlSession sqlSession;
 	
@@ -40,10 +43,8 @@ public class ActorDao {//전체배우
 	public boolean delete(int actorNo) {
 		return sqlSession.delete("actor.delete", actorNo) > 0;
 	}
+
 }
-
-
-
 
 
 
