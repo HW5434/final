@@ -6,9 +6,10 @@ import lombok.Data;
 import lombok.NoArgsConstructor;
 
 @Data @Builder @NoArgsConstructor @AllArgsConstructor
-public class QnaDto {
-	private int qnaNo;
-	private String qnaTitle;
-	private String qnaContent;
-	private String qnaAnswer;
+public class AttachDto {
+
+	private int attachNo;
+	private String attachName;
+	private String attachType;
+	private long attachSize;
 }

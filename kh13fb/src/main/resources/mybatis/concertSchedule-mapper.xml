@@ -42,6 +42,20 @@
         concert_schedule_no=#{concertScheduleNo}
 </update>
    
+   <insert id="saveWithRequestNo">
+    insert into concert_schedule(
+        concert_schedule_no,
+        concert_schedule_start,
+        concert_schedule_end,
+        concert_request_no
+    )
+    values(
+        #{concertScheduleNo},
+        #{concertScheduleStart},
+        #{concertScheduleEnd},
+        #{concertRequestNo}
+    )
+</insert>
    
    
    <update id="editUnit">
