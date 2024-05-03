@@ -15,7 +15,9 @@
     	SELECT ROWNUM AS rn, TMP.* FROM (
         SELECT
             qna_no,
-            qna_title
+            qna_title,
+            qna_target,
+            qna_answer
         FROM qna
         CONNECT BY PRIOR qna_no = qna_target
         START WITH qna_target IS NULL
@@ -32,7 +34,7 @@
 	<insert id="save">
 		insert into qna(qna_no, qna_title, qna_content, qna_answer)
 		values
-		(#{qnaNo}, #{qnaTitle}, #{qnaContent}, #{qnaAnswer})
+		(#{qnaNo}, #{qnaTitle}, #{qnaContent}, #{qnaAnswer}
 	</insert>
 
 	<!-- 수정 -->
@@ -42,9 +44,14 @@
 		<set>
 			<if test="qnaTitle != null">qna_title = #{qnaTitle},</if>
 			<if test="qnaContent != null">qna_content = #{qnaContent},</if>
+			<if test="qnaContent != null">qna_target = #{qnaTarget},</if>
 		</set>
 		where qna_no = #{qnaNo}
 	</update>
+
+	<delete id="delete">
+		delete qna where qna_no = #{qnaNo}
+	</delete>
 
 
 </mapper>

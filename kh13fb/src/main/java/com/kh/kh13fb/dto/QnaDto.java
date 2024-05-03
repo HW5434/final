@@ -11,4 +11,5 @@ public class QnaDto {
 	private String qnaTitle;
 	private String qnaContent;
 	private String qnaAnswer;
+	private Integer qnaTarget;
 }
