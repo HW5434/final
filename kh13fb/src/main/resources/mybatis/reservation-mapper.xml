@@ -1,0 +1,98 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<!DOCTYPE mapper
+    PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+    "https://mybatis.org/dtd/mybatis-3-mapper.dtd">
+    
+<mapper namespace="reservation">
+	<!-- 예매/결제 정보 목록 -->
+	<select id="list" resultType="ReservationDto">
+		select * from reservation order by reservation_no asc
+	</select>
+	
+	<!-- 예매/결제 상세 -->
+	<select id="find" resultType="ReservationDto">
+		select * from reservation where reservation_no = #{reservationNo}
+	</select>
+	
+	<!-- 예매/결제 등록(구매자가 등록하는거지) -->
+	<select id="sequence" resultType="int">
+		select reservation_seq.nextval from dual
+	</select>
+	
+	<insert id="save">
+		insert into reservation(
+			reservation_no,
+			member_no,
+			concert_schedule_no, 
+			seat_no,
+			reservation_concert_title,
+			reservation_concert_date,
+			reservation_price,
+			reservation_pay_date,
+			reservation_person_name,
+			reservation_person_tell,
+			reservation_person_email,
+			reservation_status
+		)
+		values(
+			#{reservationNo},
+			#{memberNo}, 
+			#{concertScheduleNo},
+			#{seatNo}, 
+			#{reservationConcertTitle}, 
+			#{reservationConcertDate}, 
+			#{reservationPrice}, 
+			#{reservationPayDate}, 
+			#{reservationPersonName}, 
+			#{reservationPersonTell}, 
+			#{reservationPersonEmail}, 
+			#{reservationStatus}, 
+		)
+	</insert>
+	<!-- 예매 수정 -필요할까-->
+	<update id="editAll">
+	    update reservation
+	    set
+	        member_no=#{memberNo},
+	        concert_schedule_no=#{concertScheduleNo},
+	        seat_no=#{seatNo},
+	        reservation_concert_title=#{reservationConcertTitle},
+	        reservation_concert_date=#{reservationConcertDate},
+	        reservation_price=#{reservationPrice},
+	        reservation_pay_date=#{reservationPayDate},
+	        reservation_person_name=#{reservationPersonName},
+	        reservation_person_tell=#{reservationPersonTell},
+	        reservation_person_email=#{reservationPersonEmail},
+	        reservation_status=#{reservationStatus}
+	    where
+	        reservation_no=#{reservationNo}
+	</update>
+   
+   
+   
+   <update id="editUnit">
+	    update reservation
+	    <set>
+	        <if test="memberNo != null">member_no=#{memberNo},</if>
+	        <if test="concertScheduleNo != null">concert_schedule_no=#{concertScheduleNo},</if>
+	        <if test="seatNo != null"> seat_no=#{seatNo},</if>
+	        <if test="reservationConcertTitle != null">reservation_concert_title=#{reservationConcertTitle},</if>
+	        <if test="reservationConcertDate != null">reservation_concert_date=#{reservationConcertDate},</if>
+	        <if test="reservationPrice != null"> reservation_price=#{reservationPrice},</if>
+	        <if test="reservationPayDate != null">reservation_pay_date=#{reservationPayDate},</if>
+	        <if test="reservationPersonName != null">reservation_person_name=#{reservationPersonName},</if>
+	        <if test="reservationPersonTell != null">reservation_person_tell=#{reservationPersonTell},</if>
+	        <if test="reservationPersonEmail != null">reservation_person_email=#{reservationPersonEmail},</if>
+	        <if test="reservationStatus != null">reservation_status=#{reservationStatus}</if>
+	    </set>
+	    	where reservation_no=#{reservationNo}
+	</update>
+	
+	
+	<!-- 예매 삭제 -예매 삭제가 어딨어 취소만 있지 ㅜㅜ-->
+	<!-- <delete id="delete">
+    	delete reservation where where reservation_no=#{reservationNo}
+	</delete> -->
+</mapper>
+    
