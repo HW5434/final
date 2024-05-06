@@ -105,14 +105,15 @@ public class MemberRestController {
 	@PostMapping("/login")
 	public ResponseEntity<MemberLoginVO> login(@RequestBody MemberDto memberDto) {
 		//회원번호로 정보조회
-		MemberDto findDto = memberDao.selectOne(memberDto.getMemberNo());
+		MemberDto findDto = memberDao.selectFindId(memberDto.getMemberId());
 		if(findDto == null) {//아이디없음(404)
 			return ResponseEntity.notFound().build();//404
 		}
 		
 		//비밀번호 비교
 		boolean isValid = findDto.getMemberPw().equals(memberDto.getMemberPw());
-		
+		System.out.println("백 데이터 체크");
+		System.out.println(memberDto.getMemberPw());
 		if(isValid) {//성공- MemberLoginVO(200)
 			return ResponseEntity.ok().body(MemberLoginVO.builder()
 						.memberNo(findDto.getMemberNo())
