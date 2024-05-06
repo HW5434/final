@@ -112,18 +112,57 @@ public class MemberRestController {
 		
 		//비밀번호 비교
 		boolean isValid = findDto.getMemberPw().equals(memberDto.getMemberPw());
-		System.out.println("백 데이터 체크");
-		System.out.println(memberDto.getMemberPw());
+
 		if(isValid) {//성공- MemberLoginVO(200)
+//			System.out.println("접근 체크");
+			String accessToken = jwtService.createAccessToken(findDto);
+//			System.out.println("접근 이후");
+			String refreshToken = jwtService.createRefreshToken(findDto);
+			
 			return ResponseEntity.ok().body(MemberLoginVO.builder()
 						.memberNo(findDto.getMemberNo())
+						.memberId(findDto.getMemberId())
 						.memberGrade(findDto.getMemberGrade())
+						.accessToken(accessToken)
+						.refreshToken(refreshToken)
 					.build());//200
 		} else {//실패- 파라미터오류(400)/ 미인증(401)
 			return ResponseEntity.status(401).build();//401
 		}
  		
 	}
+	
+	//refresh token으로 로그인(토큰을 갱신하는 작업)
+	@PostMapping("/refresh")
+	public ResponseEntity<MemberLoginVO> refrsh(@RequestHeader("Authorization") String refreshToken) {
+		try {
+			MemberLoginVO loginVO = jwtService.parse(refreshToken);
+			System.out.println(loginVO);
+			//loginVO에 있는 정보가 실제 DB와 일치하는지 추가적으로 조회
+			MemberDto memberDto = memberDao.selectFindId(loginVO.getMemberId());
+			if(memberDto == null) {//존재하지 않는 아이디
+				throw new Exception("존재하지 않는 아이디");
+			}
+			if(!loginVO.getMemberGrade().equals(memberDto.getMemberGrade())) {
+				throw new Exception("정보 불일치");
+			}
+			
+			//위에서 필터링 되지 않았다면 refreshToken이 유효하다고 볼 수 있음
+			//-> 사용자에게 새롭게 access token을 발급
+			//-> 보안을 위해서 refresh token도 재발급
+			String accessToken = jwtService.createAccessToken(memberDto);
+			String newRefreshToken = jwtService.createRefreshToken(memberDto);//기존건 폐기
+			return ResponseEntity.ok().body(MemberLoginVO.builder()
+						.memberId(memberDto.getMemberId())
+						.memberGrade(memberDto.getMemberGrade())
+						.accessToken(accessToken)
+						.refreshToken(newRefreshToken)
+					.build());
+		} catch(Exception e) { //잘못된 토큰
+			return ResponseEntity.status(401).build();
+		}
+	}
+	
 	
 }
 
