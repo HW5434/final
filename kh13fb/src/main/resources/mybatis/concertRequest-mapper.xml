@@ -48,7 +48,7 @@
   	  </select>
     
     
-    <!-- 지혜 -->
+    	<!-- 지혜 -->
     	<update id="editUnit">
   			  update concert_request
         	<set> 

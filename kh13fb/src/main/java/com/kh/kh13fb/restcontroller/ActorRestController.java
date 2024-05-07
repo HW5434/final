@@ -1,5 +1,6 @@
 package com.kh.kh13fb.restcontroller;
 
+import java.util.ArrayList;
 import java.util.List;
 
 import org.springframework.beans.factory.annotation.Autowired;
@@ -15,6 +16,7 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
 import com.kh.kh13fb.dao.ActorDao;
+import com.kh.kh13fb.dao.ConcertRequestDao;
 import com.kh.kh13fb.dto.ActorDto;
 
 
@@ -25,6 +27,9 @@ import com.kh.kh13fb.dto.ActorDto;
 public class ActorRestController {
 	@Autowired
 	private ActorDao actorDao;
+	
+	@Autowired
+    private ConcertRequestDao concertRequestDao;
 	
 	//배우 목록
 	@GetMapping("/")
@@ -72,6 +77,7 @@ public class ActorRestController {
 		}
 		return ResponseEntity.ok().build();
 	}
+	
 	
 }
 
