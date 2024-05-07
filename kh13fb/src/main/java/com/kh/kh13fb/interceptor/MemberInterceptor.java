@@ -46,12 +46,12 @@ public class MemberInterceptor implements HandlerInterceptor{
 		try {
 		//토큰 해석 시도
 		MemberLoginVO loginVO = jwtService.parse(token);
-		log.debug("번호 = {}, 등급 = {}", loginVO.getMemberNo(), loginVO.getMemberGrade());
+		log.debug("아이디 = {}, 등급 = {}", loginVO.getMemberId(), loginVO.getMemberGrade());
 		//추가적으로 DB검사, 기타 처리를 추가할 수 있다
 			return true;//통과
 		}	
 		catch(Exception e) {
-			//토큰이 유효하지 않은 경우 - 기산만료, 변조, 항목 누락,..
+			//토큰이 유효하지 않은 경우 - 시간만료, 변조, 항목 누락,..
 			response.sendError(403);
 			return false;
 		}

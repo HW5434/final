@@ -23,6 +23,10 @@ public class MemberDao {
 		return sqlSession.selectOne("member.find", memberNo);
 	}
 	
+	public MemberDto selectFindId(String memberId) {
+		return sqlSession.selectOne("member.selectFindId",memberId);
+	}
+	
 	//시퀀스조회
 	public int sequence() {
 		return sqlSession.selectOne("member.sequence");
@@ -58,9 +62,6 @@ public class MemberDao {
 	
 	//이메일 중복체크
 	public boolean selectDoubleCheckEmail(String memberEmail) {
-		String test = sqlSession.selectOne("member.selectDoubleCheckEmail", memberEmail);
-		System.out.println("데이터체크");
-		System.out.println(memberEmail);
 		return sqlSession.selectOne("member.selectDoubleCheckEmail", memberEmail) == null;
 	}
 }
