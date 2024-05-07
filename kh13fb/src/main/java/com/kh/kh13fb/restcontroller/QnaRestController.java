@@ -41,7 +41,7 @@ public class QnaRestController {
 		return qnaDto;
 	}
 	
-	//등록 만약에
+	//등록 만약에 2가지를 나누어야 하나? Get방식과 post방식
 	@PostMapping("/")
 	public QnaDto insert(@RequestBody QnaDto qnaDto) {
 		int sequence = qnaDao.sequence();
