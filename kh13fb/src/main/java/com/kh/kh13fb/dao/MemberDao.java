@@ -64,4 +64,9 @@ public class MemberDao {
 	public boolean selectDoubleCheckEmail(String memberEmail) {
 		return sqlSession.selectOne("member.selectDoubleCheckEmail", memberEmail) == null;
 	}
+	
+	//아이디찾기
+	public MemberDto getFindId(MemberDto memberDto) {
+		return sqlSession.selectOne("member.getFindId", memberDto);
+	}
 }

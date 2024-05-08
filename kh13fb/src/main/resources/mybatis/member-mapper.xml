@@ -75,5 +75,12 @@
 	<select id="selectDoubleCheckEmail" resultType="string">
 		select member_email from member where member_email = #{memberEmail}
 	</select>
+	
+	<!-- 아이디 찾기 -->
+	<select id="getFindId" resultType="MemberDto">
+		select * from member
+		where member_name = #{memberName}
+		and member_Email = #{memberEmail}
+	</select>
 		
 </mapper>

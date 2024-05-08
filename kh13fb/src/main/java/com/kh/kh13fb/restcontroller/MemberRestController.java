@@ -104,7 +104,7 @@ public class MemberRestController {
 	//로그인
 	@PostMapping("/login")
 	public ResponseEntity<MemberLoginVO> login(@RequestBody MemberDto memberDto) {
-		//회원번호로 정보조회
+		//아이디로 정보조회
 		MemberDto findDto = memberDao.selectFindId(memberDto.getMemberId());
 		if(findDto == null) {//아이디없음(404)
 			return ResponseEntity.notFound().build();//404
@@ -163,7 +163,17 @@ public class MemberRestController {
 		}
 	}
 	
+	//아이디 찾기
+	@PostMapping("/findId")
+	public ResponseEntity<MemberDto> findId(@RequestBody MemberDto memberDto) {
+		MemberDto findIdMemberDto = memberDao.getFindId(memberDto);
+//		System.out.println(findIdMemberDto);
+		return ResponseEntity.ok().body(findIdMemberDto);
+	}
 	
+	//비밀번호 찾기
+	
+	//회원탈퇴
 }
 
 
