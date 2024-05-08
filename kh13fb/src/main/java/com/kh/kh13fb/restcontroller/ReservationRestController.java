@@ -5,7 +5,7 @@ import java.util.List;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.CrossOrigin;
-import org.springframework.web.bind.annotation.DeleteMapping;
+//import org.springframework.web.bind.annotation.DeleteMapping;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PatchMapping;
 import org.springframework.web.bind.annotation.PathVariable;
@@ -16,7 +16,10 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
 import com.kh.kh13fb.dao.ReservationDao;
+import com.kh.kh13fb.dto.ConcertScheduleDto;
 import com.kh.kh13fb.dto.ReservationDto;
+import com.kh.kh13fb.dto.SeatDto;
+import com.kh.kh13fb.vo.ReservationSeatVO;
 
 @CrossOrigin
 @RestController
@@ -68,6 +71,17 @@ public class ReservationRestController {
 		}
 		return ResponseEntity.ok().build();
 	}
+	
+	    //공연 정보에 따른 일정 리스트(고객이 보고 선택하여야하므로)
+		@GetMapping("/{concertRequestNo}/byConcertRequestNo")
+		public List<ConcertScheduleDto> listScheduleByConcertRequestNo(@PathVariable int concertRequestNo) {
+		    return reservationDao.listScheduleByConcertRequestNo(concertRequestNo);
+		}
+		// 공연 정보에 따른 좌석 리스트(고객이 보고 선택하여야하므로)
+		@GetMapping("/{concertScheduleNo}/seat")
+		public List<ReservationSeatVO> listSeat(@PathVariable int concertScheduleNo) {
+			return reservationDao.listSeat(concertScheduleNo);
+		}
 	
 	//예매/결제 정보 삭제--삭제할 일 x
 //	@DeleteMapping("/{reservationNo}")
