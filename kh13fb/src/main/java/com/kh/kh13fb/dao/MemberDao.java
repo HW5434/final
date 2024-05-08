@@ -34,8 +34,6 @@ public class MemberDao {
 	
 	//등록
 	public void insert(MemberDto memberDto) {
-		System.out.println("데이터 확인");
-		System.out.println(memberDto);
 		sqlSession.insert("member.insert", memberDto);
 	}
 	
@@ -75,6 +73,10 @@ public class MemberDao {
 		return sqlSession.selectOne("member.getFindPw", memberDto);
 	}
 	
+	//임시 비밀번호 변경
+	public void editTempPassword(MemberDto memberDto) {
+		sqlSession.update("member.editTempPassword", memberDto);
+	}
 	
 }
 

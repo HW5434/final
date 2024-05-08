@@ -75,7 +75,7 @@ public class EmailService {
 		
 		//생성한 비밀번호로 DB 변경
 		memberDto.setMemberPw(buffer.toString());//비밀번호 설정 후
-		memberDao.getFindPw(memberDto);//변경처리
+		memberDao.editTempPassword(memberDto);//변경처리
 		
 		//이메일 발송
 		SimpleMailMessage message = new SimpleMailMessage();
