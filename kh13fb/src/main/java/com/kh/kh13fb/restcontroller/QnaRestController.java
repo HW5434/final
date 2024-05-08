@@ -41,12 +41,22 @@ public class QnaRestController {
 		return qnaDto;
 	}
 	
-	//등록 만약에 2가지를 나누어야 하나? Get방식과 post방식
+	//등록
 	@PostMapping("/")
 	public QnaDto insert(@RequestBody QnaDto qnaDto) {
 		int sequence = qnaDao.sequence();
 		qnaDto.setQnaNo(sequence);
 		qnaDao.insert(qnaDto);
+		return qnaDao.selectOne(sequence);
+	}
+	
+	//관리자 등록? <- 시도중
+	@PostMapping("/admin")
+	public QnaDto adminAdd(@RequestBody QnaDto qnaDto) {
+		int sequence = qnaDao.sequence();
+		qnaDto.setQnaNo(sequence);
+		qnaDto.setQnaAnswer("Y");
+		qnaDao.adminAdd(qnaDto);
 		return qnaDao.selectOne(sequence);
 	}
 	

@@ -19,10 +19,18 @@
 		select * from qna where qna_no = #{qnaNo}
 	</select>
 
+
 	<insert id="save">
 		insert into qna(qna_no, qna_title, qna_content, qna_answer)
 		values
 		(#{qnaNo}, #{qnaTitle}, #{qnaContent}, #{qnaAnswer})
+	</insert>
+	
+	<!-- 관리자 등록	 -->
+	<insert id="add">
+		insert into qna(qna_no, qna_title, qna_content, qna_answer, qna_target)
+		values
+		(#{qnaNo}, #{qnaTitle}, #{qnaContent}, #{qnaAnswer}, #{qnaTarget})
 	</insert>
 
 	<!-- 수정 -->
