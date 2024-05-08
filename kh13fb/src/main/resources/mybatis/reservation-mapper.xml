@@ -47,7 +47,7 @@
 			#{reservationPersonName}, 
 			#{reservationPersonTell}, 
 			#{reservationPersonEmail}, 
-			#{reservationStatus}, 
+			#{reservationStatus}
 		)
 	</insert>
 	<!-- 예매 수정 -필요할까-->
@@ -89,6 +89,37 @@
 	    	where reservation_no=#{reservationNo}
 	</update>
 	
+	<!-- 특정 공연 정보에 따른 일정 목록 출력(조회)  ?스케쥴 받아와야하니깐 resultType이 스케쥴 디티오인건가?-->
+		<select id="listScheduleByConcertRequestNo" resultType="ConcertScheduleDto">
+    		select cs.* 
+    			from concert_schedule cs
+    			join concert_request cr on cs.concert_request_no = cr.concert_request_no
+    		where cr.concert_request_no = #{concertRequestNo} order by cs.concert_schedule_start asc
+		</select>
+		
+	<!-- 좌석 조회 ? 공연 일정번호를 받아서 그에 따른 좌석 조회를 하는것! -->
+		<select id="listSeat" resultType="ReservationSeatVO">
+			SELECT
+			    cs.concert_schedule_no,
+			    cs.concert_schedule_start,
+			    cs.concert_schedule_end,
+			    s.seat_no,
+			    s.seat_col,
+			    s.seat_row,
+			    s.seat_level,
+    		CASE
+		        WHEN r.reservation_no IS NOT NULL THEN 'Y'
+		        ELSE 'N'
+    		END AS reservation_status
+			FROM
+			    concert_schedule cs
+			CROSS JOIN
+			    seat s
+			LEFT JOIN
+			    reservation r ON cs.concert_schedule_no = r.concert_schedule_no AND s.seat_no = r.seat_no
+			WHERE
+			    cs.concert_schedule_no = #{concertScheduleNo}
+		</select>
 	
 	<!-- 예매 삭제 -예매 삭제가 어딨어 취소만 있지 ㅜㅜ-->
 	<!-- <delete id="delete">
