@@ -13,12 +13,11 @@ import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
-import com.kh.kh13fb.dao.CastActorDao;
 import com.kh.kh13fb.dao.ConcertRequestDao;
-import com.kh.kh13fb.dao.ConcertScheduleDao;
 import com.kh.kh13fb.dto.ActorDto;
 import com.kh.kh13fb.dto.ConcertRequestDto;
 import com.kh.kh13fb.vo.ConcertListVO;
+import com.kh.kh13fb.vo.ConcertRequestVO;
 
 
 @CrossOrigin
@@ -35,9 +34,9 @@ public class ConcertRequestRestController {
 	}
 	
 	@PostMapping("/")
-	public void insert(@RequestBody ConcertRequestDto concertRequestDto) {
-		concertRequestDao.insert(concertRequestDto);
-		return;
+	public void insert(@RequestBody ConcertRequestVO concertRequestVO) {
+//		System.out.println(concertRequestVO);
+		concertRequestDao.insert(concertRequestVO);
 	}
 	@GetMapping("/{concertRequestNo}")
     public ResponseEntity<ConcertRequestDto> find(@PathVariable int concertRequestNo){

@@ -34,7 +34,7 @@
 	<insert id="save">
 		insert into qna(qna_no, qna_title, qna_content, qna_answer)
 		values
-		(#{qnaNo}, #{qnaTitle}, #{qnaContent}, #{qnaAnswer}
+		(#{qnaNo}, #{qnaTitle}, #{qnaContent}, #{qnaAnswer})
 	</insert>
 
 	<!-- 수정 -->
