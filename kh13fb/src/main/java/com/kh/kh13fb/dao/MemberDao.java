@@ -69,4 +69,21 @@ public class MemberDao {
 	public MemberDto getFindId(MemberDto memberDto) {
 		return sqlSession.selectOne("member.getFindId", memberDto);
 	}
+	
+	//비밀번호 찾기
+	public MemberDto getFindPw(MemberDto memberDto) {
+		return sqlSession.selectOne("member.getFindPw", memberDto);
+	}
+	
+	
 }
+
+
+
+
+
+
+
+
+
+

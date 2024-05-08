@@ -172,6 +172,21 @@ public class MemberRestController {
 	}
 	
 	//비밀번호 찾기
+	@PostMapping("/findPw")
+	public ResponseEntity<MemberDto> findPw(@RequestBody MemberDto memberDto) {
+		MemberDto findPwMemberDto = memberDao.getFindPw(memberDto);
+		
+		//아이디가 있고 이메일이 일치해야 메일 전송
+		boolean isValid = findPwMemberDto != null && 
+					findPwMemberDto.getMemberEmail().equals(memberDto.getMemberEmail());
+	
+		if(isValid) {
+			emailService.sendTempPassword(findPwMemberDto);
+			return ResponseEntity.ok().body(findPwMemberDto);
+		} else {
+			return ResponseEntity.notFound().build();
+		}
+	}
 	
 	//회원탈퇴
 }

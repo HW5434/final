@@ -82,5 +82,21 @@
 		where member_name = #{memberName}
 		and member_Email = #{memberEmail}
 	</select>
+	
+	<!-- 비밀번호 찾기 -->
+	<select id="getFindPw" resultType="MemberDto">
+		select * from member
+		where member_id = #{memberId}
+		and member_Email = #{memberEmail}
+	</select>
 		
 </mapper>
+
+
+
+
+
+
+
+
+
