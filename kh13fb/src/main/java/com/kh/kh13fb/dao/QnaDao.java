@@ -27,6 +27,11 @@ public class QnaDao {
 	public void insert(QnaDto qnaDto) {
 		sqlSession.insert("qna.save", qnaDto);
 	}
+	
+	//관리자 등록
+	public void adminAdd(QnaDto qnaDto) {
+		sqlSession.insert("qna.add", qnaDto);
+	}
 
 	//탐색
 	public QnaDto selectOne(int qnaNo) {
