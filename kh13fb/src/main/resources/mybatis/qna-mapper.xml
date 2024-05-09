@@ -11,19 +11,7 @@
 	</select>
 
 	<select id="list" resultType="QnaDto">
-    	SELECT * FROM (
-    	SELECT ROWNUM AS rn, TMP.* FROM (
-        SELECT
-            qna_no,
-            qna_title,
-            qna_target,
-            qna_answer
-        FROM qna
-        CONNECT BY PRIOR qna_no = qna_target
-        START WITH qna_target IS NULL
-        ORDER SIBLINGS BY qna_no DESC, qna_no ASC
-    ) TMP
-) WHERE rn BETWEEN 1 AND 10
+    	select * from qna order by qna_no asc
 	</select>
 
 	
@@ -31,10 +19,18 @@
 		select * from qna where qna_no = #{qnaNo}
 	</select>
 
+
 	<insert id="save">
 		insert into qna(qna_no, qna_title, qna_content, qna_answer)
 		values
 		(#{qnaNo}, #{qnaTitle}, #{qnaContent}, #{qnaAnswer})
+	</insert>
+	
+	<!-- 관리자 등록	 -->
+	<insert id="add">
+		insert into qna(qna_no, qna_title, qna_content, qna_answer, qna_target)
+		values
+		(#{qnaNo}, #{qnaTitle}, #{qnaContent}, #{qnaAnswer}, #{qnaTarget})
 	</insert>
 
 	<!-- 수정 -->
