@@ -12,6 +12,7 @@ import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.PutMapping;
 import org.springframework.web.bind.annotation.RequestBody;
+import org.springframework.web.bind.annotation.RequestHeader;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
@@ -19,6 +20,8 @@ import com.kh.kh13fb.dao.ReservationDao;
 import com.kh.kh13fb.dto.ConcertScheduleDto;
 import com.kh.kh13fb.dto.ReservationDto;
 import com.kh.kh13fb.dto.SeatDto;
+import com.kh.kh13fb.service.JwtService;
+import com.kh.kh13fb.vo.MemberLoginVO;
 import com.kh.kh13fb.vo.ReservationSeatVO;
 
 @CrossOrigin
@@ -27,6 +30,9 @@ import com.kh.kh13fb.vo.ReservationSeatVO;
 public class ReservationRestController {
 	@Autowired
 	private ReservationDao reservationDao;
+	
+	@Autowired
+	private JwtService jwtService;
 	
 	//예매/결제 목록
 	@GetMapping("/")
@@ -45,9 +51,14 @@ public class ReservationRestController {
 	}
 	//예매/결제 등록(사용자가 예매 결제!!)
 	@PostMapping("/")
-	public ReservationDto insert(@RequestBody ReservationDto reservationDto) {
+	public ReservationDto insert(@RequestBody ReservationDto reservationDto,@RequestHeader("Authorization") String token) {
+		MemberLoginVO loginVO = jwtService.parse(token);
+		// 회원 번호 추출
+		int memberNo = loginVO.getMemberNo();
+		reservationDto.setMemberNo(memberNo);//회원번호 넣어주기
+		//예매 번호 설정
 		int sequence = reservationDao.sequence();
-		reservationDto.setReservationNo(sequence);
+		reservationDto.setReservationNo(sequence);//예약번호 넣어주기
 		reservationDao.insert(reservationDto);
 		
 		return reservationDto;

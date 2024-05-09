@@ -32,8 +32,8 @@
 			reservation_pay_date,
 			reservation_person_name,
 			reservation_person_tell,
-			reservation_person_email,
-			reservation_status
+			reservation_person_email
+			<!-- reservation_status -->
 		)
 		values(
 			#{reservationNo},
@@ -43,11 +43,11 @@
 			#{reservationConcertTitle}, 
 			#{reservationConcertDate}, 
 			#{reservationPrice}, 
-			#{reservationPayDate}, 
+			sysdate,
 			#{reservationPersonName}, 
 			#{reservationPersonTell}, 
-			#{reservationPersonEmail}, 
-			#{reservationStatus}
+			#{reservationPersonEmail}
+			<!-- #{reservationStatus} -->
 		)
 	</insert>
 	<!-- 예매 수정 -필요할까-->
