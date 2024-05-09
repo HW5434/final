@@ -1,6 +1,8 @@
 package com.kh.kh13fb.dao;
 
+import java.util.HashMap;
 import java.util.List;
+import java.util.Map;
 
 import org.apache.ibatis.session.SqlSession;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -76,6 +78,12 @@ public class MemberDao {
 	//임시 비밀번호 변경
 	public void editTempPassword(MemberDto memberDto) {
 		sqlSession.update("member.editTempPassword", memberDto);
+	}
+	
+	public Map<String, Object> getMyReservationList(int memberNo) {
+		Map<String, Object> resultMap = new HashMap<String, Object>();
+		resultMap.put("reservationList", sqlSession.selectList("member.getMyReservationList", memberNo));
+		return resultMap;
 	}
 	
 }

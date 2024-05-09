@@ -1,6 +1,7 @@
 package com.kh.kh13fb.restcontroller;
 
 import java.util.List;
+import java.util.Map;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.ResponseEntity;
@@ -68,6 +69,13 @@ public class MemberRestController {
 		if(memberDto == null) return ResponseEntity.notFound().build();
 		return ResponseEntity.ok().body(memberDto);
 	}
+	
+	@GetMapping("/getMyReservationList/{refreshToken}")
+	public ResponseEntity<?> getMyReservationList(@PathVariable String refreshToken) throws Exception {
+		MemberLoginVO loginVO = jwtService.parse(refreshToken);
+		Map<String, Object> resultMap = memberDao.getMyReservationList(loginVO.getMemberNo());
+		return ResponseEntity.ok().body(resultMap);
+	}	
 
 	//수정
 	@PatchMapping("/")
