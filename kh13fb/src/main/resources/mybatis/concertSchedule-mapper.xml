@@ -81,6 +81,4 @@
     		where cr.concert_request_no = #{concertRequestNo} order by cs.concert_schedule_start asc
 		</select>
     
-    
-    
     </mapper>
