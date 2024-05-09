@@ -100,6 +100,7 @@
 		and member_Email = #{memberEmail}
 	</select>
 	
+	<!-- 임시비밀번호로 변경 -->
 	<update id="editTempPassword">
 		update member set member_pw = #{memberPw} where member_id = #{memberId}
 	</update>
