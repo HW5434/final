@@ -40,10 +40,15 @@ public class ConcertRequestRestController {
 	}
 	
 	@PostMapping("/")
-	public void insert(@RequestBody ConcertRequestVO concertRequestVO, @RequestHeader String authorization) {
+	public ConcertRequestVO insert(@RequestBody ConcertRequestVO concertRequestVO, @RequestHeader String authorization) {
 		MemberLoginVO loginVO = jwtService.parse(authorization);
-//		System.out.println(concertRequestVO);
+		concertRequestVO.setMemberNo(loginVO.getMemberNo());
+				//		System.out.println(concertRequestVO);
+		int sequence = concertRequestDao.sequence();
+		concertRequestVO.setConcertRequestNo(sequence);
 		concertRequestDao.insert(concertRequestVO);
+		
+		return concertRequestVO;
 	}
 	@GetMapping("/{concertRequestNo}")
     public ResponseEntity<ConcertRequestDto> find(@PathVariable int concertRequestNo){

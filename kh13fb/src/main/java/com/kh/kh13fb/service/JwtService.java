@@ -43,6 +43,7 @@ public class JwtService {
 					.issuedAt(now)//발행시각
 					.expiration(expire)//만료시각
 					.signWith(key)//서명
+					.claim("loginNo", memberDto.getMemberNo())
 					.claim("loginId", memberDto.getMemberId())//사용자에게 보낼 내용(key=value)
 //					.claim("loginGrade", memberDto.getMemberGrade())//사용자에게 보낼 내용(key=value)
 				.compact();
