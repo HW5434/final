@@ -30,16 +30,16 @@
 				concert_request_seatvip, concert_request_seatr, concert_request_seats, concert_request_seata, 
 				concert_request_state
 			)
-				values(#{concertRequestNo}, #{concertRequestCompanyName}, 
-							#{concertRequestCompanyNumber}, #{concertRequestRepresentative}, 
-							#{concertRequestManager}, #{concertRequestAddress}, #{concertRequestOfficeNumber}, 
-							#{concertRequestPhoneNumber}, #{concertRequestEmail}, #{concertRequestFax}, 
-							#{concertRequestConcertName}, #{concertRequestConcertGenre}, #{concertRequestAge}, 
-							#{concertRequestRuntimeFirst}, #{concertRequestIntermission}, #{concertRequestRuntimeSecond}, 
-							#{concertRequestHeadDay}, #{concertRequestFooterDay}, #{concertRequestReadyhDay}, 
-							#{concertRequestReadyfDay}, #{concertRequestStarthDay}, #{concertRequestStartfDay}, 
-							#{concertRequestWithdrawhDay}, #{concertRequestWithdrawfDay}, #{concertRequestSeatvip}, 
-							#{concertRequestSeatr}, #{concertRequestSeats}, #{concertRequestSeata}, #{concertRequestState}
+				values(#{concertRequestNo}, #{applicant.concertRequestCompanyName}, 
+							#{applicant.concertRequestCompanyNumber}, #{applicant.concertRequestRepresentative}, 
+							#{applicant.concertRequestManager}, #{applicant.concertRequestAddress}, #{applicant.concertRequestOfficeNumber}, 
+							#{applicant.concertRequestPhoneNumber}, #{applicant.concertRequestEmail}, #{applicant.concertRequestFax}, 
+							#{concert.concertRequestConcertName}, #{concert.concertRequestConcertGenre}, #{concert.concertRequestAge}, 
+							#{concert.concertRequestRuntimeFirst}, #{concert.concertRequestIntermission}, #{concert.concertRequestRuntimeSecond}, 
+							#{rent.concertRequestHeadDay}, #{rent.concertRequestFooterDay}, #{rent.concertRequestReadyhDay}, 
+							#{rent.concertRequestReadyfDay}, #{rent.concertRequestStarthDay}, #{rent.concertRequestStartfDay}, 
+							#{rent.concertRequestWithdrawhDay}, #{rent.concertRequestWithdrawfDay}, #{concert.concertRequestSeatvip}, 
+							#{concert.concertRequestSeatr}, #{concert.concertRequestSeats}, #{concert.concertRequestSeata}, #{rent.concertRequestState}
 							)
 		</insert>
 		

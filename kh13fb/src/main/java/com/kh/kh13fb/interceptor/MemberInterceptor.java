@@ -46,7 +46,7 @@ public class MemberInterceptor implements HandlerInterceptor{
 		try {
 		//토큰 해석 시도
 		MemberLoginVO loginVO = jwtService.parse(token);
-		log.debug("아이디 = {}, 등급 = {}", loginVO.getMemberId(), loginVO.getMemberGrade());
+		log.debug("번호 = {}, 아이디 = {}, 등급 = {}", loginVO.getMemberNo(), loginVO.getMemberId(), loginVO.getMemberGrade());
 		//추가적으로 DB검사, 기타 처리를 추가할 수 있다
 			return true;//통과
 		}	
