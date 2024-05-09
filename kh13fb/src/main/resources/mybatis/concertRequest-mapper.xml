@@ -62,6 +62,22 @@
     	<delete id="delete">
     		delete concert_request where concert_request_no = #{concertRequestNo}
     	</delete>
+    	
+    <insert id="saveSchedule">
+    insert into concert_schedule (
+        concert_schedule_no,
+        concert_schedule_start,
+        concert_schedule_end,
+        concert_request_no
+    )
+    values (
+        #{concertScheduleNo},
+        #{concertScheduleStart},
+        #{concertScheduleEnd},
+        #{concertRequestNo}
+    )
+    </insert>
+    
     
     
     
