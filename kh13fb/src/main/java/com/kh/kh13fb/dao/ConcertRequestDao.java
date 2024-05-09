@@ -8,6 +8,7 @@ import org.springframework.stereotype.Repository;
 
 import com.kh.kh13fb.dto.ActorDto;
 import com.kh.kh13fb.dto.ConcertRequestDto;
+import com.kh.kh13fb.vo.ConcertRequestVO;
 
 @Repository
 public class ConcertRequestDao {
@@ -19,8 +20,8 @@ public class ConcertRequestDao {
 			return sqlSession.selectList("concertRequest.list");
 		}
 
-		public void insert(ConcertRequestDto concertRequestDto) {
-			sqlSession.insert("concertRequest.register", concertRequestDto);
+		public int insert(ConcertRequestVO concertRequestVO) {
+			return sqlSession.insert("concertRequest.register", concertRequestVO);
 			
 		}
 

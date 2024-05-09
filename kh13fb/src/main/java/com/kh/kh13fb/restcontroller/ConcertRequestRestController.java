@@ -10,15 +10,17 @@ import org.springframework.web.bind.annotation.PatchMapping;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestBody;
+import org.springframework.web.bind.annotation.RequestHeader;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
-import com.kh.kh13fb.dao.CastActorDao;
 import com.kh.kh13fb.dao.ConcertRequestDao;
-import com.kh.kh13fb.dao.ConcertScheduleDao;
 import com.kh.kh13fb.dto.ActorDto;
 import com.kh.kh13fb.dto.ConcertRequestDto;
+import com.kh.kh13fb.service.JwtService;
 import com.kh.kh13fb.vo.ConcertListVO;
+import com.kh.kh13fb.vo.ConcertRequestVO;
+import com.kh.kh13fb.vo.MemberLoginVO;
 
 
 @CrossOrigin
@@ -29,15 +31,19 @@ public class ConcertRequestRestController {
 	@Autowired
 	private ConcertRequestDao concertRequestDao;
 	
+	@Autowired
+	private JwtService jwtService;
+	
 	@GetMapping("/")
 	public List<ConcertRequestDto> list(){
 		return concertRequestDao.selectList();
 	}
 	
 	@PostMapping("/")
-	public void insert(@RequestBody ConcertRequestDto concertRequestDto) {
-		concertRequestDao.insert(concertRequestDto);
-		return;
+	public void insert(@RequestBody ConcertRequestVO concertRequestVO, @RequestHeader String authorization) {
+		MemberLoginVO loginVO = jwtService.parse(authorization);
+//		System.out.println(concertRequestVO);
+		concertRequestDao.insert(concertRequestVO);
 	}
 	@GetMapping("/{concertRequestNo}")
     public ResponseEntity<ConcertRequestDto> find(@PathVariable int concertRequestNo){
