@@ -1,6 +1,8 @@
 package com.kh.kh13fb.dao;
 
+import java.util.HashMap;
 import java.util.List;
+import java.util.Map;
 
 import org.apache.ibatis.session.SqlSession;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -34,8 +36,6 @@ public class MemberDao {
 	
 	//등록
 	public void insert(MemberDto memberDto) {
-		System.out.println("데이터 확인");
-		System.out.println(memberDto);
 		sqlSession.insert("member.insert", memberDto);
 	}
 	
@@ -64,4 +64,36 @@ public class MemberDao {
 	public boolean selectDoubleCheckEmail(String memberEmail) {
 		return sqlSession.selectOne("member.selectDoubleCheckEmail", memberEmail) == null;
 	}
+	
+	//아이디찾기
+	public MemberDto getFindId(MemberDto memberDto) {
+		return sqlSession.selectOne("member.getFindId", memberDto);
+	}
+	
+	//비밀번호 찾기
+	public MemberDto getFindPw(MemberDto memberDto) {
+		return sqlSession.selectOne("member.getFindPw", memberDto);
+	}
+	
+	//임시 비밀번호 변경
+	public void editTempPassword(MemberDto memberDto) {
+		sqlSession.update("member.editTempPassword", memberDto);
+	}
+	
+	public Map<String, Object> getMyReservationList(int memberNo) {
+		Map<String, Object> resultMap = new HashMap<String, Object>();
+		resultMap.put("reservationList", sqlSession.selectList("member.getMyReservationList", memberNo));
+		return resultMap;
+	}
+	
 }
+
+
+
+
+
+
+
+
+
+

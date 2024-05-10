@@ -23,7 +23,16 @@
    <select id="sequence" resultType="int">
       select member_seq.nextval from dual
    </select>
-   
+
+   <select id="getMyReservationList" resultType="hashmap">
+   		select tb2.*, tb3.* from member tb1
+   		left outer join reservation tb2
+   		on tb1.member_no = tb2.member_no
+   		left outer join seat tb3
+   		on tb2.seat_no = tb3.seat_no
+   		where tb1.member_no = #{member_no}
+   </select>
+
    <insert id="insert">
       insert into member(member_no, member_name, member_id, member_pw, member_contact, member_email, member_birth, member_post, member_address1, member_address2)
       values(member_seq.nextval, #{memberName}, #{memberId}, #{memberPw}, #{memberContact}, #{memberEmail}, #{memberBirth}, #{memberPost}, #{memberAddress1}, #{memberAddress2})
@@ -76,5 +85,33 @@
 	<select id="selectDoubleCheckEmail" resultType="string">
 		select member_email from member where member_email = #{memberEmail}
 	</select>
+	
+	<!-- 아이디 찾기 -->
+	<select id="getFindId" resultType="MemberDto">
+		select * from member
+		where member_name = #{memberName}
+		and member_Email = #{memberEmail}
+	</select>
+	
+	<!-- 비밀번호 찾기 -->
+	<select id="getFindPw" resultType="MemberDto">
+		select * from member
+		where member_id = #{memberId}
+		and member_Email = #{memberEmail}
+	</select>
+	
+	<!-- 임시비밀번호로 변경 -->
+	<update id="editTempPassword">
+		update member set member_pw = #{memberPw} where member_id = #{memberId}
+	</update>
 		
 </mapper>
+
+
+
+
+
+
+
+
+

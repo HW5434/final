@@ -1,6 +1,7 @@
 package com.kh.kh13fb.restcontroller;
 
 import java.util.List;
+import java.util.Map;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.ResponseEntity;
@@ -17,9 +18,9 @@ import org.springframework.web.bind.annotation.RestController;
 
 import com.kh.kh13fb.dao.MemberDao;
 import com.kh.kh13fb.dto.MemberDto;
+import com.kh.kh13fb.service.EmailService;
 import com.kh.kh13fb.service.JwtService;
 import com.kh.kh13fb.vo.MemberLoginVO;
-import com.kh.kh13fb.service.EmailService;
 
 
 @CrossOrigin
@@ -59,6 +60,22 @@ public class MemberRestController {
 		if(memberDto == null) return ResponseEntity.notFound().build();
 		return ResponseEntity.ok().body(memberDto);
 	}
+	
+	//토큰값으로 상세조회
+	@GetMapping("/getMember/{refreshToken}")
+	public ResponseEntity<MemberDto> getMember(@PathVariable String refreshToken) {
+		MemberLoginVO loginVO = jwtService.parse(refreshToken);
+		MemberDto memberDto = memberDao.selectOne(loginVO.getMemberNo());
+		if(memberDto == null) return ResponseEntity.notFound().build();
+		return ResponseEntity.ok().body(memberDto);
+	}
+	
+	@GetMapping("/getMyReservationList/{refreshToken}")
+	public ResponseEntity<?> getMyReservationList(@PathVariable String refreshToken) throws Exception {
+		MemberLoginVO loginVO = jwtService.parse(refreshToken);
+		Map<String, Object> resultMap = memberDao.getMyReservationList(loginVO.getMemberNo());
+		return ResponseEntity.ok().body(resultMap);
+	}	
 
 	//수정
 	@PatchMapping("/")
@@ -67,6 +84,7 @@ public class MemberRestController {
 		if(result == false) return ResponseEntity.notFound().build();
 		return ResponseEntity.ok().body(memberDao.selectOne(memberDto.getMemberNo()));//수정 완료된 결과를 조회하여 반환
 	}
+	
 	//수정(관리자)
 	@PatchMapping("/admin")
 	public ResponseEntity<MemberDto> editMemberByAdmin(@RequestBody MemberDto memberDto) {
@@ -104,7 +122,7 @@ public class MemberRestController {
 	//로그인
 	@PostMapping("/login")
 	public ResponseEntity<MemberLoginVO> login(@RequestBody MemberDto memberDto) {
-		//회원번호로 정보조회
+		//아이디로 정보조회
 		MemberDto findDto = memberDao.selectFindId(memberDto.getMemberId());
 		if(findDto == null) {//아이디없음(404)
 			return ResponseEntity.notFound().build();//404
@@ -114,9 +132,7 @@ public class MemberRestController {
 		boolean isValid = findDto.getMemberPw().equals(memberDto.getMemberPw());
 
 		if(isValid) {//성공- MemberLoginVO(200)
-//			System.out.println("접근 체크");
 			String accessToken = jwtService.createAccessToken(findDto);
-//			System.out.println("접근 이후");
 			String refreshToken = jwtService.createRefreshToken(findDto);
 			
 			return ResponseEntity.ok().body(MemberLoginVO.builder()
@@ -163,7 +179,33 @@ public class MemberRestController {
 		}
 	}
 	
+	//아이디 찾기
+	@PostMapping("/findId")
+	public ResponseEntity<MemberDto> findId(@RequestBody MemberDto memberDto) {
+		MemberDto findIdMemberDto = memberDao.getFindId(memberDto);
+		boolean isValid = findIdMemberDto != null && findIdMemberDto.getMemberEmail().equals(memberDto.getMemberEmail());
+		if(isValid) {
+			return ResponseEntity.ok().body(findIdMemberDto);
+		} else {
+			return ResponseEntity.notFound().build();
+		}
+	}
 	
+	//비밀번호 찾기
+	@PostMapping("/findPw")
+	public ResponseEntity<MemberDto> findPw(@RequestBody MemberDto memberDto) {
+		MemberDto findPwMemberDto = memberDao.getFindPw(memberDto);
+		//아이디가 있고 이메일이 일치해야 메일 전송
+		boolean isValid = findPwMemberDto != null && findPwMemberDto.getMemberEmail().equals(memberDto.getMemberEmail());
+		if(isValid) {
+			emailService.sendTempPassword(findPwMemberDto);
+			return ResponseEntity.ok().body(findPwMemberDto);
+		} else {
+			return ResponseEntity.notFound().build();
+		}
+	}
+	
+	//회원탈퇴
 }
 
 
