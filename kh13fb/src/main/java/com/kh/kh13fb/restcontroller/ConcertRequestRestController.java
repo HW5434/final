@@ -14,6 +14,7 @@ import org.springframework.web.bind.annotation.RequestHeader;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
+import com.kh.kh13fb.dao.ActorDao;
 import com.kh.kh13fb.dao.ConcertRequestDao;
 import com.kh.kh13fb.dto.ActorDto;
 import com.kh.kh13fb.dto.ConcertRequestDto;
@@ -32,6 +33,8 @@ public class ConcertRequestRestController {
 	private ConcertRequestDao concertRequestDao;
 	
 	@Autowired
+	private ActorDao actorDao;
+	@Autowired
 	private JwtService jwtService;
 	
 	@GetMapping("/")
@@ -44,12 +47,19 @@ public class ConcertRequestRestController {
 		MemberLoginVO loginVO = jwtService.parse(authorization);
 		concertRequestVO.setMemberNo(loginVO.getMemberNo());
 				//		System.out.println(concertRequestVO);
+		for(ActorDto actor : concertRequestVO.getActors()) {
+			int sequence = actorDao.sequence();
+			actor.setActorNo(sequence);
+			System.out.println(actor);
+			actorDao.insert(actor);
+		}
 		int sequence = concertRequestDao.sequence();
 		concertRequestVO.setConcertRequestNo(sequence);
 		concertRequestDao.insert(concertRequestVO);
 		
 		return concertRequestVO;
 	}
+
 	@GetMapping("/{concertRequestNo}")
     public ResponseEntity<ConcertRequestDto> find(@PathVariable int concertRequestNo){
         ConcertRequestDto concertRequestDto = concertRequestDao.selectOne(concertRequestNo);
