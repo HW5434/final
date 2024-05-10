@@ -48,6 +48,11 @@
      	   select * from concert_request where concert_request_no = #{concertRequestNo}
   	  </select>
     
+	<!-- 지혜 - State값 조회하는 구문 -->
+   	<select id="selectByState" resultType="concertRequestDto">
+			SELECT * FROM concert_request WHERE concert_request_state  = 'y'
+	</select>
+    
     
     	<!-- 지혜 -->
     	<update id="editUnit">
