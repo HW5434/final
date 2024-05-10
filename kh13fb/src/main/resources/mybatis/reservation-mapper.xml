@@ -41,7 +41,7 @@
 			#{concertScheduleNo},
 			#{seatNo}, 
 			#{reservationConcertTitle}, 
-			#{reservationConcertDate}, 
+			TO_DATE(#{reservationConcertDate}, 'YYYY-MM-DD HH24:MI'),
 			#{reservationPrice}, 
 			sysdate,
 			#{reservationPersonName}, 
@@ -95,6 +95,13 @@
     			from concert_schedule cs
     			join concert_request cr on cs.concert_request_no = cr.concert_request_no
     		where cr.concert_request_no = #{concertRequestNo} order by cs.concert_schedule_start asc
+		</select>
+		<!-- 데이트 피커 사용 일정 뽑기 -->
+		<select id="listScheduleByDate" resultType="ConcertScheduleDto">
+    		SELECT * FROM CONCERT_SCHEDULE 
+				WHERE 
+    			CONCERT_REQUEST_NO = #{concertRequestNo}
+    			AND TO_CHAR(CONCERT_SCHEDULE_START, 'YYYY-MM-DD') = #{concertScheduleStart}
 		</select>
 		
 	<!-- 좌석 조회 ? 공연 일정번호를 받아서 그에 따른 좌석 조회를 하는것! -->
