@@ -28,7 +28,7 @@
 				concert_request_readyh_day, concert_request_readyf_day, concert_request_starth_day, 
 				concert_request_startf_day, concert_request_withdrawh_day, concert_request_withdrawf_day, 
 				concert_request_seatvip, concert_request_seatr, concert_request_seats, concert_request_seata, 
-				concert_request_state
+				concert_request_state, member_no
 			)
 				values(#{concertRequestNo}, #{applicant.concertRequestCompanyName}, 
 							#{applicant.concertRequestCompanyNumber}, #{applicant.concertRequestRepresentative}, 
@@ -39,7 +39,8 @@
 							#{rent.concertRequestHeadDay}, #{rent.concertRequestFooterDay}, #{rent.concertRequestReadyhDay}, 
 							#{rent.concertRequestReadyfDay}, #{rent.concertRequestStarthDay}, #{rent.concertRequestStartfDay}, 
 							#{rent.concertRequestWithdrawhDay}, #{rent.concertRequestWithdrawfDay}, #{concert.concertRequestSeatvip}, 
-							#{concert.concertRequestSeatr}, #{concert.concertRequestSeats}, #{concert.concertRequestSeata}, #{rent.concertRequestState}
+							#{concert.concertRequestSeatr}, #{concert.concertRequestSeats}, #{concert.concertRequestSeata}, #{rent.concertRequestState},
+							#{memberNo}
 							)
 		</insert>
 		
