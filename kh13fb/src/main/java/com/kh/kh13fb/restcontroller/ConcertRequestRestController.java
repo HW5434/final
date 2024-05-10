@@ -65,6 +65,11 @@ public class ConcertRequestRestController {
 	    return ResponseEntity.ok().build();
 
     }
+	//지혜 - 승인된 목록 뽑기 위해 추가 구문
+		@GetMapping("/state")
+		public List<ConcertRequestDto> stateByList(){
+			return concertRequestDao.selectByState();
+		}
 	
 	@GetMapping("/{concertRequestNo}/actors")
 	public ResponseEntity<ConcertListVO> findWithActors(@PathVariable int concertRequestNo) {

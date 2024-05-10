@@ -24,6 +24,11 @@ public class ConcertRequestDao {
 			return sqlSession.insert("concertRequest.register", concertRequestVO);
 			
 		}
+		
+//		지혜 - Y값을 조회하는 구문
+		public List<ConcertRequestDto>selectByState() {
+		    return sqlSession.selectList("concertRequest.selectByState");
+		}
 
 //		지혜
 		public boolean editUnit(ConcertRequestDto concertRequestDto) {
