@@ -28,6 +28,7 @@ public class ReservationDao {
 		return sqlSession.selectOne("reservation.sequence");
 	}
 	public void insert(ReservationDto reservationDto) {
+		System.out.println(reservationDto);
 		sqlSession.insert("reservation.save", reservationDto);
 	}
 	
@@ -46,6 +47,10 @@ public class ReservationDao {
 	//예매 결제에서 좌석 뽑기
 	public List<ReservationSeatVO> listSeat(int concertScheduleNo){
 		return sqlSession.selectList("reservation.listSeat",concertScheduleNo);
+	}
+	//날짜 선택한 경우 그 날짜에 따른 공연 일정 보여주기..
+	public List<ConcertScheduleDto> listScheduleByDate(ConcertScheduleDto concertScheduleDto) {
+		return sqlSession.selectList("reservation.listScheduleByDate",concertScheduleDto);
 	}
 	
 //	//예매/결제 삭제--예매 결제에 삭제가 어딨어 취소만 있지..
