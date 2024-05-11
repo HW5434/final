@@ -40,7 +40,7 @@
 	
 	<!-- 삭제 -->
 	<delete id="delete">
-		delete member where member_no = #{memberNo}
+		delete member where member_id = #{memberId}
 	</delete>
 	
 	<!-- (회원)수정 -->

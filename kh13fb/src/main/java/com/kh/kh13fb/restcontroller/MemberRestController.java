@@ -93,11 +93,28 @@ public class MemberRestController {
 		return ResponseEntity.ok().body(memberDao.selectOne(memberDto.getMemberNo()));//수정 완료된 결과를 조회하여 반환
 	}
 	
-	//삭제
-	@DeleteMapping("/{memberNo}")
-	public ResponseEntity<Object> delete(@PathVariable int memberNo) {
-		boolean result = memberDao.delete(memberNo);
+	//회원탈퇴
+	@DeleteMapping("/{loginId}")
+	public ResponseEntity<Object> delete(@PathVariable String loginId) {
+		System.out.println("확인");
+		System.out.println(loginId);
+		boolean result = memberDao.delete(loginId);
 		if(result == false) return ResponseEntity.notFound().build();
+		return ResponseEntity.ok().build();
+	}
+	
+	//회원탈퇴2
+	@PostMapping("/withdrawal")
+	public ResponseEntity<MemberDto> withdrawal(@RequestBody MemberDto memberDto) {
+		MemberDto checkMemberDto = memberDao.selectFindId(memberDto.getMemberId());
+		System.out.println(checkMemberDto.getMemberPw());
+		System.out.println(memberDto.getMemberPw());
+		System.out.println(memberDto.getMemberId());
+		if(checkMemberDto.getMemberPw().equals(memberDto.getMemberPw())) {
+			boolean result = memberDao.delete(memberDto.getMemberId());
+		} else {
+			return ResponseEntity.notFound().build();
+		}
 		return ResponseEntity.ok().build();
 	}
 	
@@ -195,6 +212,7 @@ public class MemberRestController {
 	@PostMapping("/findPw")
 	public ResponseEntity<MemberDto> findPw(@RequestBody MemberDto memberDto) {
 		MemberDto findPwMemberDto = memberDao.getFindPw(memberDto);
+		
 		//아이디가 있고 이메일이 일치해야 메일 전송
 		boolean isValid = findPwMemberDto != null && findPwMemberDto.getMemberEmail().equals(memberDto.getMemberEmail());
 		if(isValid) {
@@ -204,8 +222,6 @@ public class MemberRestController {
 			return ResponseEntity.notFound().build();
 		}
 	}
-	
-	//회원탈퇴
 }
 
 

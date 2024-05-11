@@ -48,13 +48,14 @@ public class MemberDao {
 	}
 	
 	//삭제
-	public boolean delete(int memberNo) {
-		return sqlSession.delete("member.delete", memberNo) > 0;
+	public boolean delete(String memberId) {
+		return sqlSession.delete("member.delete", memberId) > 0;
 	}
 
 	public int connect(String loginId, int attachNo) {
 		return sqlSession.insert(loginId);
 	}
+	
 	//아이디 중복체크
 	public boolean selectDoubleCheckId(String memberId) {
 		return sqlSession.selectOne("member.selectDoubleCheckId", memberId) == null;
@@ -80,6 +81,7 @@ public class MemberDao {
 		sqlSession.update("member.editTempPassword", memberDto);
 	}
 	
+	//내예매목록
 	public Map<String, Object> getMyReservationList(int memberNo) {
 		Map<String, Object> resultMap = new HashMap<String, Object>();
 		resultMap.put("reservationList", sqlSession.selectList("member.getMyReservationList", memberNo));
