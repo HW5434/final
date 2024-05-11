@@ -9,6 +9,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Repository;
 
 import com.kh.kh13fb.dto.MemberDto;
+import com.kh.kh13fb.vo.KakaoLoginVO;
 
 @Repository
 public class MemberDao {
@@ -37,6 +38,11 @@ public class MemberDao {
 	//등록
 	public void insert(MemberDto memberDto) {
 		sqlSession.insert("member.insert", memberDto);
+	}
+	
+	//카카오 로그인 등록
+	public void kakaoInsert(KakaoLoginVO kakaoLoginVO) {
+		sqlSession.insert("member.kakaoInsert", kakaoLoginVO);
 	}
 	
 	//수정
@@ -69,6 +75,11 @@ public class MemberDao {
 	//아이디찾기
 	public MemberDto getFindId(MemberDto memberDto) {
 		return sqlSession.selectOne("member.getFindId", memberDto);
+	}
+	
+	//카카오아이디찾기
+	public MemberDto getKakaoFindId(String memberId) {
+		return sqlSession.selectOne("member.getKakaoFindId", memberId);
 	}
 	
 	//비밀번호 찾기

@@ -37,6 +37,35 @@
       insert into member(member_no, member_name, member_id, member_pw, member_contact, member_email, member_birth, member_post, member_address1, member_address2)
       values(member_seq.nextval, #{memberName}, #{memberId}, #{memberPw}, #{memberContact}, #{memberEmail}, #{memberBirth}, #{memberPost}, #{memberAddress1}, #{memberAddress2})
    </insert>
+   
+   <insert id="kakaoInsert">
+      insert into member
+      (
+      	member_no, 
+      	member_name, 
+      	member_id, 
+      	member_pw, 
+      	member_contact, 
+      	member_email, 
+      	member_birth, 
+      	member_post, 
+      	member_address1, 
+      	member_address2
+      )
+      values
+      (
+      	member_seq.nextval, 
+      	#{name}, 
+      	#{id}, 
+      	'kakaoLoingPw', 
+      	#{phoneNumber}, 
+      	#{email}, 
+      	#{birth}, 
+      	'', 
+      	'', 
+      	''
+      )
+   </insert>
 	
 	<!-- 삭제 -->
 	<delete id="delete">
@@ -91,6 +120,12 @@
 		select * from member
 		where member_name = #{memberName}
 		and member_Email = #{memberEmail}
+	</select>
+	
+	<!-- 카카오아이디찾기 찾기 -->
+	<select id="getKakaoFindId" resultType="MemberDto">
+		select * from member
+		where member_id = #{memberId}
 	</select>
 	
 	<!-- 비밀번호 찾기 -->

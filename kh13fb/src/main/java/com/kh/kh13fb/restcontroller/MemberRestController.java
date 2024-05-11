@@ -20,6 +20,8 @@ import com.kh.kh13fb.dao.MemberDao;
 import com.kh.kh13fb.dto.MemberDto;
 import com.kh.kh13fb.service.EmailService;
 import com.kh.kh13fb.service.JwtService;
+import com.kh.kh13fb.service.OAuthService;
+import com.kh.kh13fb.vo.KakaoLoginVO;
 import com.kh.kh13fb.vo.MemberLoginVO;
 
 
@@ -36,6 +38,9 @@ public class MemberRestController {
 
 	@Autowired
 	private EmailService emailService;
+	
+	@Autowired
+	private OAuthService oAuthService;
 	
 	//등록
 	@PostMapping("/")
@@ -221,6 +226,34 @@ public class MemberRestController {
 		} else {
 			return ResponseEntity.notFound().build();
 		}
+	}
+	
+	//카카오 로그인
+	@GetMapping("/api/kakaoLogin/{code}")
+	public ResponseEntity<?> kakaoLogin(@PathVariable String code) throws Exception {
+		String accessToken = oAuthService.createKakaoToken(code);
+		KakaoLoginVO kakaoLoginVO = oAuthService.getKakaoInfo(accessToken);
+		System.out.println("카카오 데이터 체크");
+		System.out.println(kakaoLoginVO);
+		if(memberDao.getKakaoFindId(kakaoLoginVO.getId()) == null) {
+			memberDao.kakaoInsert(kakaoLoginVO);
+			return getResponseEntity(kakaoLoginVO.getId());
+		} else {
+			return getResponseEntity(kakaoLoginVO.getId());
+		}
+	}
+	
+	public ResponseEntity<MemberLoginVO> getResponseEntity(String memberId) {
+		MemberDto findDto = memberDao.selectFindId(memberId);
+		String accessToken = jwtService.createAccessToken(findDto);
+		String refreshToken = jwtService.createRefreshToken(findDto);
+		return ResponseEntity.ok().body(MemberLoginVO.builder()
+					.memberNo(findDto.getMemberNo())
+					.memberId(findDto.getMemberId())
+					.memberGrade(findDto.getMemberGrade())
+					.accessToken(accessToken)
+					.refreshToken(refreshToken)
+				.build());//200
 	}
 }
 
