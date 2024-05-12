@@ -77,7 +77,7 @@ public class MemberDao {
 		return sqlSession.selectOne("member.getFindId", memberDto);
 	}
 	
-	//카카오아이디찾기
+	//카카오아이디찾기(처음카카오로그인인지알아냄)
 	public MemberDto getKakaoFindId(String memberId) {
 		return sqlSession.selectOne("member.getKakaoFindId", memberId);
 	}

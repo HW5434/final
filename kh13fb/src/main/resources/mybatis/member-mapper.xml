@@ -79,7 +79,6 @@
 			<if test="memberName != null">member_name = #{memberName},</if>
 			<if test="memberPw != null">member_pw = #{memberPw},</if>
 			<if test="memberContact != null">member_contact = #{memberContact},</if>
-			<if test="memberEmail != null">member_email = #{memberEmail},</if>
 			<if test="memberBirth != null">member_birth = #{memberBirth},</if>
 			<if test="memberPost != null">member_post = #{memberPost},</if>
 			<if test="memberAddress1 != null">member_address1 = #{memberAddress1},</if>
