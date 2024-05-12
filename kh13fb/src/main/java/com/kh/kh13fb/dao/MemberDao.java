@@ -9,6 +9,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Repository;
 
 import com.kh.kh13fb.dto.MemberDto;
+import com.kh.kh13fb.vo.KakaoLoginVO;
 
 @Repository
 public class MemberDao {
@@ -39,6 +40,11 @@ public class MemberDao {
 		sqlSession.insert("member.insert", memberDto);
 	}
 	
+	//카카오 로그인 등록
+	public void kakaoInsert(KakaoLoginVO kakaoLoginVO) {
+		sqlSession.insert("member.kakaoInsert", kakaoLoginVO);
+	}
+	
 	//수정
 	public boolean edit(MemberDto memberDto) {
 		return sqlSession.update("member.edit", memberDto) > 0;
@@ -48,13 +54,14 @@ public class MemberDao {
 	}
 	
 	//삭제
-	public boolean delete(int memberNo) {
-		return sqlSession.delete("member.delete", memberNo) > 0;
+	public boolean delete(String memberId) {
+		return sqlSession.delete("member.delete", memberId) > 0;
 	}
 
 	public int connect(String loginId, int attachNo) {
 		return sqlSession.insert(loginId);
 	}
+	
 	//아이디 중복체크
 	public boolean selectDoubleCheckId(String memberId) {
 		return sqlSession.selectOne("member.selectDoubleCheckId", memberId) == null;
@@ -70,6 +77,11 @@ public class MemberDao {
 		return sqlSession.selectOne("member.getFindId", memberDto);
 	}
 	
+	//카카오아이디찾기
+	public MemberDto getKakaoFindId(String memberId) {
+		return sqlSession.selectOne("member.getKakaoFindId", memberId);
+	}
+	
 	//비밀번호 찾기
 	public MemberDto getFindPw(MemberDto memberDto) {
 		return sqlSession.selectOne("member.getFindPw", memberDto);
@@ -80,6 +92,7 @@ public class MemberDao {
 		sqlSession.update("member.editTempPassword", memberDto);
 	}
 	
+	//내예매목록
 	public Map<String, Object> getMyReservationList(int memberNo) {
 		Map<String, Object> resultMap = new HashMap<String, Object>();
 		resultMap.put("reservationList", sqlSession.selectList("member.getMyReservationList", memberNo));

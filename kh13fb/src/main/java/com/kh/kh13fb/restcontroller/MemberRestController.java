@@ -20,6 +20,8 @@ import com.kh.kh13fb.dao.MemberDao;
 import com.kh.kh13fb.dto.MemberDto;
 import com.kh.kh13fb.service.EmailService;
 import com.kh.kh13fb.service.JwtService;
+import com.kh.kh13fb.service.OAuthService;
+import com.kh.kh13fb.vo.KakaoLoginVO;
 import com.kh.kh13fb.vo.MemberLoginVO;
 
 
@@ -36,6 +38,9 @@ public class MemberRestController {
 
 	@Autowired
 	private EmailService emailService;
+	
+	@Autowired
+	private OAuthService oAuthService;
 	
 	//등록
 	@PostMapping("/")
@@ -93,11 +98,28 @@ public class MemberRestController {
 		return ResponseEntity.ok().body(memberDao.selectOne(memberDto.getMemberNo()));//수정 완료된 결과를 조회하여 반환
 	}
 	
-	//삭제
-	@DeleteMapping("/{memberNo}")
-	public ResponseEntity<Object> delete(@PathVariable int memberNo) {
-		boolean result = memberDao.delete(memberNo);
+	//회원탈퇴
+	@DeleteMapping("/{loginId}")
+	public ResponseEntity<Object> delete(@PathVariable String loginId) {
+		System.out.println("확인");
+		System.out.println(loginId);
+		boolean result = memberDao.delete(loginId);
 		if(result == false) return ResponseEntity.notFound().build();
+		return ResponseEntity.ok().build();
+	}
+	
+	//회원탈퇴2
+	@PostMapping("/withdrawal")
+	public ResponseEntity<MemberDto> withdrawal(@RequestBody MemberDto memberDto) {
+		MemberDto checkMemberDto = memberDao.selectFindId(memberDto.getMemberId());
+		System.out.println(checkMemberDto.getMemberPw());
+		System.out.println(memberDto.getMemberPw());
+		System.out.println(memberDto.getMemberId());
+		if(checkMemberDto.getMemberPw().equals(memberDto.getMemberPw())) {
+			boolean result = memberDao.delete(memberDto.getMemberId());
+		} else {
+			return ResponseEntity.notFound().build();
+		}
 		return ResponseEntity.ok().build();
 	}
 	
@@ -195,6 +217,7 @@ public class MemberRestController {
 	@PostMapping("/findPw")
 	public ResponseEntity<MemberDto> findPw(@RequestBody MemberDto memberDto) {
 		MemberDto findPwMemberDto = memberDao.getFindPw(memberDto);
+		
 		//아이디가 있고 이메일이 일치해야 메일 전송
 		boolean isValid = findPwMemberDto != null && findPwMemberDto.getMemberEmail().equals(memberDto.getMemberEmail());
 		if(isValid) {
@@ -205,7 +228,33 @@ public class MemberRestController {
 		}
 	}
 	
-	//회원탈퇴
+	//카카오 로그인
+	@GetMapping("/api/kakaoLogin/{code}")
+	public ResponseEntity<?> kakaoLogin(@PathVariable String code) throws Exception {
+		String accessToken = oAuthService.createKakaoToken(code);
+		KakaoLoginVO kakaoLoginVO = oAuthService.getKakaoInfo(accessToken);
+		System.out.println("카카오 데이터 체크");
+		System.out.println(kakaoLoginVO);
+		if(memberDao.getKakaoFindId(kakaoLoginVO.getId()) == null) {
+			memberDao.kakaoInsert(kakaoLoginVO);
+			return getResponseEntity(kakaoLoginVO.getId());
+		} else {
+			return getResponseEntity(kakaoLoginVO.getId());
+		}
+	}
+	
+	public ResponseEntity<MemberLoginVO> getResponseEntity(String memberId) {
+		MemberDto findDto = memberDao.selectFindId(memberId);
+		String accessToken = jwtService.createAccessToken(findDto);
+		String refreshToken = jwtService.createRefreshToken(findDto);
+		return ResponseEntity.ok().body(MemberLoginVO.builder()
+					.memberNo(findDto.getMemberNo())
+					.memberId(findDto.getMemberId())
+					.memberGrade(findDto.getMemberGrade())
+					.accessToken(accessToken)
+					.refreshToken(refreshToken)
+				.build());//200
+	}
 }
 
 
