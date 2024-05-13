@@ -48,21 +48,23 @@ public class ConcertRequestRestController {
 	
 	@PostMapping("/")
 	public ConcertRequestVO insert(@RequestBody ConcertRequestVO concertRequestVO, @RequestHeader String authorization) {
-		MemberLoginVO loginVO = jwtService.parse(authorization);
-		concertRequestVO.setMemberNo(loginVO.getMemberNo());
-				//		System.out.println(concertRequestVO);
-		for(ActorDto actor : concertRequestVO.getActors()) {
-			int sequence = actorDao.sequence();
-			actor.setActorNo(sequence);
-			System.out.println(actor);
-			actorDao.insert(actor);
-		}
-		
-		int sequence = concertRequestDao.sequence();
-		concertRequestVO.setConcertRequestNo(sequence);
-		concertRequestDao.insert(concertRequestVO);
-		
-		return concertRequestVO;
+		System.out.println(concertRequestVO);
+//		MemberLoginVO loginVO = jwtService.parse(authorization);
+//		concertRequestVO.setMemberNo(loginVO.getMemberNo());
+//				//		System.out.println(concertRequestVO);
+//		for(ActorDto actor : concertRequestVO.getActors()) {
+//			int sequence = actorDao.sequence();
+//			actor.setActorNo(sequence);
+//			System.out.println(actor);
+//			actorDao.insert(actor);
+//		}
+//		
+//		int sequence = concertRequestDao.sequence();
+//		concertRequestVO.setConcertRequestNo(sequence);
+//		concertRequestDao.insert(concertRequestVO);
+//		
+//		return concertRequestVO;
+		return null;
 	}
 
 	@GetMapping("/{concertRequestNo}")
