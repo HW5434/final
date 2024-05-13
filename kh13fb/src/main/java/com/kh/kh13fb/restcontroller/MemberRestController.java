@@ -66,6 +66,14 @@ public class MemberRestController {
 		return ResponseEntity.ok().body(memberDto);
 	}
 	
+   //아이디값으로 상세조회
+   @GetMapping("/getMember2/{memberId}")
+   public ResponseEntity<MemberDto> getMember2(@PathVariable String memberId) {
+      MemberDto memberDto = memberDao.selectFindId(memberId);
+      if(memberDto == null) return ResponseEntity.notFound().build();
+      return ResponseEntity.ok().body(memberDto);
+   }
+	
 	//토큰값으로 상세조회
 	@GetMapping("/getMember/{refreshToken}")
 	public ResponseEntity<MemberDto> getMember(@PathVariable String refreshToken) {
