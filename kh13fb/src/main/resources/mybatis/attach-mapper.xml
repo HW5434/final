@@ -29,9 +29,9 @@
     		WHERE attachNo = #{attachNo}
   		</update>
   		
-  		 <insert id="insertMemberAttach" parameterType="map">
-    	    INSERT INTO member_attach(member_id, attach_no)
-     	   VALUES (#{memberId}, #{attachNo})
+  		 <insert id="insertPosterAttach" parameterType="map">
+    	    INSERT INTO poster_attach(concert_request_no, attach_no)
+     	   VALUES (#{concertRequestNo}, #{attachNo})
     	</insert>
        
     </mapper>

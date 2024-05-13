@@ -15,8 +15,10 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
 import com.kh.kh13fb.dao.ActorDao;
+import com.kh.kh13fb.dao.AttachDao;
 import com.kh.kh13fb.dao.ConcertRequestDao;
 import com.kh.kh13fb.dto.ActorDto;
+import com.kh.kh13fb.dto.AttachDto;
 import com.kh.kh13fb.dto.ConcertRequestDto;
 import com.kh.kh13fb.service.JwtService;
 import com.kh.kh13fb.vo.ConcertListVO;
@@ -34,6 +36,8 @@ public class ConcertRequestRestController {
 	
 	@Autowired
 	private ActorDao actorDao;
+	@Autowired
+	private AttachDao attachDao;
 	@Autowired
 	private JwtService jwtService;
 	
@@ -53,6 +57,7 @@ public class ConcertRequestRestController {
 			System.out.println(actor);
 			actorDao.insert(actor);
 		}
+		
 		int sequence = concertRequestDao.sequence();
 		concertRequestVO.setConcertRequestNo(sequence);
 		concertRequestDao.insert(concertRequestVO);

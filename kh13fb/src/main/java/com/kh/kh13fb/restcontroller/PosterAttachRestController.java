@@ -12,7 +12,7 @@ import org.springframework.web.bind.annotation.RestController;
 import org.springframework.web.multipart.MultipartFile;
 
 import com.kh.kh13fb.dao.AttachDao;
-import com.kh.kh13fb.dao.MemberDao;
+import com.kh.kh13fb.dao.ConcertRequestDao;
 import com.kh.kh13fb.dto.AttachDto;
 import com.kh.kh13fb.service.AttachService;
 
@@ -27,7 +27,7 @@ public class PosterAttachRestController {
 	private AttachDao attachDao;
 
 	@Autowired
-	private MemberDao memberDao;
+	private ConcertRequestDao concertRequestDao;
 
 	@Autowired
 	private AttachService attachService;
@@ -37,14 +37,14 @@ public class PosterAttachRestController {
 	@PostMapping("/upload")
 	public Integer upload(@RequestParam MultipartFile attach, HttpSession session)
 			throws IllegalStateException, IOException {
-		String loginId = (String) session.getAttribute("loginId");
+		String concertRequestNo = (String) session.getAttribute("concertRequest");
 
 		// 파일이 없으면 중지
 		if (!attach.isEmpty()) {
 
 			// 기존 파일 삭제
 			try {
-				int attachNo = attachDao.findAttachNo(loginId);// 파일번호찾고
+				int attachNo = attachDao.findAttachNo(concertRequestNo);// 파일번호찾고
 				File dir = new File(System.getProperty("user.home"), "upload");
 				File target = new File(dir, String.valueOf(attachNo));
 				target.delete();// 실제파일 삭제
@@ -70,7 +70,7 @@ public class PosterAttachRestController {
 			attachDto.setAttachSize(attach.getSize());
 			attachDao.insert(attachDto);// DB저장
 
-			memberDao.connect(loginId, attachNo);// 연결처리
+			concertRequestDao.connect(concertRequestNo, attachNo);// 연결처리
 		}
 
 		// 파일 저장 및 해당 파일 번호 반환

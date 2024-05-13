@@ -7,6 +7,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Repository;
 
 import com.kh.kh13fb.dto.ActorDto;
+import com.kh.kh13fb.dto.AttachDto;
 import com.kh.kh13fb.dto.ConcertRequestDto;
 import com.kh.kh13fb.vo.ConcertRequestVO;
 
@@ -56,6 +57,10 @@ public class ConcertRequestDao {
 				
 		public List<ActorDto> selectActorsByConcertRequestNo(int concertRequestNo) {
 			return sqlSession.selectList("actor.listByConcertRequestNo",concertRequestNo);
+		}
+
+		public int connect(Object concertRequestNo, int attachNo) {
+			return sqlSession.insert("posterAttach.insertPosterAttach");
 		}
 
 }
