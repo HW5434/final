@@ -1,6 +1,8 @@
 package com.kh.kh13fb.dao;
 
+import java.util.HashMap;
 import java.util.List;
+import java.util.Map;
 
 import org.apache.ibatis.session.SqlSession;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -44,6 +46,15 @@ public class ReservationDao {
 	public List<ConcertScheduleDto> listScheduleByConcertRequestNo(int concertRequestNo) {
 		return sqlSession.selectList("reservation.listScheduleByConcertRequestNo",concertRequestNo);
 	}
+	
+	//예매 결제에서 날짜에 따른 공연 일정리스트 뽑기
+	public List<ConcertScheduleDto> listScheduleByDate(int concertRequestNo, String concertScheduleStart){//공연번호와 일정 필요한데..
+		Map<String, Object> params = new HashMap<>();
+		    params.put("concertRequestNo", concertRequestNo);
+		    params.put("concertScheduleStart", concertScheduleStart);
+	    return sqlSession.selectList("reservation.listScheduleByDate", params);
+	}
+	
 	//예매 결제에서 좌석 뽑기
 	public List<ReservationSeatVO> listSeat(int concertScheduleNo){
 		return sqlSession.selectList("reservation.listSeat",concertScheduleNo);

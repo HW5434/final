@@ -1,6 +1,7 @@
 package com.kh.kh13fb.restcontroller;
 
-import java.util.ArrayList;
+import java.time.LocalDate;
+import java.time.format.DateTimeFormatter;
 import java.util.List;
 
 import org.springframework.beans.factory.annotation.Autowired;
@@ -173,6 +174,19 @@ public class ReservationRestController {
 		public List<ConcertScheduleDto> listScheduleByConcertRequestNo(@PathVariable int concertRequestNo) {
 		    return reservationDao.listScheduleByConcertRequestNo(concertRequestNo);
 		}
+		//공연정보 및 날짜에 따른 일정 리스트
+		//reservation/{concertRequestNo}/byDate?concertScheduleStart=2024-05-23 이런식으로 받아올 수 있나(x)
+		@GetMapping("/concertRequestNo/{concertRequestNo}/concertScheduleStart/{concertScheduleStart}")
+		public List<ConcertScheduleDto> listScheduleByDate(@PathVariable int concertRequestNo,
+																						@PathVariable String concertScheduleStart) {
+			 // 날짜 포맷팅
+		    DateTimeFormatter formatter = DateTimeFormatter.ofPattern("yyyy-MM-dd");
+		    LocalDate date = LocalDate.parse(concertScheduleStart, formatter);
+
+		    // 공연번호와 선택한 날짜를 사용하여 일정을 조회하는 코드를 작성
+		    return reservationDao.listScheduleByDate(concertRequestNo, date.toString());
+		}
+		
 //		//공연 정보에 따른 일정 리스트(고객이 보고 선택하여야하므로)
 //		@GetMapping("/{concertRequestNo}/byDate/${selectedDate}")
 //		public List<ConcertScheduleDto> listScheduleByDate(@RequestBody ConcertScheduleDto concertScheduleDto) {
