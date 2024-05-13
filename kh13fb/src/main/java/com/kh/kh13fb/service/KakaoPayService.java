@@ -55,6 +55,7 @@ public class KakaoPayService {
 		body.put("tax_free_amount", "0");//비과세
 		
 		//구매페이지 주소의 뒤에 /success, /cancel, /fail을 붙여서 처리하도록 구현
+		//*************-이부분 리액트 주소로 가도록 수정 필요
 		String page = ServletUriComponentsBuilder
 								.fromCurrentRequestUri().build().toUriString();
 		body.put("approval_url", page+"/success");//승인주소

@@ -51,62 +51,7 @@ public class ReservationRestController {
 		}
 		return ResponseEntity.status(200).body(reservationDto);
 	}
-//	//예매/결제 등록(사용자가 예매 결제!!)
-//	@PostMapping("/")
-//	public ReservationDto insert(@RequestBody ReservationDto reservationDto,@RequestHeader("Authorization") String token) {
-//		MemberLoginVO loginVO = jwtService.parse(token);
-//		// 회원 번호 추출
-//		int memberNo = loginVO.getMemberNo();
-//		reservationDto.setMemberNo(memberNo);//회원번호 넣어주기
-//		//예매 번호 설정
-//		int sequence = reservationDao.sequence();
-//		reservationDto.setReservationNo(sequence);//예약번호 넣어주기
-//		reservationDao.insert(reservationDto);
-//		
-//		return reservationDto;
-//		//return reservationDao.selectOne(sequence);//등록된 결과를 조회하여 반환
-//	}
-//	@PostMapping("/")
-//	public void insert(@RequestBody SeatArrayReservationVO seatArrayReservationVOList, @RequestHeader("Authorization") String token) {
-//	    MemberLoginVO loginVO = jwtService.parse(token);
-//	    int memberNo = loginVO.getMemberNo();
-//	    //예매 번호 설정
-//		int sequence = reservationDao.sequence();
-//	    
-//
-//	    for (SeatArrayReservationVO seatArrayReservationVO : seatArrayReservationVOList) {
-//	        ReservationDto reservationDto = ReservationDto.builder()
-//	            .reservationNo(sequence)
-//	        	.memberNo(memberNo)
-//	            .seatNo(seatArrayReservationVO.getSeatNo())
-//	            .reservationPrice(seatArrayReservationVO.getSeatPrice())
-//	            .build();
-//	        reservationDao.insert(reservationDto);
-//	    }
-//
-//	}
-	
-//	@PostMapping("/")
-//	public void insert(@RequestBody SeatArrayReservationVO seatArrayReservationVO, @RequestHeader("Authorization") String token) {
-//	    MemberLoginVO loginVO = jwtService.parse(token);
-//	    int memberNo = loginVO.getMemberNo();
-//	    
-//	    // 예매 번호 설정
-//	    int sequence = reservationDao.sequence();
-//	    
-//	    // SeatArrayReservationVO에서 seatNo를 리스트로 받아와서 처리
-//	    List<Integer> seatNoList = seatArrayReservationVO.getSeatNo();
-//
-//	    for (Integer seatNo : seatNoList) {
-//	        ReservationDto reservationDto = ReservationDto.builder()
-//	            .reservationNo(sequence)
-//	            .memberNo(memberNo)
-//	            .seatNo(seatNo)
-//	            .reservationPrice(seatArrayReservationVO.getReservationPrice()) // 예약 가격은 SeatArrayReservationVO에서 받아옴
-//	            .build();
-//	        reservationDao.insert(reservationDto);
-//	    }
-//	}
+
 	@PostMapping("/")
 	public void insert(@RequestBody SeatArrayReservationVO seatArrayReservationVO, @RequestHeader("Authorization") String token) {
 	    MemberLoginVO loginVO = jwtService.parse(token);
@@ -122,10 +67,6 @@ public class ReservationRestController {
 	    List<Integer> reservationPriceList = seatArrayReservationVO.getReservationPrice();
 	    System.out.println(seatNoList);
 	    System.out.println(reservationPriceList);
-//	    // 좌석 번호와 가격 리스트의 길이가 같은지 확인
-//	    if (seatNoList.size() != reservationPriceList.size()) {
-//	        throw new IllegalArgumentException("좌석 번호와 가격의 개수가 일치하지 않습니다.");
-//	    }
 
 	    // 좌석 번호와 가격을 이용하여 예약 생성
 	    for (int i = 0; i < seatNoList.size(); i++) {
