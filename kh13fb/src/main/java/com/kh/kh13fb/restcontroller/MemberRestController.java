@@ -1,9 +1,11 @@
 package com.kh.kh13fb.restcontroller;
 
+import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.CrossOrigin;
 import org.springframework.web.bind.annotation.DeleteMapping;
@@ -14,6 +16,7 @@ import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestHeader;
 import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
 
 import com.kh.kh13fb.dao.MemberDao;
@@ -106,11 +109,17 @@ public class MemberRestController {
 		return ResponseEntity.ok().body(memberDao.selectOne(memberDto.getMemberNo()));//수정 완료된 결과를 조회하여 반환
 	}
 	
+	//비밀번호 변경
+	@PostMapping("/editPassword")
+	public ResponseEntity<?> editPassword(@RequestBody Map<String,Object> paramMap) {
+		boolean result = memberDao.editPassword(paramMap);
+		if(result == false) return ResponseEntity.notFound().build();
+		return new ResponseEntity<Map<String, Object>>(paramMap, HttpStatus.OK);
+	}
+	
 	//회원탈퇴
 	@DeleteMapping("/{loginId}")
 	public ResponseEntity<Object> delete(@PathVariable String loginId) {
-		System.out.println("확인");
-		System.out.println(loginId);
 		boolean result = memberDao.delete(loginId);
 		if(result == false) return ResponseEntity.notFound().build();
 		return ResponseEntity.ok().build();

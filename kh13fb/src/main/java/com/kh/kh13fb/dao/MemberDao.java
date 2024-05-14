@@ -53,6 +53,11 @@ public class MemberDao {
 		return sqlSession.update("member.editMemberByAdmin", memberDto) > 0;
 	}
 	
+	public boolean editPassword(Map<String, Object> member) {
+		System.out.println(member);
+		return sqlSession.update("member.editPassword", member) > 0;
+	}
+	
 	//삭제
 	public boolean delete(String memberId) {
 		return sqlSession.delete("member.delete", memberId) > 0;

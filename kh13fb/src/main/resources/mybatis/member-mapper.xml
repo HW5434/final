@@ -104,6 +104,14 @@
 		where member_no = #{memberNo}
 	</update>
 	
+	<update id="editPassword" parameterType="hashmap">
+		update member
+		<set>
+			member_pw = #{newPassword}
+		</set>
+		where member_id = #{memberId}
+	</update>
+	
 	<!-- 아이디 중복체크 -->
 	<select id="selectDoubleCheckId" resultType="string">
 		select member_id from member where member_id = #{memberId}
