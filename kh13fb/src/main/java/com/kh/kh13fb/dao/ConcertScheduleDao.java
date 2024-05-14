@@ -7,6 +7,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Repository;
 
 import com.kh.kh13fb.dto.ConcertScheduleDto;
+import com.kh.kh13fb.vo.ConcertScheduleAddVO;
 
 @Repository
 public class ConcertScheduleDao {
@@ -20,11 +21,14 @@ public class ConcertScheduleDao {
 	public ConcertScheduleDto selectOne(int concertScheduleNo) {
 		return sqlSession.selectOne("concertSchedule.find",concertScheduleNo);
 	}
+	public ConcertScheduleAddVO selectTwo(int concertScheduleNo ) {
+		return sqlSession.selectOne("concertSchedule.findone",concertScheduleNo);
+	}
 	public  int sequence () {
 		return sqlSession.selectOne("concertSchedule.sequence");
 	}
-	public void insert (ConcertScheduleDto concertScheduleDto) {
-		sqlSession.insert("concertSchedule.save",concertScheduleDto);
+	public void insert (ConcertScheduleAddVO concertScheduleAddVO) {
+		sqlSession.insert("concertSchedule.save",concertScheduleAddVO);
 	}
 	public boolean editAll(ConcertScheduleDto concertScheduleDto) {
 		return sqlSession.update("concertSchedule.editAll", concertScheduleDto)>0;
