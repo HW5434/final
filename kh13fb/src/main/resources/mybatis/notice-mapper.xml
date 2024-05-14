@@ -13,7 +13,7 @@
 
 	<!-- 	목록 -->
 	<select id="list" resultType="NoticeDto">
-		select * from notice order by notice_no asc
+		select * from notice order by notice_no desc
 	</select>
 
 	<!-- 	검색 -->
@@ -26,14 +26,80 @@
 		insert into notice
 			(notice_no, notice_title, notice_content, notice_wdate, notice_view)
 		values
-			(#{noticeNo}, #{noticeTitle}, #{noticeContent}, #{noticeWdate}, #{noticeView})
+			(#{noticeNo}, #{noticeTitle}, #{noticeContent}, sysdate, #{noticeView})
 	</insert>
 	
-	<!-- 	수정 -->
+	<!-- 시작 [키워드 검색] -->
+	
+	<!-- 검색 -->
+	<select id="searchList" resultType="NoticeDto">
+		select notice_no, notice_title, notice_content, notice_wdate, notice_view from 
+		where instr(${column}, #{keyword}) > 0
+	    order by notice_wdate DESC
+	</select>
+	
+	<!-- 검색 페이징 -->
+	<select id="searchListByPaging" resultType="NoticeDto">
+		<include refid="top-n-header"></include>
+            select * from notice
+            where instr(${column}, #{keyword}) > 0
+            order by notice.notice_wdate desc
+		<include refid="top-n-footer"></include>
+	</select>
+	
+	<!-- 검색 결과 목록 개수 -->
+	<select id="searchByCount" resultType="int">
+		select count(*) from notice
+		where instr(${column}, #{keyword}) > 0
+	</select>
+	
+	<!-- 끝 [키워드 검색] -->
+	
 	
 	<!-- 	삭제 -->
 	<delete id="delete">
 		delete notice where notice_no = #{noticeNo}
 	</delete>
+	
+	<!-- 조회수 증가 -->
+	 <update id="updateViewCount" parameterType="int">
+		update notice
+	    set notice_view = notice_view + 1
+	    where notice_no = #{noticeNo} 
+	 </update>
+		
+	<!-- 목록 -->
+	<select id="listByPaging" resultType="NoticeDto">
+		<include refid="top-n-header"></include>
+		select * from notice order by notice_no desc
+		<include refid="top-n-footer"></include>
+	</select>
+	
+	<select id="count" resultType="int">
+		select count(*) from notice
+	</select>
+	
+	<!-- 
+    	Top N Query 적용
+	    - 결국 홈페이지의 목록에는 페이징이라는 개념이 포함된다
+	    - 어떻게 구현하느냐에 따라서 네비게이터나 무한스크롤 형태가 됨
+	    - 모든 조회에 똑같이 들어가는 구문이므로 어딘가에 보관해두고 불러온다면?
+	 -->
+	 
+	<!-- 상단 -->
+	<sql id="top-n-header">
+	    <if test="beginRow != null and endRow != null">
+	    select * from (
+	        select rownum rn, TMP.* from (
+	    </if>
+	</sql>
+	
+	<!-- 하단 -->
+	<sql id="top-n-footer">
+	    <if test="beginRow != null and endRow != null">
+	        )TMP
+	    ) where rn between #{beginRow} and #{endRow}
+	    </if>
+	</sql>
 
 </mapper>
