@@ -1,11 +1,12 @@
 package com.kh.kh13fb.dao;
 
+import java.util.HashMap;
 import java.util.List;
+import java.util.Map;
 
 import org.apache.ibatis.session.SqlSession;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Repository;
-
 import com.kh.kh13fb.dto.QnaDto;
 
 @Repository
@@ -41,6 +42,22 @@ public class QnaDao {
 	//수정
 	public boolean edit(QnaDto qnaDto) {
 		return sqlSession.update("qna.edit", qnaDto) > 0;
+	}
+	
+	//페이지 시스템
+		public List<QnaDto> selectListByPaging(int page, int size) {
+			int beginRow = page * size - (size-1);
+			int endRow = page * size;
+			
+			Map<String, Object> data = new HashMap<>();
+			data.put("beginRow", beginRow);
+			data.put("endRow", endRow);
+			return sqlSession.selectList("qna.listByPaging", data);
+		}
+		
+	//페이징 카운트
+	public int count() {
+		return sqlSession.selectOne("qna.count");
 	}
 	
 	//삭제

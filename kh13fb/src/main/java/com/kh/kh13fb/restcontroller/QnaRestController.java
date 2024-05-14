@@ -15,6 +15,8 @@ import org.springframework.web.bind.annotation.RestController;
 
 import com.kh.kh13fb.dao.QnaDao;
 import com.kh.kh13fb.dto.QnaDto;
+import com.kh.kh13fb.vo.PageVO;
+import com.kh.kh13fb.vo.QnaDataVO;
 
 import io.swagger.v3.oas.annotations.tags.Tag;
 
@@ -51,6 +53,7 @@ public class QnaRestController {
 	}
 	
 	//관리자 등록? <- 시도중
+	//TargetDto 만들어 보기?
 	@PostMapping("/admin")
 	public QnaDto adminAdd(@RequestBody QnaDto qnaDto) {
 		int sequence = qnaDao.sequence();
@@ -71,6 +74,26 @@ public class QnaRestController {
 	@DeleteMapping("/{qnaNo}")
 	public boolean delete(@PathVariable int qnaNo) {
 		return qnaDao.delete(qnaNo);
+	}
+	
+	//페이징 시스템 적용
+	@GetMapping("/page/{page}/size/{size}")
+	public QnaDataVO list(@PathVariable int page, @PathVariable int size) {
+		
+	    List<QnaDto> list = qnaDao.selectListByPaging(page, size);
+	    int count = qnaDao.count(); // 전체 데이터 개수 조회
+	    int totalPages = count / size + 1; // 전체 페이지 수 계산
+
+	    PageVO pageVO = PageVO.builder()
+	                        .page(page) // 현재 페이지 번호 설정
+	                        .size(size) // 페이지 크기 설정
+	                        .count(count) // 전체 개수 설정
+	                        .build();
+
+	    return QnaDataVO.builder()
+	            .list(list) // 화면에 표시할 목록 설정
+	            .pageVO(pageVO) // 페이지 정보 설정
+	            .build();
 	}
 	
 }
