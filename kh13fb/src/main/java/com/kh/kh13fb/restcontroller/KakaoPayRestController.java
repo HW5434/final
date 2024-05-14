@@ -1,38 +1,33 @@
 package com.kh.kh13fb.restcontroller;
 
 import java.net.URISyntaxException;
-import java.util.List;
 import java.util.UUID;
 
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.stereotype.Controller;
-import org.springframework.ui.Model;
+import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.CrossOrigin;
 import org.springframework.web.bind.annotation.GetMapping;
-import org.springframework.web.bind.annotation.ModelAttribute;
 import org.springframework.web.bind.annotation.PostMapping;
+import org.springframework.web.bind.annotation.RequestBody;
+import org.springframework.web.bind.annotation.RequestHeader;
 import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
 
 import com.kh.kh13fb.dao.PaymentDao;
 import com.kh.kh13fb.dao.ReservationDao;
-import com.kh.kh13fb.dto.PaymentDetailDto;
-import com.kh.kh13fb.dto.PaymentDto;
 import com.kh.kh13fb.dto.ReservationDto;
+import com.kh.kh13fb.service.JwtService;
 import com.kh.kh13fb.service.KakaoPayService;
+import com.kh.kh13fb.vo.FlashApproveVO;
+import com.kh.kh13fb.vo.FlashReadyVO;
 import com.kh.kh13fb.vo.KakaoPayApproveRequestVO;
 import com.kh.kh13fb.vo.KakaoPayApproveResponseVO;
-import com.kh.kh13fb.vo.KakaoPayCancelRequestVO;
-import com.kh.kh13fb.vo.KakaoPayCancelResponseVO;
-import com.kh.kh13fb.vo.KakaoPayOrderRequestVO;
-import com.kh.kh13fb.vo.KakaoPayOrderResponseVO;
 import com.kh.kh13fb.vo.KakaoPayReadyRequestVO;
 import com.kh.kh13fb.vo.KakaoPayReadyResponseVO;
+import com.kh.kh13fb.vo.MemberLoginVO;
 import com.kh.kh13fb.vo.PurchaseListVO;
 import com.kh.kh13fb.vo.PurchaseVO;
 
-import jakarta.servlet.http.HttpSession;
 import lombok.extern.slf4j.Slf4j;
 
 @CrossOrigin
@@ -43,23 +38,30 @@ public class KakaoPayRestController {
 	
 	@Autowired
 	private KakaoPayService kakaoPayService;
+	
+	//예약 정보 dao필요... = 예전의 productDao
 	@Autowired
 	private ReservationDao reservationDao;
+	
 	@Autowired
 	private PaymentDao paymentDao;
+	
+	//토큰 받아와야함
+	 @Autowired
+	 private JwtService jwtService;
+
 	
 	//여기서 회원번호 받아주려면 토큰 받아와야함
 	//결제되서 db에만 담기면 되지 않을까... 예매 목록은 reservation에서 보여주면 되니까?
 	//프론트에 보내줄 정보 필요
-	@GetMapping("/purchase")
-	public String purchase(Model model) {
-		model.addAttribute("list", reservationDao.selectList());
-		return "pay3/purchase";
-	}
-	//여기서 토큰 받아와야하나?
-	@PostMapping("/purchase")
-	public String purchase(@ModelAttribute PurchaseListVO vo, 
-										HttpSession session) throws URISyntaxException {
+	 
+	
+	@PostMapping("/purchase")//Ready 프론트앤드에 필요한 정보들 넘겨줘야해
+	public ResponseEntity<FlashReadyVO> purchase(@RequestBody PurchaseListVO vo ,
+										@RequestHeader("Authorization") String token) throws URISyntaxException{
+		MemberLoginVO loginVO = jwtService.parse(token);
+	    //int memberNo = loginVO.getMemberNo();
+		
 		log.debug("size={}", vo.getPurchase().size());
 		log.debug("vo={}",vo);
 		
@@ -88,64 +90,65 @@ public class KakaoPayRestController {
 		log.debug("결제이름 = {}", name);
 		log.debug("결제금액 = {}", total);
 		
-		//결제 준비 요청 - KokaoPayReadyRequestVO, KakaoPayReadyResponseVO
+		//결제 *준비* *요청* - KokaoPayReadyRequestVO
 		KakaoPayReadyRequestVO requestVO=
 				KakaoPayReadyRequestVO.builder()
 				 .partnerOrderId(UUID.randomUUID().toString())
-				 .partnerUserId("thdustest1000")
+				 .partnerUserId(loginVO.getMemberId())
 				 .itemName(name.toString())
 				 .totalAmount(total)
 				.build();
 		
+		//결제 *준비* *응답* - KakaoPayReadyResponseVO
 		KakaoPayReadyResponseVO responseVO=
 				kakaoPayService.ready(requestVO);
+		//프론트에 넘겨줘야하는 것들 넘겨주기 - vo 따로 만들어야..(session사용 못하니까)
+		FlashReadyVO flashReadyVO = 
+				FlashReadyVO.builder()
+					.partnerOrderId(requestVO.getPartnerOrderId())
+					.partnerUserId(requestVO.getPartnerUserId())
+					.tid(responseVO.getTid())
+					.nextRedirectPcUrl(responseVO.getNextRedirectPcUrl())
+				.build();
+				//session.setAttribute("vo", vo);
 		
-		//session에 flash attribute를 추가--요것만 추가하면 실제로 결제가 될꺼//카카오 페이 결제 완료 알림 오는거 ㅎㅎ
-		session.setAttribute("partner_order_id", requestVO.getPartnerOrderId());
-		session.setAttribute("partner_user_id", requestVO.getPartnerUserId());
-		session.setAttribute("tid", responseVO.getTid());
-		//(+추가) 사용자가 구매한 상품번호와 수량 목록을 결제 성공 페이지로 전송
-		session.setAttribute("vo", vo);
-		//session.setAttribute("list", vo.getPurchase());위의 코드와 같음
-		
-		return "redirect:" + responseVO.getNextRedirectPcUrl();//결제 페이지로 안내
+		return ResponseEntity.status(200).body(flashReadyVO);//vo 반환하기 -프론트 앤드에 넘길 정보들
 	}
+	
 
-	@GetMapping("/purchase/success")
-	public String success(HttpSession session, 
-			@RequestParam String pg_token) throws URISyntaxException {
+	@PostMapping("/purchase/success")//Approve 백엔드가 받을 정보 --여기서 디비에 등록해야지..
+	public void success(@RequestBody FlashApproveVO flashApproveVO,
+			@RequestBody PurchaseListVO purchaseListVO) throws URISyntaxException {
 		
 		//승인처리
 		KakaoPayApproveRequestVO requestVO = 
 				KakaoPayApproveRequestVO.builder()
-					.partnerOrderId((String)(session.getAttribute("partner_order_id")))
-					.partnerUserId((String)(session.getAttribute("partner_user_id")))
-					.tid((String)(session.getAttribute("tid")))
-					.pgToken(pg_token)
+					.partnerOrderId(flashApproveVO.getPartnerOrderId())
+					.partnerUserId(flashApproveVO.getPartnerUserId())
+					.tid(flashApproveVO.getTid())
+					.pgToken(flashApproveVO.getPgToken())
 				.build();
 		
-		//세션의 Flash Attribute를 제거
-		session.removeAttribute("partner_order_id");
-		session.removeAttribute("partner_user_id");
-		session.removeAttribute("tid");
+		//따로 remove 해줄 필요 없겟징
 		
 		KakaoPayApproveResponseVO responseVO = 
-									kakaoPayService.approve(requestVO);//approve가 끝난 시점
+									kakaoPayService.approve(requestVO);//approve가 끝난 시점-승인
 		
 		
 		//세션에 전송된 vo(구매목록)을 꺼내서 DB에 저장할 때 활용
-		PurchaseListVO vo = (PurchaseListVO) session.getAttribute("vo");
-		session.removeAttribute("vo");
+		//PurchaseListVO vo = (PurchaseListVO) session.getAttribute("vo");
+		//session.removeAttribute("vo");
 		
 		//카카오페이서비스에 모듈화 해놓은 걸 불러오기!(컨트롤러가 길어지면 안되서 모듈화 해서 저장해놨잖아)
-		kakaoPayService.insertPayment(vo, responseVO);
+		//디비에 저장하기
+		kakaoPayService.insertPayment(purchaseListVO, responseVO);
 		
-		return "redirect:successComplete";
+		
 	}    
-	@GetMapping("/purchase/successComplete")
-	public String successComplete() {
-		return "pay3/successComplete";
-	}
+//	@GetMapping("/purchase/successComplete")
+//	public String successComplete() {
+//		return "pay3/successComplete";
+//	}
 	
 	
 	

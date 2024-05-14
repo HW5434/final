@@ -56,8 +56,7 @@ public class KakaoPayService {
 		
 		//구매페이지 주소의 뒤에 /success, /cancel, /fail을 붙여서 처리하도록 구현
 		//*************-이부분 리액트 주소로 가도록 수정 필요
-		String page = ServletUriComponentsBuilder
-								.fromCurrentRequestUri().build().toUriString();
+		String page = "http://localhost:3000/kakaopay/purchase";
 		body.put("approval_url", page+"/success");//승인주소
 		body.put("cancel_url", page+"/cancel");//취소주소
 		body.put("fail_url", page+"/fail");//실패주소

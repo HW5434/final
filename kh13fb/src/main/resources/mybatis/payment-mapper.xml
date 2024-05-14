@@ -29,13 +29,16 @@
 	</select>
 	<insert id="paymentDetailAdd">
 		insert into payment_detail(
-			payment_detail_no, payment_detail_reservation, 
+			payment_detail_no, payment_detail_qty
+			payment_detail_reservation, 
 			payment_detail_name,
 			payment_detail_price,payment_detail_status,
 			payment_no
 		)
 		values (
-			#{paymentDetailNo}, #{paymentDetailReservation},
+			#{paymentDetailNo}, 
+			#{paymentDetailQty}
+			#{paymentDetailReservation},
 			#{paymentDetailName},
 			#{paymentDetailPrice}, #{paymentDetailStatus},
 			#{paymentNo}

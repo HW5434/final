@@ -18,10 +18,12 @@ import org.springframework.web.bind.annotation.RequestHeader;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
+import com.kh.kh13fb.dao.PaymentDao;
 import com.kh.kh13fb.dao.ReservationDao;
 import com.kh.kh13fb.dto.ConcertScheduleDto;
 import com.kh.kh13fb.dto.ReservationDto;
 import com.kh.kh13fb.service.JwtService;
+import com.kh.kh13fb.service.KakaoPayService;
 import com.kh.kh13fb.vo.MemberLoginVO;
 import com.kh.kh13fb.vo.ReservationSeatVO;
 import com.kh.kh13fb.vo.SeatArrayReservationVO;
@@ -31,7 +33,13 @@ import com.kh.kh13fb.vo.SeatArrayReservationVO;
 @RequestMapping("/reservation")
 public class ReservationRestController {
 	@Autowired
+	private KakaoPayService kakaoPayService;
+	
+	@Autowired
 	private ReservationDao reservationDao;
+	
+	@Autowired
+	private PaymentDao paymentDao;
 	
 	@Autowired
 	private JwtService jwtService;
@@ -52,6 +60,7 @@ public class ReservationRestController {
 		return ResponseEntity.status(200).body(reservationDto);
 	}
 
+//	@PostMapping("/purchase")
 	@PostMapping("/")
 	public void insert(@RequestBody SeatArrayReservationVO seatArrayReservationVO, @RequestHeader("Authorization") String token) {
 	    MemberLoginVO loginVO = jwtService.parse(token);
@@ -88,6 +97,7 @@ public class ReservationRestController {
 	            .build();
 	        reservationDao.insert(reservationDto);
 	    }
+	    //카카오결제?
 	}
 	
 	
