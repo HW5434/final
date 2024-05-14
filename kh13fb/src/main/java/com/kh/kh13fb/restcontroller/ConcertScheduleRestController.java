@@ -15,14 +15,20 @@ import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
+import com.fasterxml.jackson.core.type.TypeReference;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import com.fasterxml.jackson.databind.node.ObjectNode;
+import com.kh.kh13fb.dao.CastActorDao;
 import com.kh.kh13fb.dao.ConcertScheduleDao;
 import com.kh.kh13fb.dto.ActorDto;
 import com.kh.kh13fb.dto.ConcertRequestDto;
 import com.kh.kh13fb.dto.ConcertScheduleDto;
+import com.kh.kh13fb.vo.ConcertScheduleAddVO;
+import com.kh.kh13fb.vo.ConcertScheduleVO;
 
 import io.swagger.v3.oas.annotations.tags.Tag;
+
+
 
 @Tag(name="공연 일정", description = "공연일정 CRUD")
 @CrossOrigin
@@ -48,31 +54,27 @@ public class ConcertScheduleRestController {
 		}
 		return ResponseEntity.status(200).body(concertScheduleDto);
 	}
-//	//등록
+	
+//	//등록- 처음 등록 코드
 //	@PostMapping("/")
-//	public ConcertScheduleDto insert(@RequestBody ConcertScheduleDto concertScheduleDto) {
+//	public ResponseEntity insert(@RequestBody ConcertScheduleAddVO concertScheduleAddVO) {
 //		int sequence = concertScheduleDao.sequence();
-//		concertScheduleDto.setConcertScheduleNo(sequence);
-//		concertScheduleDao.insert(concertScheduleDto);
+//		concertScheduleAddVO.setConcertScheduleNo(sequence);
+//		concertScheduleDao.insert(concertScheduleAddVO);
 //		
-//		return concertScheduleDto;
+//		return concertScheduleDao.selectOne(concertScheduleAddVO.getConcertScheduleNo());
 //	}
 	
-	
 	//등록
-	   @PostMapping("/")
-	   public ConcertScheduleDto insert(@RequestBody ObjectNode saveObj) throws Exception {
-	      ObjectMapper mapper = new ObjectMapper();
-	      ConcertScheduleDto concertScheduleDto = mapper.treeToValue(saveObj.get("concertSchedule"), ConcertScheduleDto.class);
-	      ConcertRequestDto concertRequest = mapper.treeToValue(saveObj.get("concertRequest"), ConcertRequestDto.class);
-	      List<ActorDto> actorsList = mapper.treeToValue(saveObj.get("actors"), List.class);
-	      int sequence = concertScheduleDao.sequence();
-	      concertScheduleDto.setConcertScheduleNo(sequence);
-	      concertScheduleDao.insert(concertScheduleDto);
-	      
-	      return concertScheduleDto;
-	   }
-	
+	@PostMapping("/")
+	public ResponseEntity<ConcertScheduleAddVO>  insert(@RequestBody ConcertScheduleAddVO concertScheduleAddVO ){
+		//ConcertScheduleVO concertscheduleVo = 
+		int sequence = concertScheduleDao.sequence();
+		concertScheduleAddVO.setConcertScheduleNo(sequence);
+		
+		concertScheduleDao.insert(concertScheduleAddVO);
+		return ResponseEntity.ok().body(concertScheduleDao.selectTwo(sequence));
+	}
 	
 	//수정 - 전체 
 	@PutMapping("/")
