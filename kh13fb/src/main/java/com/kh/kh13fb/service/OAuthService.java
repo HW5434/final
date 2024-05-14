@@ -58,7 +58,7 @@ public class OAuthService {
         kakaoUser.setPhoneNumber(cleanPhoneNumber(kakao_account.getString("phone_number")));
         kakaoUser.setEmail(kakao_account.getString("email"));
         kakaoUser.setNickname(profile.getString("nickname"));
-        kakaoUser.setBirth(birth);
+        kakaoUser.setBirth(birth.trim());
 
         return kakaoUser;
     }

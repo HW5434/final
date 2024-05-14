@@ -241,8 +241,6 @@ public class MemberRestController {
 	public ResponseEntity<?> kakaoLogin(@PathVariable String code) throws Exception {
 		String accessToken = oAuthService.createKakaoToken(code);
 		KakaoLoginVO kakaoLoginVO = oAuthService.getKakaoInfo(accessToken);
-		System.out.println("카카오 데이터 체크");
-		System.out.println(kakaoLoginVO);
 		if(memberDao.getKakaoFindId(kakaoLoginVO.getId()) == null) {
 			memberDao.kakaoInsert(kakaoLoginVO);
 			return getResponseEntity(kakaoLoginVO.getId());
