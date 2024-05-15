@@ -1,12 +1,12 @@
 package com.kh.kh13fb.restcontroller;
 
 import java.net.URISyntaxException;
+import java.util.Map;
 import java.util.UUID;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.CrossOrigin;
-import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestHeader;
@@ -57,36 +57,38 @@ public class KakaoPayRestController {
 	 
 	
 	@PostMapping("/purchase")//Ready 프론트앤드에 필요한 정보들 넘겨줘야해
-	public ResponseEntity<FlashReadyVO> purchase(@RequestBody PurchaseListVO vo ,
-										@RequestHeader("Authorization") String token) throws URISyntaxException{
+	public ResponseEntity<FlashReadyVO> purchase(@RequestBody PurchaseVO vo,
+												 @RequestHeader("Authorization") String token) throws URISyntaxException{
+
 		MemberLoginVO loginVO = jwtService.parse(token);
 	    //int memberNo = loginVO.getMemberNo();
 		
-		log.debug("size={}", vo.getPurchase().size());
-		log.debug("vo={}",vo);
+//		log.debug("size={}", vo.getPurchase().size());
+//		log.debug("vo={}",vo);
 		
 		//vo 의 purchase 목록을 이용하여 결제 정보를 생성하는 코드 필요
 		StringBuffer name = new StringBuffer();//문자열 더하기 해야하니까 필요
 		int total = 0;//총 금액
 		
+		
 		//이름 - 000 외 N건, 가격
 		//for(PurchaseVO purchaseVO : vo.getPurchase()) {//구매 이력을 반복하며 상품 정보를 조회}
-		for(int i = 0; i < vo.getPurchase().size(); i++) {//구매 이력을 반복하며 상품 정보를 조회
-			PurchaseVO purchaseVO = vo.getPurchase().get(i);
-			ReservationDto reservationDto = reservationDao.selectOne(purchaseVO.getConcertScheduleNo());//상품 번호 조회
-			
-			if(i == 0) {//i 가 0일 경우만 상품이름 한번 나오게끔!
-				name.append(reservationDto.getReservationConcertTitle());//상품 이름(한번만 나오게)
-			}
-			//total += 이 상품에 대한 구매금액;
-			//total += productDto.getPrice() * purchaseVO.getQty();//가격 * 수량
-		}
-		//구매 목록이 2개 이상이라면 "외 N건" 이라는 글자를 추가
-		if(vo.getPurchase().size() >= 2) {
-			name.append(" 외");
-			name.append(vo.getPurchase().size()-1);//외 N건 이니까 -1 해줘야지
-			name.append("건");
-		}
+//		for(int i = 0; i < vo.getPurchase().size(); i++) {//구매 이력을 반복하며 상품 정보를 조회
+//			PurchaseVO purchaseVO = vo.getPurchase().get(i);
+//			ReservationDto reservationDto = reservationDao.selectOne(purchaseVO.getConcertScheduleNo());//상품 번호 조회
+//			
+//			if(i == 0) {//i 가 0일 경우만 상품이름 한번 나오게끔!
+//				name.append(reservationDto.getReservationConcertTitle());//상품 이름(한번만 나오게)
+//			}
+//			//total += 이 상품에 대한 구매금액;
+//			//total += productDto.getPrice() * purchaseVO.getQty();//가격 * 수량
+//		}
+//		//구매 목록이 2개 이상이라면 "외 N건" 이라는 글자를 추가
+//		if(vo.getPurchase().size() >= 2) {
+//			name.append(" 외");
+//			name.append(vo.getPurchase().size()-1);//외 N건 이니까 -1 해줘야지
+//			name.append("건");
+//		}
 		log.debug("결제이름 = {}", name);
 		log.debug("결제금액 = {}", total);
 		
@@ -95,8 +97,8 @@ public class KakaoPayRestController {
 				KakaoPayReadyRequestVO.builder()
 				 .partnerOrderId(UUID.randomUUID().toString())
 				 .partnerUserId(loginVO.getMemberId())
-				 .itemName(name.toString())
-				 .totalAmount(total)
+				 .itemName("하이하이")
+				 .totalAmount(vo.getTotalPrice())
 				.build();
 		
 		//결제 *준비* *응답* - KakaoPayReadyResponseVO
@@ -116,10 +118,8 @@ public class KakaoPayRestController {
 	}
 	
 
-	@PostMapping("/purchase/success")//Approve 백엔드가 받을 정보 --여기서 디비에 등록해야지..
-	public void success(@RequestBody FlashApproveVO flashApproveVO,
-			@RequestBody PurchaseListVO purchaseListVO) throws URISyntaxException {
-		
+	@PostMapping("/success")//Approve 백엔드가 받을 정보 --여기서 디비에 등록해야지..
+	public void success(@RequestBody FlashApproveVO flashApproveVO) throws URISyntaxException {
 		//승인처리
 		KakaoPayApproveRequestVO requestVO = 
 				KakaoPayApproveRequestVO.builder()
@@ -131,19 +131,7 @@ public class KakaoPayRestController {
 		
 		//따로 remove 해줄 필요 없겟징
 		
-		KakaoPayApproveResponseVO responseVO = 
-									kakaoPayService.approve(requestVO);//approve가 끝난 시점-승인
-		
-		
-		//세션에 전송된 vo(구매목록)을 꺼내서 DB에 저장할 때 활용
-		//PurchaseListVO vo = (PurchaseListVO) session.getAttribute("vo");
-		//session.removeAttribute("vo");
-		
-		//카카오페이서비스에 모듈화 해놓은 걸 불러오기!(컨트롤러가 길어지면 안되서 모듈화 해서 저장해놨잖아)
-		//디비에 저장하기
-		kakaoPayService.insertPayment(purchaseListVO, responseVO);
-		
-		
+		KakaoPayApproveResponseVO responseVO = kakaoPayService.approve(requestVO);//approve가 끝난 시점-승인		
 	}    
 //	@GetMapping("/purchase/successComplete")
 //	public String successComplete() {

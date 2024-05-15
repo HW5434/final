@@ -42,6 +42,7 @@ public class KakaoPayService {
 	private RestTemplate template;
 	//준비요청 메소드
 	public KakaoPayReadyResponseVO  ready(KakaoPayReadyRequestVO requestVO) throws URISyntaxException{
+		System.out.println("");
 		//주소 생성
 		URI uri = new URI("https://open-api.kakaopay.com/online/v1/payment/ready");
 
@@ -63,7 +64,7 @@ public class KakaoPayService {
 		
 		//통신 요청
 		HttpEntity entity = new HttpEntity(body, header);//헤더 + 바디
-		
+
 		return template.postForObject(uri, entity, KakaoPayReadyResponseVO.class);
 	}
 	//승인요청 메소드
