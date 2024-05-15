@@ -19,18 +19,48 @@
 		select * from member where member_id = #{memberId}
 	</select>
 	
+	
+   <select id="getMyReservationList" resultType="hashmap">
+   		<include refid="top-n-header"></include>
+	   		select * from member tb1
+	   		left outer join reservation tb2
+	   		on tb1.member_no = tb2.member_no
+	   		left outer join seat tb3
+	   		on tb2.seat_no = tb3.seat_no
+	   		where tb1.member_no = #{memberNo}
+   		<include refid="top-n-footer"></include>
+   </select>
+   
+   	<!-- Top N Query -->
+	<!-- 상단 -->
+	<sql id="top-n-header">
+	    <if test="beginRow != null and endRow != null">
+	    select * from (
+	        select rownum rn, TMP.* from (
+	    </if>
+	</sql>
+	
+	<!-- 하단 -->
+	<sql id="top-n-footer">
+	    <if test="beginRow != null and endRow != null">
+	        )TMP
+	    ) where rn between #{beginRow} and #{endRow}
+	    </if>
+	</sql>
+	
+	<select id="count" resultType="int">
+			select count(*) from (select * from member tb1
+	   		left outer join reservation tb2
+	   		on tb1.member_no = tb2.member_no
+	   		left outer join seat tb3
+	   		on tb2.seat_no = tb3.seat_no
+	   		where tb1.member_no = #{memberNo})
+	</select>
+	
+	
 	<!-- 등록 -->
    <select id="sequence" resultType="int">
       select member_seq.nextval from dual
-   </select>
-
-   <select id="getMyReservationList" resultType="hashmap">
-   		select tb2.*, tb3.* from member tb1
-   		left outer join reservation tb2
-   		on tb1.member_no = tb2.member_no
-   		left outer join seat tb3
-   		on tb2.seat_no = tb3.seat_no
-   		where tb1.member_no = #{member_no}
    </select>
 
    <insert id="insert">

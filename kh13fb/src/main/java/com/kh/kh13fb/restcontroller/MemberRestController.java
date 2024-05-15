@@ -17,6 +17,7 @@ import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestHeader;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestParam;
+import org.springframework.web.bind.annotation.ResponseBody;
 import org.springframework.web.bind.annotation.RestController;
 
 import com.kh.kh13fb.dao.MemberDao;
@@ -26,6 +27,7 @@ import com.kh.kh13fb.service.JwtService;
 import com.kh.kh13fb.service.OAuthService;
 import com.kh.kh13fb.vo.KakaoLoginVO;
 import com.kh.kh13fb.vo.MemberLoginVO;
+import com.kh.kh13fb.vo.PageVO;
 
 
 @CrossOrigin
@@ -86,10 +88,20 @@ public class MemberRestController {
 		return ResponseEntity.ok().body(memberDto);
 	}
 	
-	@GetMapping("/getMyReservationList/{refreshToken}")
-	public ResponseEntity<?> getMyReservationList(@PathVariable String refreshToken) throws Exception {
-		MemberLoginVO loginVO = jwtService.parse(refreshToken);
-		Map<String, Object> resultMap = memberDao.getMyReservationList(loginVO.getMemberNo());
+	@PostMapping("/getMyReservationList/")
+	public ResponseEntity<?> getMyReservationList(@RequestBody Map<String, Object> map) throws Exception {
+		MemberLoginVO loginVO = jwtService.parse((String) map.get("refreshToken"));
+		int page = (int) map.get("page");
+		int size = (int) map.get("size");
+		int count = memberDao.count(loginVO.getMemberNo());
+		int totalPage = count / size + 1; // 전체 페이지 수 계산
+		Map<String, Object> resultMap = memberDao.getMyReservationList(loginVO.getMemberNo(), page, size);
+		PageVO pageVO = PageVO.builder()
+                .page(page) // 현재 페이지 번호 설정
+                .size(size) // 페이지 크기 설정
+                .count(count) // 전체 개수 설정
+                .build();
+		resultMap.put("pageVO", pageVO);
 		return ResponseEntity.ok().body(resultMap);
 	}	
 
