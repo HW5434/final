@@ -9,6 +9,7 @@ import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PatchMapping;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
+import org.springframework.web.bind.annotation.RequestAttribute;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
@@ -45,27 +46,35 @@ public class QnaRestController {
 	
 	//등록
 	@PostMapping("/")
-	public QnaDto insert(@RequestBody QnaDto qnaDto) {
+	public QnaDto insert(@RequestAttribute("memberId") String memberId, 
+						 			 @RequestBody QnaDto qnaDto) {
 		int sequence = qnaDao.sequence();
 		qnaDto.setQnaNo(sequence);
-		qnaDao.insert(qnaDto);
+		qnaDto.setQnaWriter(memberId);
+		qnaDto.setQnaAnswer("N");
+		qnaDao.insert(qnaDto);	
+		System.out.println(memberId);
 		return qnaDao.selectOne(sequence);
 	}
 	
-	//관리자 등록? <- 시도중
-	//TargetDto 만들어 보기?
+	//관리자 등록 
+	// qnaTarget을 붙이는 작업은 Mapper에서 하고 React에서 값을 넘겨주는건 React에서 해결
 	@PostMapping("/admin")
-	public QnaDto adminAdd(@RequestBody QnaDto qnaDto) {
+	public QnaDto adminAdd(@RequestAttribute("memberId") String memberId, 
+						   @RequestBody QnaDto qnaDto) {
+		//System.out.println(memberId);
 		int sequence = qnaDao.sequence();
 		qnaDto.setQnaNo(sequence);
+		qnaDto.setQnaWriter(memberId);
 		qnaDto.setQnaAnswer("Y");
 		qnaDao.adminAdd(qnaDto);
+		//System.out.println(qnaDto); //담겨지는지 테스트
 		return qnaDao.selectOne(sequence);
 	}
 	
 	//일부수정
 	@PatchMapping("/")
-	public boolean edit(@RequestBody QnaDto qnaDto) {
+	public boolean edit(@RequestAttribute("userId") int userId, @RequestBody QnaDto qnaDto) {
 		boolean result = qnaDao.edit(qnaDto);
 		return result;
 	}
