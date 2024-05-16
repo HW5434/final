@@ -14,19 +14,18 @@ import org.springframework.web.bind.annotation.RequestHeader;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
+import com.kh.kh13fb.dao.MemberDao;
 import com.kh.kh13fb.dao.PaymentDao;
 import com.kh.kh13fb.dao.ReservationDao;
+import com.kh.kh13fb.dto.MemberDto;
 import com.kh.kh13fb.dto.ReservationDto;
 import com.kh.kh13fb.service.JwtService;
 import com.kh.kh13fb.service.KakaoPayService;
-import com.kh.kh13fb.vo.FlashApproveVO;
 import com.kh.kh13fb.vo.FlashReadyVO;
 import com.kh.kh13fb.vo.KakaoPayApproveRequestVO;
-import com.kh.kh13fb.vo.KakaoPayApproveResponseVO;
 import com.kh.kh13fb.vo.KakaoPayReadyRequestVO;
 import com.kh.kh13fb.vo.KakaoPayReadyResponseVO;
 import com.kh.kh13fb.vo.MemberLoginVO;
-import com.kh.kh13fb.vo.PurchaseListVO;
 import com.kh.kh13fb.vo.PurchaseVO;
 import com.kh.kh13fb.vo.SeatArrayReservationVO;
 
@@ -49,8 +48,11 @@ public class KakaoPayRestController {
 	private PaymentDao paymentDao;
 	
 	//토큰 받아와야함
-	 @Autowired
-	 private JwtService jwtService;
+	@Autowired
+	private JwtService jwtService;
+	
+	@Autowired
+	private MemberDao memberDao;
 
 	
 	//여기서 회원번호 받아주려면 토큰 받아와야함
@@ -121,73 +123,46 @@ public class KakaoPayRestController {
 	
 
 	@PostMapping("/success")//Approve 백엔드가 받을 정보 --여기서 디비에 등록해야지..
-	public void success(@RequestBody FlashApproveVO flashApproveVO) throws URISyntaxException {
-		//승인처리
+	public void success(@RequestBody Map<String, Object> map) throws URISyntaxException {
+		
+		MemberDto memberDto = memberDao.getKakaoFindId((String)map.get("partnerUserId"));
+	    
+		List<Integer> seatNoList = (List<Integer>) map.get("seatNo");
+		List<Integer> reservationPriceList = (List<Integer>) map.get("reservationPrice");
+		
 		KakaoPayApproveRequestVO requestVO = 
 				KakaoPayApproveRequestVO.builder()
-					.partnerOrderId(flashApproveVO.getPartnerOrderId())
-					.partnerUserId(flashApproveVO.getPartnerUserId())
-					.tid(flashApproveVO.getTid())
-					.pgToken(flashApproveVO.getPgToken())
+					.partnerOrderId((String)map.get("partnerOrderId"))
+					.partnerUserId((String)map.get("partnerUserId"))
+					.tid((String)map.get("tid"))
+					.pgToken((String)map.get("pgToken"))
 				.build();
 		
 		//따로 remove 해줄 필요 없겟징
 		
-		KakaoPayApproveResponseVO responseVO = kakaoPayService.approve(requestVO);//approve가 끝난 시점-승인		
+		kakaoPayService.approve(requestVO);//approve가 끝난 시점-승인	
+		
+		for (int i = 0; i < seatNoList.size(); i++) {
+			int sequence = reservationDao.sequence();
+			Integer seatNo = seatNoList.get(i);
+			Integer reservationPrice = reservationPriceList.get(i);
+			
+			ReservationDto reservationDto = ReservationDto.builder()
+					.concertScheduleNo((int)map.get("concertScheduleNo"))
+					.reservationConcertTitle((String)map.get("reservationConcertTitle"))
+					.reservationConcertDate((String)map.get("reservationConcertDate"))
+					.reservationNo(sequence)
+					.memberNo(memberDto.getMemberNo())
+					.seatNo(seatNo)
+					.reservationPrice(reservationPrice)
+					.reservationPersonName((String)map.get("reservationPersonName"))
+					.reservationPersonTell((String)map.get("reservationPersonTell"))
+					.reservationPersonEmail((String)map.get("reservationPersonEmail"))
+					.build();
+			reservationDao.insert(reservationDto);
+		}
+		
 	}    
-	
-	
-	
-//	@PostMapping("/success")
-//	public void success(@RequestBody FlashApproveVO flashApproveVO,
-//	                    @RequestBody SeatArrayReservationVO seatArrayReservationVO,
-//	                    @RequestHeader("Authorization") String token) throws URISyntaxException {
-//	    // 토큰을 사용하여 사용자 정보 가져오기
-//	    MemberLoginVO loginVO = jwtService.parse(token);
-//	    int memberNo = loginVO.getMemberNo();
-//
-//	    // 승인 처리
-//	    KakaoPayApproveRequestVO requestVO =
-//	            KakaoPayApproveRequestVO.builder()
-//	                    .partnerOrderId(flashApproveVO.getPartnerOrderId())
-//	                    .partnerUserId(flashApproveVO.getPartnerUserId())
-//	                    .tid(flashApproveVO.getTid())
-//	                    .pgToken(flashApproveVO.getPgToken())
-//	                    .build();
-//
-//	    KakaoPayApproveResponseVO responseVO = kakaoPayService.approve(requestVO);
-//
-//	    // 좌석 예약 정보 활용
-//	    if (seatArrayReservationVO != null) {
-//	        // 예약 번호 설정
-//	        // 좌석 번호와 가격 리스트 받아오기
-//	        List<Integer> seatNoList = seatArrayReservationVO.getSeatNo();
-//	        List<Integer> reservationPriceList = seatArrayReservationVO.getReservationPrice();
-//
-//	        // 좌석 번호와 가격을 이용하여 예약 생성
-//	        for (int i = 0; i < seatNoList.size(); i++) {
-//	            int sequence = reservationDao.sequence();
-//	            Integer seatNo = seatNoList.get(i);
-//	            Integer reservationPrice = reservationPriceList.get(i);
-//
-//	            ReservationDto reservationDto = ReservationDto.builder()
-//	                    .concertScheduleNo(seatArrayReservationVO.getConcertScheduleNo())
-//	                    .reservationConcertTitle(seatArrayReservationVO.getReservationConcertTitle())
-//	                    .reservationConcertDate(seatArrayReservationVO.getReservationConcertDate())
-//	                    .reservationNo(sequence)
-//	                    .memberNo(memberNo)
-//	                    .seatNo(seatNo)
-//	                    .reservationPrice(reservationPrice)
-//	                    .reservationPersonName(seatArrayReservationVO.getReservationPersonName())
-//	                    .reservationPersonTell(seatArrayReservationVO.getReservationPersonTell())
-//	                    .reservationPersonEmail(seatArrayReservationVO.getReservationPersonEmail())
-//	                    .build();
-//	            reservationDao.insert(reservationDto);
-//	        }
-//	    }
-//	}
-	
-	
 //	@GetMapping("/purchase/successComplete")
 //	public String successComplete() {
 //		return "pay3/successComplete";
