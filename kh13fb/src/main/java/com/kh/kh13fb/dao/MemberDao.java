@@ -53,6 +53,11 @@ public class MemberDao {
 		return sqlSession.update("member.editMemberByAdmin", memberDto) > 0;
 	}
 	
+	public boolean editPassword(Map<String, Object> member) {
+		System.out.println(member);
+		return sqlSession.update("member.editPassword", member) > 0;
+	}
+	
 	//삭제
 	public boolean delete(String memberId) {
 		return sqlSession.delete("member.delete", memberId) > 0;
@@ -77,7 +82,7 @@ public class MemberDao {
 		return sqlSession.selectOne("member.getFindId", memberDto);
 	}
 	
-	//카카오아이디찾기
+	//카카오아이디찾기(처음카카오로그인인지알아냄)
 	public MemberDto getKakaoFindId(String memberId) {
 		return sqlSession.selectOne("member.getKakaoFindId", memberId);
 	}
@@ -93,12 +98,23 @@ public class MemberDao {
 	}
 	
 	//내예매목록
-	public Map<String, Object> getMyReservationList(int memberNo) {
+	public Map<String, Object> getMyReservationList(int memberNo, int page, int size) {
+		int beginRow = page * size - (size-1);
+		int endRow = page * size;
+		Map<String, Object> data = new HashMap<>();
+		data.put("beginRow", beginRow);
+		data.put("endRow", endRow);
+		data.put("memberNo", memberNo);
+		System.out.println("데이터 베이스 넘기는 값");
+		System.out.println(data);
 		Map<String, Object> resultMap = new HashMap<String, Object>();
-		resultMap.put("reservationList", sqlSession.selectList("member.getMyReservationList", memberNo));
+		resultMap.put("reservationList", sqlSession.selectList("member.getMyReservationList", data));
 		return resultMap;
 	}
 	
+	public int count(int memberNo) {
+		return sqlSession.selectOne("member.count", memberNo);
+	}
 }
 
 
