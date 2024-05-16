@@ -84,6 +84,7 @@ public class ConcertScheduleRestController {
 		int sequence = concertScheduleDao.sequence();
 		concertScheduleDto.setConcertScheduleNo(sequence);
 		concertScheduleDao.insert(concertScheduleDto);
+		
 		return concertScheduleDao.selectOne(sequence);
 	}
 	
