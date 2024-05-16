@@ -17,9 +17,15 @@
 		concert_schedule_start,
 		concert_schedule_end,
 		concert_request_no)
-		
-		values(#{concertScheduleNo},#{concertScheduleStart}, #{concertScheduleEnd},#{concertRequestNo})
+		values
+		(
+		#{concertScheduleNo}, 
+		TO_DATE(#{concertScheduleStart}, 'YYYY-MM-DD HH24:MI'), 
+		TO_DATE(#{concertScheduleEnd}, 'YYYY-MM-DD HH24:MI'), 
+		#{concertRequestNo}
+		)
     </insert>
+    
     
     
     <!-- 목록 -->
@@ -80,5 +86,19 @@
     			join concert_request cr on cs.concert_request_no = cr.concert_request_no
     		where cr.concert_request_no = #{concertRequestNo} order by cs.concert_schedule_start asc
 		</select>
+		
+<!-- 공연정보에 대한것들 [현우] -->
+
+    <!-- 목록 조회 [현우] : 맨위 참고 -->
+    
+    <!-- 목록 조회 [현우] : 맨위 참고 -->
+    
+<!--     <insert id="new"> -->
+<!--     INSERT INTO concert_schedule  -->
+<!--     (concert_schedule_no, concert_schedule_start, concert_schedule_end, concert_request_no) -->
+<!-- 	VALUES  -->
+<!--     (#{concertScheduleNo},#{concertScheduleStart}, #{concertScheduleEnd},#{concertRequestNo}) -->
+<!--     </insert> -->
+    
     
     </mapper>
