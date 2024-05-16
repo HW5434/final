@@ -9,4 +9,5 @@ import lombok.NoArgsConstructor;
 public class ConcertScheduleVO {
 	private String concertScheduleStart;
 	private String concertScheduleEnd;
+	
 }
