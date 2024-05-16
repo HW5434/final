@@ -11,4 +11,6 @@ public class FlashApproveVO {
 	private String partnerUserId;
 	private String tid;
 	private String pgToken;
+	
+	
 }

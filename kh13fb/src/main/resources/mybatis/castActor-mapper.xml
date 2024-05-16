@@ -9,6 +9,24 @@
 	<select id="list" resultType="CastActorDto">
 		select * from cast_actor order by cast_actor_no asc
 	</select>
+	<!-- 공연일정에 따른 공연출연배우 목록 -->
+	<!-- <select id="listbyConcertScheduleNo" resultType="CastActorDto">
+		select * from cast_actor where concert_schedule_no=#{concertScheduleNo}
+	</select> -->
+	
+	 <select id="listByConcertScheduleNo" resultType="CastActorDto">
+		select ca.cast_actor_no, ca.cast_actor_name, cs.concert_schedule_no
+			from cast_actor ca
+			join concert_schedule cs on ca.concert_schedule_no = cs.concert_schedule_no
+		where cs.concert_schedule_no = #{concertScheduleNo}
+	</select> 
+	<!-- <select id="listByConcertRequestNo" resultType="CastActorDto">
+		select ca.cast_actor_no, ca.cast_actor_name, cs.concert_schedule_no
+			from cast_actor ca
+			join concert_schedule cs ON ca.concert_schedule_no = cs.concert_schedule_no
+			join concert_request cr ON cs.concert_request_no = cr.concert_request_no
+		where cr.concert_request_no = #{concertRequestNo}
+	</select> -->
 	
 	<!-- 공연출연배우 상세 -정보 별로 없는데 상세 필요할까싶음-->
 	<select id="find" resultType="CastActorDto">
