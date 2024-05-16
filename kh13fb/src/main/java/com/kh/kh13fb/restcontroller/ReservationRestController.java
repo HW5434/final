@@ -32,14 +32,10 @@ import com.kh.kh13fb.vo.SeatArrayReservationVO;
 @RestController
 @RequestMapping("/reservation")
 public class ReservationRestController {
-	@Autowired
-	private KakaoPayService kakaoPayService;
 	
 	@Autowired
 	private ReservationDao reservationDao;
 	
-	@Autowired
-	private PaymentDao paymentDao;
 	
 	@Autowired
 	private JwtService jwtService;

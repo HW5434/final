@@ -29,6 +29,11 @@ public class CastActorRestController {
 	public List<CastActorDto> list(){
 		return castActorDao.selectList();
 	}
+//	//배우 목록
+//	@GetMapping("/byConcertScheduleNo")
+//	public List<CastActorDto> selectListByConcertScheduleNo(@PathVariable int castActorNo){
+//		return castActorDao.selectListByConcertScheduleNo(castActorNo);
+//	}
 	
 	//배우 상세
 	@GetMapping("/{castActorNo}")

@@ -101,37 +101,38 @@ public class KakaoPayService {
 	@Transactional//이거 붙이면 transaction되서 insert가 다 실행되거나 다 실행하지 않거나 됨!
 	public void insertPayment(PurchaseListVO vo, 
 											KakaoPayApproveResponseVO responseVO) {
-			//DB에 결제 완료된 내역을 저장
-			//- 결제 *대표* 정보(payment) = 번호 생성 후 등록
-			int paymentNo = paymentDao.paymentSequence();//번호 먼저 뽑기안녕하세요
-			PaymentDto paymentDto = PaymentDto.builder()
-						.paymentNo(paymentNo)//시퀀스
-						.paymentName(responseVO.getItemName())//대표결제명
-						.paymentTotal(responseVO.getAmount().getTotal())//대표결제금액
-						.paymentRemain(responseVO.getAmount().getTotal())//잔여금액-결제총금액과 동일(처음 구매할 땐 취소 없으니까 잔여금액도 동일하지)
-						.memberId(responseVO.getPartnerUserId())//구매자ID
-						.paymentTid(responseVO.getTid())//거래번호
-					.build();
-			paymentDao.insertPayment(paymentDto);
-				
-			//- 결제 *상세*ㄴ 내역(payment_detail) - 목록 개수만큼 반복적으로 등록
-			//if(vo.getPurchase() != null) {//구매내역이 있다면 -- 이건 당연한 얘기 굳이 필요 x}
-			for(PurchaseVO purchaseVO : vo.getPurchase()) {
-				ReservationDto reservationDto = 
-						reservationDao.selectOne(purchaseVO.getConcertScheduleNo());//공연정보 조회?
-				int paymentDetailNo = paymentDao.paymentDetailSequence();
-				PaymentDetailDto paymentDetailDto = PaymentDetailDto.builder()
-							.paymentDetailNo(paymentDetailNo)//시퀀스
-							//.paymentDetailReservation(seatArrayReservationVO.getNo())//상품번호
-							.paymentDetailReservation(reservationDto.getReservationNo())//상품번호--프로젝트시 이부분만 변경될껄?
-							//.paymentDetailQty(seatArrayReservationVO.getQty())//수량-난 없다
-							.paymentDetailName(reservationDto.getReservationConcertTitle())//상품명-좌석?으로 가야하나..
-							.paymentDetailPrice(reservationDto.getReservationPrice())//가격
-							.paymentDetailStatus("승인")//내가 셋팅하면 돼....
-							.paymentNo(paymentNo)//결제대표번호
-						.build();
-				paymentDao.insertPaymentDetail(paymentDetailDto);
-			}
+//			//DB에 결제 완료된 내역을 저장
+//			//- 결제 *대표* 정보(payment) = 번호 생성 후 등록
+//			int paymentNo = paymentDao.paymentSequence();//번호 먼저 뽑기
+//			PaymentDto paymentDto = PaymentDto.builder()
+//						.paymentNo(paymentNo)//시퀀스
+//						.paymentName(responseVO.getItemName())//대표결제명
+//						.paymentTotal(responseVO.getAmount().getTotal())//대표결제금액
+//						.paymentRemain(responseVO.getAmount().getTotal())//잔여금액-결제총금액과 동일(처음 구매할 땐 취소 없으니까 잔여금액도 동일하지)
+//						.memberId(responseVO.getPartnerUserId())//구매자ID
+//						.paymentTid(responseVO.getTid())//거래번호
+//					.build();
+//			paymentDao.insertPayment(paymentDto);
+//				
+//			//- 결제 *상세*ㄴ 내역(payment_detail) - 목록 개수만큼 반복적으로 등록
+//			//if(vo.getPurchase() != null) {//구매내역이 있다면 -- 이건 당연한 얘기 굳이 필요 x}
+//			for(PurchaseVO purchaseVO : vo.getPurchase()) {
+//				ReservationDto reservationDto = 
+//						reservationDao.selectOne(purchaseVO.getConcertScheduleNo());//공연정보 조회?
+//				int paymentDetailNo = paymentDao.paymentDetailSequence();
+//				PaymentDetailDto paymentDetailDto = PaymentDetailDto.builder()
+//							.paymentDetailNo(paymentDetailNo)//시퀀스
+//							//.paymentDetailReservation(seatArrayReservationVO.getNo())//상품번호
+//							.paymentDetailReservation(reservationDto.getReservationNo())//상품번호--프로젝트시 이부분만 변경될껄?
+//							//.paymentDetailQty(seatArrayReservationVO.getQty())//수량-난 없다
+//							.paymentDetailName(reservationDto.getReservationConcertTitle())//상품명-좌석?으로 가야하나..
+//							.paymentDetailPrice(reservationDto.getReservationPrice())//가격
+//							.paymentDetailStatus("승인")//내가 셋팅하면 돼....
+//							.paymentNo(paymentNo)//결제대표번호
+//						.build();
+//				paymentDao.insertPaymentDetail(paymentDetailDto);
+//			}
+		
 	}
 	
 	//상세조회 메소드! 조회 관련!!
