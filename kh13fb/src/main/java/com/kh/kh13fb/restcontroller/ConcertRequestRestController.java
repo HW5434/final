@@ -7,7 +7,6 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.CrossOrigin;
 import org.springframework.web.bind.annotation.GetMapping;
-import org.springframework.web.bind.annotation.ModelAttribute;
 import org.springframework.web.bind.annotation.PatchMapping;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
@@ -31,6 +30,7 @@ import com.kh.kh13fb.vo.ConcertRequestApplicantVO;
 import com.kh.kh13fb.vo.ConcertRequestConcertVO;
 import com.kh.kh13fb.vo.ConcertRequestRentVO;
 import com.kh.kh13fb.vo.ConcertRequestVO;
+import com.kh.kh13fb.vo.MemberLoginVO;
 
 
 @CrossOrigin
@@ -55,22 +55,26 @@ public class ConcertRequestRestController {
 	
 	@PostMapping("/")
 	public void insert(@RequestHeader("Authorization") String authorization, 
-			@ModelAttribute ConcertRequestApplicantVO applicant,
-			@ModelAttribute ConcertRequestConcertVO concert,
+			@RequestParam int concertRequestNo,
+			@RequestParam String applicant,
+			@RequestParam String concert,
 			@RequestParam String actors,
-			@ModelAttribute ConcertRequestRentVO rent,
+			@RequestParam String rent,
 			@RequestParam(required=false) List<MultipartFile> attachList) throws IOException {
 		ObjectMapper mapper = new ObjectMapper();
-		List<ActorDto> actorList = mapper.readValue(actors, new TypeReference<List<ActorDto>>(){});
-		
+		MemberLoginVO loginVO = jwtService.parse(authorization);
+		int memberNo = loginVO.getMemberNo();
+		//concertRequestVO.setMemberNo(loginVO.getMemberNo());
 		ConcertRequestVO concertRequestVO = ConcertRequestVO.builder()
-					.applicant(applicant)
-					.concert(concert)
-					.actors(actorList)
-					.rent(rent)
+					.memberNo(memberNo)
+					.applicant(mapper.readValue(applicant, ConcertRequestApplicantVO.class))
+					.concert(mapper.readValue(concert, ConcertRequestConcertVO.class))
+					.actors(mapper.readValue(actors, new TypeReference<List<ActorDto>>(){}))
+					.rent(mapper.readValue(rent, ConcertRequestRentVO.class))
 					.attachList(attachList)
 				.build();
 		System.out.println(concertRequestVO);
+		
 		
 //	public ConcertRequestVO insert(@RequestBody ConcertRequestVO concertRequestVO, @RequestHeader String authorization) {
 //		MemberLoginVO loginVO = jwtService.parse(authorization);

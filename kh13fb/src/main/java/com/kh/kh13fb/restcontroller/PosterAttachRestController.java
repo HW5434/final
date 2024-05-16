@@ -41,23 +41,6 @@ public class PosterAttachRestController {
 //
 //		// 파일이 없으면 중지
 //		if (!file.isEmpty()) {
-//
-//			// 기존 파일 삭제
-//			try {
-//				int attachNo = attachDao.findAttachNo(concertRequestNo);// 파일번호찾고
-//				File dir = new File(System.getProperty("user.home"), "upload");
-//				File target = new File(dir, String.valueOf(attachNo));
-//				target.delete();// 실제파일 삭제
-//				attachDao.delete(attachNo);// DB에서 삭제
-//			} catch (Exception e) {
-//				// e.printStackTrace();
-//			} // 예외 발생 시 아무것도 안함(skip)
-//
-//			// 신규 파일 추가
-//			// - attach_seq 번호 생성
-//			// - 실물 파일을 저장
-//			// - DB에 insert
-//			// - member과 connect 처리
 //			int attachNo = attachDao.getSequence();// 시퀀스생성
 //			File dir = new File(System.getProperty("user.home"), "upload");
 //			File target = new File(dir, String.valueOf(attachNo));
