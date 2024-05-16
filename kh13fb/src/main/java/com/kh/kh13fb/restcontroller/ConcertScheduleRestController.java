@@ -80,6 +80,7 @@ public class ConcertScheduleRestController {
 	//등록 메소드 [현우]
 	@PostMapping("/new")
 	public ConcertScheduleDto insert(@RequestBody ConcertScheduleDto concertScheduleDto) {
+		System.out.println(concertScheduleDto);
 		int sequence = concertScheduleDao.sequence();
 		concertScheduleDto.setConcertScheduleNo(sequence);
 		concertScheduleDao.insert(concertScheduleDto);
