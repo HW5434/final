@@ -6,6 +6,7 @@ import org.apache.ibatis.session.SqlSession;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Repository;
 
+import com.kh.kh13fb.dto.ActorDto;
 import com.kh.kh13fb.dto.CastActorDto;
 
 @Repository
@@ -40,4 +41,6 @@ public class CastActorDao {//공연출연배우-공연일정과 연결된...
 	public boolean delete(int castActorNo) {
 		return sqlSession.delete("castActor.delete",castActorNo ) > 0;
 	}
+
+
 }

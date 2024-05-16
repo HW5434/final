@@ -48,6 +48,8 @@ public class MemberInterceptor implements HandlerInterceptor{
 		MemberLoginVO loginVO = jwtService.parse(token);
 		log.debug("번호 = {}, 아이디 = {}, 등급 = {}", loginVO.getMemberNo(), loginVO.getMemberId(), loginVO.getMemberGrade());
 		//추가적으로 DB검사, 기타 처리를 추가할 수 있다
+		//memberId라는 이름으로 회원정보를 가져감
+		request.setAttribute("memberId", loginVO.getMemberId());
 			return true;//통과
 		}	
 		catch(Exception e) {
