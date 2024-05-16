@@ -15,7 +15,6 @@ import lombok.NoArgsConstructor;
 @JsonIgnoreProperties(ignoreUnknown = true)
 @Data @NoArgsConstructor @AllArgsConstructor @Builder
 public class ConcertRequestVO {
-	
 	private int memberNo;
 	private int concertRequestNo;
 	private ConcertRequestApplicantVO applicant;
@@ -23,6 +22,5 @@ public class ConcertRequestVO {
 	private List<ActorDto> actors;
 	private ConcertRequestRentVO rent;
 	private List<MultipartFile> attachList;
-	
 	
 }

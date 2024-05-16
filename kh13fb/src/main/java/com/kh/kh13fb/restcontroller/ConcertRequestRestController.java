@@ -1,29 +1,36 @@
 package com.kh.kh13fb.restcontroller;
 
+import java.io.IOException;
 import java.util.List;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.CrossOrigin;
 import org.springframework.web.bind.annotation.GetMapping;
+import org.springframework.web.bind.annotation.ModelAttribute;
 import org.springframework.web.bind.annotation.PatchMapping;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestHeader;
 import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
+import org.springframework.web.multipart.MultipartFile;
 
+import com.fasterxml.jackson.core.type.TypeReference;
+import com.fasterxml.jackson.databind.ObjectMapper;
 import com.kh.kh13fb.dao.ActorDao;
 import com.kh.kh13fb.dao.AttachDao;
 import com.kh.kh13fb.dao.ConcertRequestDao;
 import com.kh.kh13fb.dto.ActorDto;
-import com.kh.kh13fb.dto.AttachDto;
 import com.kh.kh13fb.dto.ConcertRequestDto;
 import com.kh.kh13fb.service.JwtService;
 import com.kh.kh13fb.vo.ConcertListVO;
+import com.kh.kh13fb.vo.ConcertRequestApplicantVO;
+import com.kh.kh13fb.vo.ConcertRequestConcertVO;
+import com.kh.kh13fb.vo.ConcertRequestRentVO;
 import com.kh.kh13fb.vo.ConcertRequestVO;
-import com.kh.kh13fb.vo.MemberLoginVO;
 
 
 @CrossOrigin
@@ -47,8 +54,25 @@ public class ConcertRequestRestController {
 	}
 	
 	@PostMapping("/")
-	public ConcertRequestVO insert(@RequestBody ConcertRequestVO concertRequestVO, @RequestHeader String authorization) {
+	public void insert(@RequestHeader("Authorization") String authorization, 
+			@ModelAttribute ConcertRequestApplicantVO applicant,
+			@ModelAttribute ConcertRequestConcertVO concert,
+			@RequestParam String actors,
+			@ModelAttribute ConcertRequestRentVO rent,
+			@RequestParam(required=false) List<MultipartFile> attachList) throws IOException {
+		ObjectMapper mapper = new ObjectMapper();
+		List<ActorDto> actorList = mapper.readValue(actors, new TypeReference<List<ActorDto>>(){});
+		
+		ConcertRequestVO concertRequestVO = ConcertRequestVO.builder()
+					.applicant(applicant)
+					.concert(concert)
+					.actors(actorList)
+					.rent(rent)
+					.attachList(attachList)
+				.build();
 		System.out.println(concertRequestVO);
+		
+//	public ConcertRequestVO insert(@RequestBody ConcertRequestVO concertRequestVO, @RequestHeader String authorization) {
 //		MemberLoginVO loginVO = jwtService.parse(authorization);
 //		concertRequestVO.setMemberNo(loginVO.getMemberNo());
 //				//		System.out.println(concertRequestVO);
@@ -64,7 +88,6 @@ public class ConcertRequestRestController {
 //		concertRequestDao.insert(concertRequestVO);
 //		
 //		return concertRequestVO;
-		return null;
 	}
 
 	@GetMapping("/{concertRequestNo}")
