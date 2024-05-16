@@ -21,9 +21,21 @@ public class ConcertScheduleDao {
 	public ConcertScheduleDto selectOne(int concertScheduleNo) {
 		return sqlSession.selectOne("concertSchedule.find",concertScheduleNo);
 	}
+	
+	//등록 메소드
 	public ConcertScheduleAddVO selectTwo(int concertScheduleNo ) {
 		return sqlSession.selectOne("concertSchedule.findone",concertScheduleNo);
 	}
+	
+	//공연 일정 목록 조회 메소드
+	
+	
+	//공연 일정 등록 메소드
+	public void insert(ConcertScheduleDto concertScheduleDto) {
+		sqlSession.insert("concertSchedule.save", concertScheduleDto);
+	}
+	
+	
 	public  int sequence () {
 		return sqlSession.selectOne("concertSchedule.sequence");
 	}

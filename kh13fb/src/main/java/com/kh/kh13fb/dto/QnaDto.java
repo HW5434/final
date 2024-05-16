@@ -12,4 +12,5 @@ public class QnaDto {
 	private String qnaContent;
 	private String qnaAnswer;
 	private Integer qnaTarget;
+	private String qnaWriter;
 }

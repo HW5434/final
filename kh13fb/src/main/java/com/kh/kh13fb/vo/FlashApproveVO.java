@@ -6,8 +6,9 @@ import lombok.Data;
 import lombok.NoArgsConstructor;
 
 @Data @Builder @NoArgsConstructor @AllArgsConstructor
-public class ConcertScheduleVO {
-	private String concertScheduleStart;
-	private String concertScheduleEnd;
-	
+public class FlashApproveVO {
+	private String partnerOrderId;
+	private String partnerUserId;
+	private String tid;
+	private String pgToken;
 }

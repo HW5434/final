@@ -11,6 +11,7 @@ import org.springframework.web.bind.annotation.PatchMapping;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.PutMapping;
+import org.springframework.web.bind.annotation.RequestAttribute;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
@@ -23,6 +24,7 @@ import com.kh.kh13fb.dao.ConcertScheduleDao;
 import com.kh.kh13fb.dto.ActorDto;
 import com.kh.kh13fb.dto.ConcertRequestDto;
 import com.kh.kh13fb.dto.ConcertScheduleDto;
+import com.kh.kh13fb.dto.QnaDto;
 import com.kh.kh13fb.vo.ConcertScheduleAddVO;
 import com.kh.kh13fb.vo.ConcertScheduleVO;
 
@@ -66,14 +68,24 @@ public class ConcertScheduleRestController {
 //	}
 	
 	//등록
-	@PostMapping("/")
-	public ResponseEntity<ConcertScheduleAddVO>  insert(@RequestBody ConcertScheduleAddVO concertScheduleAddVO ){
-		//ConcertScheduleVO concertscheduleVo = 
+//	@PostMapping("/")
+//	public ResponseEntity<ConcertScheduleAddVO>  insert(@RequestBody ConcertScheduleAddVO concertScheduleAddVO ){
+//		//ConcertScheduleVO concertscheduleVo = 
+//		int sequence = concertScheduleDao.sequence();
+//		concertScheduleAddVO.setConcertScheduleNo(sequence);
+//		
+//		concertScheduleDao.insert(concertScheduleAddVO);
+//		System.out.println(concertScheduleAddVO);
+//		return ResponseEntity.ok().body(concertScheduleDao.selectTwo(sequence));
+//	}
+	
+	//등록 메소드 [현우]
+	@PostMapping("/new")
+	public ConcertScheduleDto insert(@RequestBody ConcertScheduleDto concertScheduleDto) {
 		int sequence = concertScheduleDao.sequence();
-		concertScheduleAddVO.setConcertScheduleNo(sequence);
-		
-		concertScheduleDao.insert(concertScheduleAddVO);
-		return ResponseEntity.ok().body(concertScheduleDao.selectTwo(sequence));
+		concertScheduleDto.setConcertScheduleNo(sequence);
+		concertScheduleDao.insert(concertScheduleDto);
+		return concertScheduleDao.selectOne(sequence);
 	}
 	
 	//수정 - 전체 

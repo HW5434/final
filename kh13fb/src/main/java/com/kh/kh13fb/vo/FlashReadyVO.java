@@ -6,8 +6,10 @@ import lombok.Data;
 import lombok.NoArgsConstructor;
 
 @Data @Builder @NoArgsConstructor @AllArgsConstructor
-public class ConcertScheduleVO {
-	private String concertScheduleStart;
-	private String concertScheduleEnd;
-	
+public class FlashReadyVO {
+	private String partnerOrderId;
+	private String partnerUserId;
+	private String tid;
+	//url도 필요?
+	private String nextRedirectPcUrl;
 }
