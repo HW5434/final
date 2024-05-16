@@ -103,7 +103,7 @@ public class KakaoPayService {
 											KakaoPayApproveResponseVO responseVO) {
 			//DB에 결제 완료된 내역을 저장
 			//- 결제 *대표* 정보(payment) = 번호 생성 후 등록
-			int paymentNo = paymentDao.paymentSequence();//번호 먼저 뽑기
+			int paymentNo = paymentDao.paymentSequence();//번호 먼저 뽑기안녕하세요
 			PaymentDto paymentDto = PaymentDto.builder()
 						.paymentNo(paymentNo)//시퀀스
 						.paymentName(responseVO.getItemName())//대표결제명
