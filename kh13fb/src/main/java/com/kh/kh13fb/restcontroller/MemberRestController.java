@@ -1,6 +1,6 @@
 package com.kh.kh13fb.restcontroller;
 
-import java.util.HashMap;
+import java.util.ArrayList;
 import java.util.List;
 import java.util.Map;
 
@@ -16,8 +16,6 @@ import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestHeader;
 import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RequestParam;
-import org.springframework.web.bind.annotation.ResponseBody;
 import org.springframework.web.bind.annotation.RestController;
 
 import com.kh.kh13fb.dao.MemberDao;
@@ -96,12 +94,19 @@ public class MemberRestController {
 		int count = memberDao.count(loginVO.getMemberNo());
 		int totalPage = count / size + 1; // 전체 페이지 수 계산
 		Map<String, Object> resultMap = memberDao.getMyReservationList(loginVO.getMemberNo(), page, size);
+		ArrayList reservationLeng = (ArrayList) resultMap.get("reservationList");
+		ArrayList seatList = new ArrayList();
+		for(int i = 0; i < reservationLeng.size(); i++) {
+			Map<String, Object> reservationData = (Map<String, Object>) reservationLeng.get(i);
+			seatList.add(i, memberDao.getReservationSeat(loginVO.getMemberNo(), (String) reservationData.get("PAY_DATE")));
+		}
 		PageVO pageVO = PageVO.builder()
                 .page(page) // 현재 페이지 번호 설정
                 .size(size) // 페이지 크기 설정
                 .count(count) // 전체 개수 설정
                 .build();
 		resultMap.put("pageVO", pageVO);
+		resultMap.put("seatList", seatList);
 		return ResponseEntity.ok().body(resultMap);
 	}	
 
