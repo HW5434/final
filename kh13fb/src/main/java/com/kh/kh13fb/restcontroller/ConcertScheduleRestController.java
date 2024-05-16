@@ -16,17 +16,15 @@ import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
-import com.fasterxml.jackson.core.type.TypeReference;
-import com.fasterxml.jackson.databind.ObjectMapper;
-import com.fasterxml.jackson.databind.node.ObjectNode;
-import com.kh.kh13fb.dao.CastActorDao;
 import com.kh.kh13fb.dao.ConcertScheduleDao;
-import com.kh.kh13fb.dto.ActorDto;
-import com.kh.kh13fb.dto.ConcertRequestDto;
+import com.kh.kh13fb.dto.CastActorDto;
 import com.kh.kh13fb.dto.ConcertScheduleDto;
+
+import com.kh.kh13fb.vo.CastActorByConcertScheduleVO;
+
 import com.kh.kh13fb.dto.QnaDto;
+
 import com.kh.kh13fb.vo.ConcertScheduleAddVO;
-import com.kh.kh13fb.vo.ConcertScheduleVO;
 
 import io.swagger.v3.oas.annotations.tags.Tag;
 
@@ -82,6 +80,7 @@ public class ConcertScheduleRestController {
 	//등록 메소드 [현우]
 	@PostMapping("/new")
 	public ConcertScheduleDto insert(@RequestBody ConcertScheduleDto concertScheduleDto) {
+		System.out.println(concertScheduleDto);
 		int sequence = concertScheduleDao.sequence();
 		concertScheduleDto.setConcertScheduleNo(sequence);
 		concertScheduleDao.insert(concertScheduleDto);
@@ -124,6 +123,20 @@ public class ConcertScheduleRestController {
 	public List<ConcertScheduleDto> findScheduleByConcertRequestNo(@PathVariable int concertRequestNo) {
 	    return concertScheduleDao.findByConcertRequestNo(concertRequestNo);
 	}
+	//공연 일정에 따른 배우 목록 출력
+	@GetMapping("/{concertScheduleNo}/castActors")
+	public ResponseEntity<CastActorByConcertScheduleVO> findWithCastActors(@PathVariable int concertScheduleNo){
+		ConcertScheduleDto concertScheduleDto = concertScheduleDao.selectOne(concertScheduleNo);
+		if (concertScheduleDto == null) return ResponseEntity.notFound().build();
+		List<CastActorDto> castActorList = concertScheduleDao.selectCastActorsByConcertScheduleNo(concertScheduleNo);
 	
+		CastActorByConcertScheduleVO castActorByConcertScheduleVO = 
+											CastActorByConcertScheduleVO.builder()
+												.concertScheduleDto(concertScheduleDto)
+												.listCastActorDto(castActorList)
+											.build();
+		return ResponseEntity.ok().body(castActorByConcertScheduleVO);
+		
+	}
 	
 }

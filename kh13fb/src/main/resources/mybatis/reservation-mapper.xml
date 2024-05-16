@@ -41,7 +41,7 @@
 			#{concertScheduleNo},
 			#{seatNo}, 
 			#{reservationConcertTitle}, 
-			TO_DATE(#{reservationConcertDate}, 'YYYY-MM-DD HH24:MI'),
+			TO_DATE(#{reservationConcertDate}, 'YYYY-MM-DD HH24:MI:SS'),
 			#{reservationPrice}, 
 			sysdate,
 			#{reservationPersonName}, 

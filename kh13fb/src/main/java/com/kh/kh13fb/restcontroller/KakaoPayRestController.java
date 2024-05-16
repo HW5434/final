@@ -1,6 +1,7 @@
 package com.kh.kh13fb.restcontroller;
 
 import java.net.URISyntaxException;
+import java.util.List;
 import java.util.Map;
 import java.util.UUID;
 
@@ -27,6 +28,7 @@ import com.kh.kh13fb.vo.KakaoPayReadyResponseVO;
 import com.kh.kh13fb.vo.MemberLoginVO;
 import com.kh.kh13fb.vo.PurchaseListVO;
 import com.kh.kh13fb.vo.PurchaseVO;
+import com.kh.kh13fb.vo.SeatArrayReservationVO;
 
 import lombok.extern.slf4j.Slf4j;
 
@@ -97,7 +99,7 @@ public class KakaoPayRestController {
 				KakaoPayReadyRequestVO.builder()
 				 .partnerOrderId(UUID.randomUUID().toString())
 				 .partnerUserId(loginVO.getMemberId())
-				 .itemName("하이하이")
+				 .itemName("MUTIPLE")
 				 .totalAmount(vo.getTotalPrice())
 				.build();
 		
@@ -133,6 +135,59 @@ public class KakaoPayRestController {
 		
 		KakaoPayApproveResponseVO responseVO = kakaoPayService.approve(requestVO);//approve가 끝난 시점-승인		
 	}    
+	
+	
+	
+//	@PostMapping("/success")
+//	public void success(@RequestBody FlashApproveVO flashApproveVO,
+//	                    @RequestBody SeatArrayReservationVO seatArrayReservationVO,
+//	                    @RequestHeader("Authorization") String token) throws URISyntaxException {
+//	    // 토큰을 사용하여 사용자 정보 가져오기
+//	    MemberLoginVO loginVO = jwtService.parse(token);
+//	    int memberNo = loginVO.getMemberNo();
+//
+//	    // 승인 처리
+//	    KakaoPayApproveRequestVO requestVO =
+//	            KakaoPayApproveRequestVO.builder()
+//	                    .partnerOrderId(flashApproveVO.getPartnerOrderId())
+//	                    .partnerUserId(flashApproveVO.getPartnerUserId())
+//	                    .tid(flashApproveVO.getTid())
+//	                    .pgToken(flashApproveVO.getPgToken())
+//	                    .build();
+//
+//	    KakaoPayApproveResponseVO responseVO = kakaoPayService.approve(requestVO);
+//
+//	    // 좌석 예약 정보 활용
+//	    if (seatArrayReservationVO != null) {
+//	        // 예약 번호 설정
+//	        // 좌석 번호와 가격 리스트 받아오기
+//	        List<Integer> seatNoList = seatArrayReservationVO.getSeatNo();
+//	        List<Integer> reservationPriceList = seatArrayReservationVO.getReservationPrice();
+//
+//	        // 좌석 번호와 가격을 이용하여 예약 생성
+//	        for (int i = 0; i < seatNoList.size(); i++) {
+//	            int sequence = reservationDao.sequence();
+//	            Integer seatNo = seatNoList.get(i);
+//	            Integer reservationPrice = reservationPriceList.get(i);
+//
+//	            ReservationDto reservationDto = ReservationDto.builder()
+//	                    .concertScheduleNo(seatArrayReservationVO.getConcertScheduleNo())
+//	                    .reservationConcertTitle(seatArrayReservationVO.getReservationConcertTitle())
+//	                    .reservationConcertDate(seatArrayReservationVO.getReservationConcertDate())
+//	                    .reservationNo(sequence)
+//	                    .memberNo(memberNo)
+//	                    .seatNo(seatNo)
+//	                    .reservationPrice(reservationPrice)
+//	                    .reservationPersonName(seatArrayReservationVO.getReservationPersonName())
+//	                    .reservationPersonTell(seatArrayReservationVO.getReservationPersonTell())
+//	                    .reservationPersonEmail(seatArrayReservationVO.getReservationPersonEmail())
+//	                    .build();
+//	            reservationDao.insert(reservationDto);
+//	        }
+//	    }
+//	}
+	
+	
 //	@GetMapping("/purchase/successComplete")
 //	public String successComplete() {
 //		return "pay3/successComplete";
