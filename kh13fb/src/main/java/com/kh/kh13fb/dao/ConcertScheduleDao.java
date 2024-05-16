@@ -6,6 +6,7 @@ import org.apache.ibatis.session.SqlSession;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Repository;
 
+import com.kh.kh13fb.dto.CastActorDto;
 import com.kh.kh13fb.dto.ConcertScheduleDto;
 import com.kh.kh13fb.vo.ConcertScheduleAddVO;
 
@@ -42,6 +43,9 @@ public class ConcertScheduleDao {
 	public List<ConcertScheduleDto> findByConcertRequestNo(int concertRequestNo) {
 		return sqlSession.selectList("concertSchedule.findByConcertRequestNo",concertRequestNo);
 	}
-	
+	//공연일정에 따른 배우 목록 뽑기
+	public List<CastActorDto> selectCastActorsByConcertScheduleNo(int concertScheduleNo) {
+		return sqlSession.selectList("castActor.listByConcertScheduleNo",concertScheduleNo);
+	}
 	
 }

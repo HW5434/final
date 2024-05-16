@@ -19,6 +19,11 @@ public class CastActorDao {//공연출연배우-공연일정과 연결된...
 		return sqlSession.selectList("castActor.list");
 	}
 	
+//	//공연출연배우 목록
+//	public List<CastActorDto> selectListByConcertScheduleNo(int concertScheduleNo){
+//		return sqlSession.selectList("castActor.listbyConcertScheduleNo", concertScheduleNo);
+//	}
+	
 	//공연출연배우 상세
 	public CastActorDto selectOne(int castActorNo) {
 		return sqlSession.selectOne("castActor.find", castActorNo);
