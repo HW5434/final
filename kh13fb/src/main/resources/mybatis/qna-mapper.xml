@@ -11,7 +11,20 @@
 	</select>
 
 	<select id="list" resultType="QnaDto">
-    	select * from qna order by qna_no asc
+    	SELECT * FROM (
+	    SELECT ROWNUM AS rn, TMP.* FROM (
+	        SELECT
+	            qna_no,
+	            qna_title,
+	            qna_target,
+	            qna_answer,
+	            QNA_WRITER
+	        FROM qna
+	        CONNECT BY PRIOR qna_no = qna_target
+	        START WITH qna_target IS NULL
+	        ORDER SIBLINGS BY qna_no DESC, qna_no ASC 
+	    ) TMP
+	) WHERE rn BETWEEN 1 AND 10
 	</select>
 
 	
@@ -21,16 +34,18 @@
 
 
 	<insert id="save">
-		insert into qna(qna_no, qna_title, qna_content, qna_answer)
+		insert into qna(qna_no, qna_title, qna_content, qna_answer, qna_writer)
 		values
-		(#{qnaNo}, #{qnaTitle}, #{qnaContent}, #{qnaAnswer})
+		(#{qnaNo}, #{qnaTitle}, #{qnaContent}, #{qnaAnswer}, #{qnaWriter})
 	</insert>
 	
 	<!-- 관리자 등록	 -->
 	<insert id="add">
-		insert into qna(qna_no, qna_title, qna_content, qna_answer, qna_target)
+		insert into qna(
+		qna_no, qna_title, qna_content, qna_answer, qna_target, qna_writer
+		)
 		values
-		(#{qnaNo}, #{qnaTitle}, #{qnaContent}, #{qnaAnswer}, #{qnaTarget})
+		(#{qnaNo}, #{qnaTitle}, #{qnaContent}, #{qnaAnswer}, #{qnaTarget}, #{qnaWriter})
 	</insert>
 
 	<!-- 수정 -->
@@ -48,6 +63,55 @@
 	<delete id="delete">
 		delete qna where qna_no = #{qnaNo}
 	</delete>
+	
+	<!-- 목록 -->
+	<select id="listByPaging" resultType="QnaDto">
+		<!-- <include refid="top-n-header"></include>
+		select * from qna order by qna_no desc
+		<include refid="top-n-footer"></include>-->
+			
+    	SELECT * FROM (
+	    SELECT ROWNUM AS rn, TMP.* FROM (
+	        SELECT
+	            qna_no,
+	            qna_title,
+	            qna_target,
+	            qna_answer,
+	            QNA_WRITER
+	        FROM qna
+	        CONNECT BY PRIOR qna_no = qna_target
+	        START WITH qna_target IS NULL
+	        ORDER SIBLINGS BY qna_no DESC, qna_no ASC 
+	    ) TMP
+	) WHERE rn BETWEEN 1 AND 10
+	</select>
+	
+	<select id="count" resultType="int">
+		select count(*) from qna
+	</select>
+	
+	<!-- 
+    	Top N Query 적용
+	    - 결국 홈페이지의 목록에는 페이징이라는 개념이 포함된다
+	    - 어떻게 구현하느냐에 따라서 네비게이터나 무한스크롤 형태가 됨
+	    - 모든 조회에 똑같이 들어가는 구문이므로 어딘가에 보관해두고 불러온다면?
+	 -->
+	 
+	<!-- 상단 -->
+	<sql id="top-n-header">
+	    <if test="beginRow != null and endRow != null">
+	    select * from (
+	        select rownum rn, TMP.* from (
+	    </if>
+	</sql>
+	
+	<!-- 하단 -->
+	<sql id="top-n-footer">
+	    <if test="beginRow != null and endRow != null">
+	        )TMP
+	    ) where rn between #{beginRow} and #{endRow}
+	    </if>
+	</sql>
 
 
 </mapper>

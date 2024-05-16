@@ -24,16 +24,20 @@ public class InterceptorConfiguration implements WebMvcConfigurer{
 	@Override
 	public void addInterceptors(InterceptorRegistry registry) {
 		
-//		registry.addInterceptor(memberInterceptor)
-//					.addPathPatterns(
+		registry.addInterceptor(memberInterceptor)
+					.addPathPatterns(
+							"/qna/admin**",
+							"/qna/**"
+//							"/qna/admin**"
+							//관리자만 질문글 쓸 수 있게 인터셉터 테스트
 //							"/member/**" //"/concertRequest/**"
-//							
-//							)
+							
+//							);
 //					.excludePathPatterns(
 //							"/member/signUp*"	, "/member/login*", "/member/doubleCheckId*","/member/sendEmail*",
 //							"/member/doubleCheckEmail*"
 //							
-//							);
+							);
 	/*	
 		// 관리자 인터셉터 등록
 		
