@@ -107,6 +107,7 @@ public class MemberRestController {
                 .build();
 		resultMap.put("pageVO", pageVO);
 		resultMap.put("seatList", seatList);
+		resultMap.put("reservationCount", count);
 		return ResponseEntity.ok().body(resultMap);
 	}	
 
