@@ -36,10 +36,12 @@ public class NoticeRestController {
 		return noticeDao.selectList();
 	}
 	
+	//게시글 등록할때
 	@PostMapping("/")
 	public NoticeDto insert(@RequestBody NoticeDto noticeDto) {
 		int sequence = noticeDao.sequence();
 		noticeDto.setNoticeNo(sequence);
+		System.out.println(noticeDto);
 		noticeDao.insert(noticeDto);
 		return noticeDao.selectOne(sequence);
 	}
@@ -53,7 +55,6 @@ public class NoticeRestController {
 	@GetMapping("/{noticeNo}")
 	public ResponseEntity<NoticeDto> find(@PathVariable int noticeNo){
 		noticeDao.updateViewCount(noticeNo);
-		
 		NoticeDto noticeDto = noticeDao.selectOne(noticeNo);
 		if(noticeDto == null) return ResponseEntity.notFound().build();
 		return ResponseEntity.ok().body(noticeDto);

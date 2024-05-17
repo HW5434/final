@@ -34,7 +34,9 @@
 
 
 	<insert id="save">
-		insert into qna(qna_no, qna_title, qna_content, qna_answer, qna_writer)
+		insert into qna(
+		qna_no, qna_title, qna_content, qna_answer, qna_writer
+		)
 		values
 		(#{qnaNo}, #{qnaTitle}, #{qnaContent}, #{qnaAnswer}, #{qnaWriter})
 	</insert>
