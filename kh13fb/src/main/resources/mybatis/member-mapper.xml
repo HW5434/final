@@ -22,13 +22,44 @@
 	
    <select id="getMyReservationList" resultType="hashmap">
    		<include refid="top-n-header"></include>
-	   		select * from member tb1
-	   		left outer join reservation tb2
-	   		on tb1.member_no = tb2.member_no
-	   		left outer join seat tb3
-	   		on tb2.seat_no = tb3.seat_no
-	   		where tb1.member_no = #{memberNo}
+			SELECT  
+				tb1.MEMBER_NO,
+				tb1.RESERVATION_CONCERT_TITLE,
+				tb1.RESERVATION_CONCERT_DATE,
+				tb1.RESERVATION_PERSON_NAME,
+				tb1.RESERVATION_STATUS,
+				SUM(tb1.RESERVATION_PRICE) AS SUM_PRICE,
+				TO_CHAR(tb1.RESERVATION_PAY_DATE, 'YYYY-MM-DD HH24:MI') AS PAY_DATE,
+				COUNT(tb1.MEMBER_NO) AS RESERVATION_COUNT 
+			FROM reservation tb1
+			LEFT OUTER JOIN CONCERT_SCHEDULE tb2
+			ON tb1.CONCERT_SCHEDULE_NO = tb2.CONCERT_SCHEDULE_NO
+			LEFT OUTER JOIN SEAT tb3
+			ON tb1.SEAT_NO = tb3.SEAT_NO
+			LEFT OUTER JOIN MEMBER tb4
+			ON tb1.MEMBER_NO = tb4.MEMBER_NO
+			WHERE tb4.MEMBER_NO = #{memberNo}
+			GROUP BY
+				TO_CHAR(tb1.RESERVATION_PAY_DATE, 'YYYY-MM-DD HH24:MI'), 
+				tb1.MEMBER_NO,
+				tb1.RESERVATION_CONCERT_TITLE,
+				tb1.RESERVATION_CONCERT_DATE,
+				tb1.RESERVATION_PERSON_NAME,
+				tb1.RESERVATION_STATUS
+			ORDER BY PAY_DATE ASC
    		<include refid="top-n-footer"></include>
+   </select>
+   
+   <select id="getReservationSeat" resultType="hashMap">
+		SELECT
+		CONCAT(CONCAT(tb1.SEAT_COL,'열'), CONCAT(tb1.SEAT_ROW,'번')) AS SEAT_CHOICE,
+		tb2.MEMBER_NO,
+		TO_CHAR(tb2.RESERVATION_PAY_DATE, 'YYYY-MM-DD HH24:MI') AS RESERVATION_PAY_DATE
+		FROM seat tb1
+		LEFT OUTER JOIN RESERVATION tb2
+		ON tb1.SEAT_NO = TB2.SEAT_NO
+		WHERE tb2.MEMBER_NO = #{memberNo}
+		AND TO_CHAR(tb2.RESERVATION_PAY_DATE, 'YYYY-MM-DD HH24:MI') = #{payDate}
    </select>
    
    	<!-- Top N Query -->
@@ -49,12 +80,30 @@
 	</sql>
 	
 	<select id="count" resultType="int">
-			select count(*) from (select * from member tb1
-	   		left outer join reservation tb2
-	   		on tb1.member_no = tb2.member_no
-	   		left outer join seat tb3
-	   		on tb2.seat_no = tb3.seat_no
-	   		where tb1.member_no = #{memberNo})
+			select count(*) from (SELECT  
+				tb1.MEMBER_NO,
+				tb1.RESERVATION_CONCERT_TITLE,
+				tb1.RESERVATION_CONCERT_DATE,
+				tb1.RESERVATION_PERSON_NAME,
+				tb1.RESERVATION_STATUS,
+				SUM(tb1.RESERVATION_PRICE) AS SUM_PRICE,
+				to_char(tb1.RESERVATION_PAY_DATE, 'YYYY-MM-DD HH24:MI') AS PAY_DATE,
+				COUNT(tb1.MEMBER_NO) AS RESERVATION_COUNT 
+			FROM reservation tb1
+			LEFT OUTER JOIN CONCERT_SCHEDULE tb2
+			ON tb1.CONCERT_SCHEDULE_NO = tb2.CONCERT_SCHEDULE_NO
+			LEFT OUTER JOIN SEAT tb3
+			ON tb1.SEAT_NO = tb3.SEAT_NO
+			LEFT OUTER JOIN MEMBER tb4
+			ON tb1.MEMBER_NO = tb4.MEMBER_NO
+			WHERE tb4.MEMBER_NO = #{memberNo}
+			GROUP BY
+				TO_CHAR(tb1.RESERVATION_PAY_DATE, 'YYYY-MM-DD HH24:MI'), 
+				tb1.MEMBER_NO,
+				tb1.RESERVATION_CONCERT_TITLE,
+				tb1.RESERVATION_CONCERT_DATE,
+				tb1.RESERVATION_PERSON_NAME,
+				tb1.RESERVATION_STATUS)
 	</select>
 	
 	
@@ -176,7 +225,7 @@
 	<update id="editTempPassword">
 		update member set member_pw = #{memberPw} where member_id = #{memberId}
 	</update>
-		
+	
 </mapper>
 
 
