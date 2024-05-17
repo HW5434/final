@@ -21,6 +21,6 @@ public class ConcertRequestVO {
 	private ConcertRequestConcertVO concert;
 	private List<ActorDto> actors;
 	private ConcertRequestRentVO rent;
-	private List<MultipartFile> attachList;
+	private MultipartFile attach;
 	
 }

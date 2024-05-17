@@ -16,24 +16,25 @@ public class AttachService {
 	
 	@Autowired
 	private AttachDao attachDao;
+
 	
 	@Autowired
 	private FilePathProperties filePathProperties;
 	
 	//파일저장 + DB저장
-	public int save(MultipartFile attachList) throws IllegalStateException, IOException {
+	public int save(MultipartFile attach) throws IllegalStateException, IOException {
 		int attachNo = attachDao.getSequence();
-		File dir = new File(System.getProperty("user.home"), "upload");
-		dir.mkdir();
+		File dir = new File(filePathProperties.getPath());
+		dir.mkdirs();
 		File target = new File(dir, String.valueOf(attachNo));
-		attachList.transferTo(target);//실물파일저장
+		attach.transferTo(target);//실물파일저장
 		
 		//첨부파일 정보 DB저장
 		AttachDto attachDto = new AttachDto();
 		attachDto.setAttachNo(attachNo);
-		attachDto.setAttachName(attachList.getOriginalFilename());
-		attachDto.setAttachType(attachList.getContentType());
-		attachDto.setAttachSize(attachList.getSize());
+		attachDto.setAttachName(attach.getOriginalFilename());
+		attachDto.setAttachType(attach.getContentType());
+		attachDto.setAttachSize(attach.getSize());
 		
 		attachDao.insert(attachDto);//DB저장
 		

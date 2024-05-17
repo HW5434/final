@@ -1,13 +1,14 @@
 package com.kh.kh13fb.dao;
 
+import java.util.HashMap;
 import java.util.List;
+import java.util.Map;
 
 import org.apache.ibatis.session.SqlSession;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Repository;
 
 import com.kh.kh13fb.dto.ActorDto;
-import com.kh.kh13fb.dto.AttachDto;
 import com.kh.kh13fb.dto.ConcertRequestDto;
 import com.kh.kh13fb.vo.ConcertRequestVO;
 
@@ -59,8 +60,15 @@ public class ConcertRequestDao {
 			return sqlSession.selectList("actor.listByConcertRequestNo",concertRequestNo);
 		}
 
-		public int connect(Object concertRequestNo, int attachNo) {
-			return sqlSession.insert("posterAttach.insertPosterAttach");
+		public void connect (int concertRequestNo, int attachNo) {
+				Map<String, Object> data = new HashMap<>();
+				data.put("concertRequestNo", concertRequestNo);
+				data.put("attachNo", attachNo);
+				sqlSession.insert("concertRequest.connect", data);
+		}
+
+		public int findAttach(int concertRequestNo) {
+			return sqlSession.selectOne("concertRequest.findAttach", concertRequestNo);
 		}
 
 }

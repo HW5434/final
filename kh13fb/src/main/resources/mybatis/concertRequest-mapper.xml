@@ -84,7 +84,7 @@
     </insert>
     
     <insert id="connect">
-    	insert into poster_attach (concert_request_no, attach_no) values
+    	insert into concert_request_attach (concert_request_no, attach_no) values
     		(#{concertRequestNo}, #{attachNo})
     </insert> 
     
