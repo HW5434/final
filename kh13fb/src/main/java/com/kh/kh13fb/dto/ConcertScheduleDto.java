@@ -11,7 +11,6 @@ import lombok.NoArgsConstructor;
 @JsonIgnoreProperties(ignoreUnknown = true)
 @Data @Builder @NoArgsConstructor @AllArgsConstructor
 public class ConcertScheduleDto {
-	private String selectedActors;
 	private int concertScheduleNo;
 	@JsonFormat(pattern="yyyy-MM-dd HH:mm", timezone="Asia/Seoul")
 	private String concertScheduleStart;

@@ -13,14 +13,12 @@
     
     <insert id="save">
     	insert into concert_schedule(
-    	selected_actors,
     	concert_schedule_no,
 		concert_schedule_start,
 		concert_schedule_end,
 		concert_request_no)
 		values
 		(
-		#{selectedActors},
 		#{concertScheduleNo}, 
 		TO_DATE(#{concertScheduleStart}, 'YYYY-MM-DD HH24:MI'), 
 		TO_DATE(#{concertScheduleEnd}, 'YYYY-MM-DD HH24:MI'), 
@@ -52,14 +50,12 @@
    
    <insert id="saveWithRequestNo">
     insert into concert_schedule(
-    	selected_actors,
         concert_schedule_no,
         concert_schedule_start,
         concert_schedule_end,
         concert_request_no
     )
-    values(
-   		 #{selectedActors},
+    values( 
         #{concertScheduleNo},
         #{concertScheduleStart},
         #{concertScheduleEnd},
