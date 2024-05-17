@@ -174,12 +174,12 @@ public class KakaoPayRestController {
 //	//결제 취소와 실패에서는 결제 준비 시 세션에 담았던 
 //	//Flash Attribute를 반드시 제거해야한다
 //	//결제 취소 페이지
-//	@GetMapping("/purchase/cancel")
-//	public String cancel(HttpSession session) {//썻던걸 없애줘야해 취소나 실패에서는
-//		session.removeAttribute("partner_order_id");
-//		session.removeAttribute("partner_user_id");
-//		session.removeAttribute("tid");
-//		session.removeAttribute("vo");
+//	@GetMapping("/cancel")
+//	public void success(@RequestHeader("Authorization") String token)throws URISyntaxException {//썻던걸 없애줘야해 취소나 실패에서는
+////		session.removeAttribute("partner_order_id");
+////		session.removeAttribute("partner_user_id");
+////		session.removeAttribute("tid");
+////		session.removeAttribute("vo");
 //		return "pay3/cancel";
 //	}
 //	//결제 실패 페이지
