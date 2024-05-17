@@ -25,5 +25,5 @@ public class ReservationDto {
 	private String reservationPersonName;//구매자이름
 	private String reservationPersonTell;//구매자연락처
 	private String reservationPersonEmail;//구매자 이메일
-	//private String reservationStatus;//구매상태
+	private String reservationStatus;//구매상태
 }

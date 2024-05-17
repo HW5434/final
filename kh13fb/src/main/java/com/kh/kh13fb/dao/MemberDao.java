@@ -105,8 +105,6 @@ public class MemberDao {
 		data.put("beginRow", beginRow);
 		data.put("endRow", endRow);
 		data.put("memberNo", memberNo);
-		System.out.println("데이터 베이스 넘기는 값");
-		System.out.println(data);
 		Map<String, Object> resultMap = new HashMap<String, Object>();
 		resultMap.put("reservationList", sqlSession.selectList("member.getMyReservationList", data));
 		return resultMap;
@@ -114,6 +112,13 @@ public class MemberDao {
 	
 	public int count(int memberNo) {
 		return sqlSession.selectOne("member.count", memberNo);
+	}
+	
+	public List getReservationSeat(int memberNo, String payDate) {
+		Map<String, Object> data = new HashMap<>();
+		data.put("memberNo", memberNo);
+		data.put("payDate", payDate);
+		return sqlSession.selectList("member.getReservationSeat", data);
 	}
 }
 
