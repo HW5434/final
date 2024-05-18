@@ -8,35 +8,32 @@ import org.springframework.web.servlet.config.annotation.WebMvcConfigurer;
 import com.kh.kh13fb.interceptor.MemberInterceptor;
 import com.kh.kh13fb.interceptor.NonMemberInterceptor;
 
-
-
 @Configuration
 public class InterceptorConfiguration implements WebMvcConfigurer{
 	
 	@Autowired
 	private MemberInterceptor memberInterceptor;
-	
 
 	@Autowired
 	private NonMemberInterceptor NonMemberInterceptor;
-	
 	
 	@Override
 	public void addInterceptors(InterceptorRegistry registry) {
 		
 		registry.addInterceptor(memberInterceptor)
 					.addPathPatterns(
-							"/qna/admin**",
+							"/qna/admin/**",
 							"/qna/**"
+							);
 							//관리자만 질문글 쓸 수 있게 인터셉터 테스트
+							
 //							"/member/**" //"/concertRequest/**"
 							
-//							);
 //					.excludePathPatterns(
 //							"/member/signUp*"	, "/member/login*", "/member/doubleCheckId*","/member/sendEmail*",
 //							"/member/doubleCheckEmail*"
 //							
-							);
+//							);	
 	/*	
 		// 관리자 인터셉터 등록
 		

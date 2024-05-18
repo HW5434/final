@@ -16,6 +16,7 @@
 	        SELECT
 	            qna_no,
 	            qna_title,
+	            qna_content
 	            qna_target,
 	            qna_answer,
 	            QNA_WRITER
@@ -77,6 +78,7 @@
 	        SELECT
 	            qna_no,
 	            qna_title,
+	            qna_content,
 	            qna_target,
 	            qna_answer,
 	            QNA_WRITER

@@ -7,6 +7,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import org.springframework.web.multipart.MultipartFile;
 
+import com.kh.kh13fb.configuration.FilePathProperties;
 import com.kh.kh13fb.dao.AttachDao;
 import com.kh.kh13fb.dto.AttachDto;
 
@@ -15,12 +16,16 @@ public class AttachService {
 	
 	@Autowired
 	private AttachDao attachDao;
+
+	
+	@Autowired
+	private FilePathProperties filePathProperties;
 	
 	//파일저장 + DB저장
 	public int save(MultipartFile attach) throws IllegalStateException, IOException {
 		int attachNo = attachDao.getSequence();
-		File dir = new File(System.getProperty("user.home"), "upload");
-		dir.mkdir();
+		File dir = new File(filePathProperties.getPath());
+		dir.mkdirs();
 		File target = new File(dir, String.valueOf(attachNo));
 		attach.transferTo(target);//실물파일저장
 		
