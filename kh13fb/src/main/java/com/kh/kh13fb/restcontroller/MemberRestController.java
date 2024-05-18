@@ -115,6 +115,8 @@ public class MemberRestController {
 	@PatchMapping("/")
 	public ResponseEntity<MemberDto> edit(@RequestBody MemberDto memberDto) {
 		boolean result = memberDao.edit(memberDto);
+		System.out.println("체크체크");
+		System.out.println(memberDto);
 		if(result == false) return ResponseEntity.notFound().build();
 		return ResponseEntity.ok().body(memberDao.selectOne(memberDto.getMemberNo()));//수정 완료된 결과를 조회하여 반환
 	}
@@ -147,9 +149,9 @@ public class MemberRestController {
 	@PostMapping("/withdrawal")
 	public ResponseEntity<MemberDto> withdrawal(@RequestBody MemberDto memberDto) {
 		MemberDto checkMemberDto = memberDao.selectFindId(memberDto.getMemberId());
-		System.out.println(checkMemberDto.getMemberPw());
-		System.out.println(memberDto.getMemberPw());
-		System.out.println(memberDto.getMemberId());
+//		System.out.println(checkMemberDto.getMemberPw());
+//		System.out.println(memberDto.getMemberPw());
+//		System.out.println(memberDto.getMemberId());
 		if(checkMemberDto.getMemberPw().equals(memberDto.getMemberPw())) {
 			boolean result = memberDao.delete(memberDto.getMemberId());
 		} else {
