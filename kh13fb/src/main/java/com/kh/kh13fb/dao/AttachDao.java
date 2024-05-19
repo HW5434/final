@@ -36,8 +36,8 @@ public class AttachDao {
 			return sqlSession.selectOne("attach.find", attachNo);
 		}
 
-		public int findAttachNo(String concertRequestVO) {
-			return sqlSession.selectOne("attach.find", concertRequestVO);
+		public int findAttachNo(int concertRequestNo) {
+			return sqlSession.selectOne("attach.findAttachNo", concertRequestNo);
 		}
 
 		public int sequence() {

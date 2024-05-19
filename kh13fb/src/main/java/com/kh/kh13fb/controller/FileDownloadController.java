@@ -16,6 +16,7 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.ResponseBody;
 
+import com.kh.kh13fb.configuration.FilePathProperties;
 import com.kh.kh13fb.dao.AttachDao;
 import com.kh.kh13fb.dto.AttachDto;
 
@@ -25,6 +26,9 @@ public class FileDownloadController {
 
 	@Autowired
 	private AttachDao attachDao;
+	
+	@Autowired
+	private FilePathProperties filePathProperties;
 	//여태까지 모든 컨트롤러에서는 사용자가 볼 화면을 반환했다
 	//이 매핑은 그렇지 않다는 것을 표시해야 한다 (@ResponseBody)
 	//사용자에게는 화면이 아닌 파일이 담신 응답 객체를 반환
@@ -45,7 +49,7 @@ public class FileDownloadController {
 			return ResponseEntity.notFound().build();
 		}
 		//3. 실제 파일을 불러온다 (apache common io, apache commons fileupload)
-		File dir = new File(System.getProperty("user.home"), "upload");
+		File dir = new File(filePathProperties.getPath());
 		File target = new File(dir, String.valueOf(attachDto.getAttachNo()));
 		
 		byte[] data = FileUtils.readFileToByteArray(target);//파일을 읽어라

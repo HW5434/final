@@ -14,6 +14,10 @@
     		select * from attach where attach_no = #{attachNo}
     	</select>
     	
+    	<select id="findAttachNo" resultType="int">
+    		select attach_no from concert_request_attach where concert_request_no = #{concertRequestNo}
+    	</select>
+    	
     	<insert id="save">
     		insert into attach(attach_no, attach_name, attach_type, attach_size)
     			values( #{attachNo}, #{attachName},#{attachType}, #{attachSize})
