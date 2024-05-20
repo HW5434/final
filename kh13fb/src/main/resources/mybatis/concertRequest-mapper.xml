@@ -83,7 +83,9 @@
     )
     </insert>
     
-    
-    
+    <insert id="connect">
+    	insert into concert_request_attach (concert_request_no, attach_no) values
+    		(#{concertRequestNo}, #{attachNo})
+    </insert> 
     
     </mapper>

@@ -5,6 +5,7 @@ import java.util.List;
 import java.util.Map;
 
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.core.io.ByteArrayResource;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.CrossOrigin;
@@ -18,8 +19,12 @@ import org.springframework.web.bind.annotation.RequestHeader;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
+import com.kh.kh13fb.dao.AttachDao;
+import com.kh.kh13fb.dao.ConcertScheduleDao;
 import com.kh.kh13fb.dao.MemberDao;
+import com.kh.kh13fb.dto.ConcertScheduleDto;
 import com.kh.kh13fb.dto.MemberDto;
+import com.kh.kh13fb.service.AttachService;
 import com.kh.kh13fb.service.EmailService;
 import com.kh.kh13fb.service.JwtService;
 import com.kh.kh13fb.service.OAuthService;
@@ -44,6 +49,15 @@ public class MemberRestController {
 	
 	@Autowired
 	private OAuthService oAuthService;
+	
+	@Autowired
+	private AttachDao attachDao;
+
+	@Autowired
+	private AttachService attachService;
+	
+	@Autowired
+	private ConcertScheduleDao concertSchecduleDao;
 	
 	//등록
 	@PostMapping("/")
@@ -115,6 +129,8 @@ public class MemberRestController {
 	@PatchMapping("/")
 	public ResponseEntity<MemberDto> edit(@RequestBody MemberDto memberDto) {
 		boolean result = memberDao.edit(memberDto);
+		System.out.println("체크체크");
+		System.out.println(memberDto);
 		if(result == false) return ResponseEntity.notFound().build();
 		return ResponseEntity.ok().body(memberDao.selectOne(memberDto.getMemberNo()));//수정 완료된 결과를 조회하여 반환
 	}
@@ -147,9 +163,9 @@ public class MemberRestController {
 	@PostMapping("/withdrawal")
 	public ResponseEntity<MemberDto> withdrawal(@RequestBody MemberDto memberDto) {
 		MemberDto checkMemberDto = memberDao.selectFindId(memberDto.getMemberId());
-		System.out.println(checkMemberDto.getMemberPw());
-		System.out.println(memberDto.getMemberPw());
-		System.out.println(memberDto.getMemberId());
+//		System.out.println(checkMemberDto.getMemberPw());
+//		System.out.println(memberDto.getMemberPw());
+//		System.out.println(memberDto.getMemberId());
 		if(checkMemberDto.getMemberPw().equals(memberDto.getMemberPw())) {
 			boolean result = memberDao.delete(memberDto.getMemberId());
 		} else {
@@ -287,6 +303,13 @@ public class MemberRestController {
 					.accessToken(accessToken)
 					.refreshToken(refreshToken)
 				.build());//200
+	}
+	
+	@GetMapping("/getAttach/{concertScheduleNo}")
+	public ResponseEntity<ByteArrayResource> getAttach(@PathVariable int concertScheduleNo) throws Exception {
+		ConcertScheduleDto concertSchedule = concertSchecduleDao.selectOne(concertScheduleNo);
+		int attachNo = attachDao.findAttachNo(concertSchedule.getConcertRequestNo());
+		return attachService.download(attachNo);
 	}
 	
 }

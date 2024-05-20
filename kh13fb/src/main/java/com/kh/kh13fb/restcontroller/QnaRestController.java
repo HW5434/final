@@ -46,14 +46,13 @@ public class QnaRestController {
 	
 	//등록
 	@PostMapping("/")
-	public QnaDto insert(@RequestAttribute("memberId") String memberId, 
-						 			 @RequestBody QnaDto qnaDto) {
+	public QnaDto insert(@RequestAttribute("memberId") String memberId, @RequestBody QnaDto qnaDto) {
 		int sequence = qnaDao.sequence();
 		qnaDto.setQnaNo(sequence);
 		qnaDto.setQnaWriter(memberId);
 		qnaDto.setQnaAnswer("N");
-		qnaDao.insert(qnaDto);
-		//System.out.println(memberId);
+		qnaDao.insert(qnaDto);	
+//		System.out.println(memberId);
 		return qnaDao.selectOne(sequence);
 	}
 	
