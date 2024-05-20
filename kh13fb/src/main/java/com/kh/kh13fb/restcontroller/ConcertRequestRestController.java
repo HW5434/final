@@ -69,8 +69,8 @@ public class ConcertRequestRestController {
 		ConcertRequestVO concertRequestVO = ConcertRequestVO.builder().memberNo(memberNo)
 				.applicant(mapper.readValue(applicant, ConcertRequestApplicantVO.class))
 				.concert(mapper.readValue(concert, ConcertRequestConcertVO.class))
-				.actors(mapper.readValue(actors, new TypeReference<List<ActorDto>>() {
-				})).rent(mapper.readValue(rent, ConcertRequestRentVO.class)).attach(attach).build();
+				.actors(mapper.readValue(actors, new TypeReference<List<ActorDto>>() {}))
+				.rent(mapper.readValue(rent, ConcertRequestRentVO.class)).attach(attach).build();
 //		System.out.println(concertRequestVO);
 
 //	public ConcertRequestVO insert(@RequestBody ConcertRequestVO concertRequestVO, @RequestHeader String authorization) {

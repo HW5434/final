@@ -23,6 +23,7 @@ public class InterceptorConfiguration implements WebMvcConfigurer{
 		registry.addInterceptor(memberInterceptor)
 					.addPathPatterns(
 							"/qna/admin**"
+							
 							);
 							//관리자만 질문글 쓸 수 있게 인터셉터 테스트
 							
