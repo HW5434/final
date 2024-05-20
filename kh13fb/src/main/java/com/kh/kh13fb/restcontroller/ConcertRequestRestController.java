@@ -3,8 +3,10 @@ package com.kh.kh13fb.restcontroller;
 import java.io.File;
 import java.io.IOException;
 import java.util.List;
+import java.util.Map;
 
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.core.io.ByteArrayResource;
 import org.springframework.http.ResponseEntity;
 import org.springframework.transaction.annotation.Transactional;
 import org.springframework.web.bind.annotation.CrossOrigin;
@@ -137,6 +139,12 @@ public class ConcertRequestRestController {
 		return ResponseEntity.ok().body(concertListVO);
 	}
 
+	@GetMapping("/getAttach/{concertRequestNo}")
+	public ResponseEntity<ByteArrayResource> getAttach(@PathVariable int concertRequestNo) throws Exception {
+		int attachNo = attachDao.findAttachNo(concertRequestNo);
+		return attachService.download(attachNo);
+	}
+	
 	@PostMapping("/upload/{concertRequestNo}")
 	@Transactional
 	public ResponseEntity<?> insertEdit(@PathVariable int concertRequestNo,
