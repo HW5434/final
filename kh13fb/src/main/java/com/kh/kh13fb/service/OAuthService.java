@@ -22,7 +22,7 @@ public class OAuthService {
                 .POST(HttpRequest.BodyPublishers.ofString(
                         "grant_type=" + "authorization_code" +
                                 "&client_id=70d8db6c99799796a660966c718f3d6d"+
-                                "&redirect_uri=http://localhost:3000/auth"+
+                                "&redirect_uri=http://192.168.30.43:3000/auth"+
                                 "&code=" + code
                 ))
                 .build();
